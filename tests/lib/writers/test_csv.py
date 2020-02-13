@@ -1,8 +1,6 @@
-import os.path
-
 from csv import reader
-# from os import remove
-# from os.path import exists, isfile
+from os import remove
+from os.path import exists, isfile
 
 from src.lib.writers.csv import CsvWriter
 from tests.lib.writers.writers_fixtures import pandas_dataframe_with_data, \
@@ -19,8 +17,8 @@ class TestCsvWriter:
         csv_writer.write(dataframe=pandas_dataframe_with_data,
                          file_path=test_file_path,
                          index=False)
-        assert os.path.exists(test_file_path) is True
-        assert os.path.isfile(test_file_path) is True
+        assert exists(test_file_path) is True
+        assert isfile(test_file_path) is True
 
         with open(test_file_path) as csv_file:
             csv_reader = reader(csv_file, delimiter=',')
@@ -34,8 +32,8 @@ class TestCsvWriter:
 
             assert csv_reader == expected
 
-        os.remove(test_file_path)
-        assert os.path.exists(test_file_path) is False
+        remove(test_file_path)
+        assert exists(test_file_path) is False
 
     def test_writting_dataframe_without_records(self,
                                                 pandas_dataframe_without_data,
@@ -44,5 +42,5 @@ class TestCsvWriter:
         csv_writer.write(dataframe=pandas_dataframe_without_data,
                          file_path=test_file_path,
                          index=False)
-        assert os.path.exists(test_file_path) is False
-        assert os.path.isfile(test_file_path) is False
+        assert exists(test_file_path) is False
+        assert isfile(test_file_path) is False
