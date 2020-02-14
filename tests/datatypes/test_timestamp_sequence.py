@@ -32,5 +32,5 @@ class TestTimestampGenerator(unittest.TestCase):
         for datepart in dateparts:
             print(datepart)
             gen = TimestampSequenceType(datepart=datepart)
-            records = gen.generate_records(8028)
-            self.assertEqual(8028, len(records))
+            records = gen.generate_records(TEST_NUM_OF_RECORDS)
+            self.assertEqual(TEST_NUM_OF_RECORDS, len(records))
