@@ -2,13 +2,13 @@ from random import randint
 
 
 class IntegerType:
-    def __init__(self, start_at, end_at):
+    def __init__(self, start_at: int = 0, end_at: int = 100):
         self.start_at = start_at
         self.end_at = end_at
 
-    def generate(self, num_of_records) -> list:
-        return [randint(self.start_at, self.end_at)
-                for x in range(0, num_of_records)]
+    def generate(self) -> int:
+        return randint(self.start_at, self.end_at)
 
-    def generate_sequence(self, step) -> list:
-        return [x for x in range(self.start_at, self.end_at, step)]
+    def generate_records(self, num_of_records) -> list:
+        return [self.generate()
+                for x in range(0, num_of_records)]

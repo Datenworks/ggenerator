@@ -1,11 +1,11 @@
-from random import randint
+import random
+import string
 
 
 class CharacterType:
-    def __init__(self):
-        self.ascii_start = 32
-        self.ascii_end = 126
+    def generate(self) -> str:
+        return random.choice(string.ascii_letters)
 
-    def generate(self, num_of_records) -> list:
-        return [chr(randint(self.ascii_start, self.ascii_end))
+    def generate_records(self, num_of_records) -> list:
+        return [self.generate()
                 for _ in range(num_of_records)]

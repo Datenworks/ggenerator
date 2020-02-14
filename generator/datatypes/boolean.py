@@ -1,6 +1,9 @@
-from random import uniform
+import random
 
 
 class BooleanType:
-    def generate(self, num_of_records) -> list:
-        return [round(uniform(0, 1)) == 1 for _ in range(num_of_records)]
+    def generate(self) -> bool:
+        return bool(random.getrandbits(1))
+
+    def generate_records(self, num_of_records) -> list:
+        return [self.generate() for _ in range(num_of_records)]
