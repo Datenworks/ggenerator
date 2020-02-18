@@ -1,9 +1,12 @@
+.vscode/
+__pycache__/
+*workspace
+.venv/
 .coverage
 .env/
 .kube/
 .pytest_cache/
 .Python
-.vscode/
 
 __pycache__
 
