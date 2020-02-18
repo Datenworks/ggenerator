@@ -2,6 +2,8 @@ import random
 
 
 class BooleanType:
+    key = 'boolean'
+
     def generate(self) -> bool:
         return bool(random.getrandbits(1))
 

@@ -1,7 +1,7 @@
-from tests.generator.datatypes.generators_fixtures import generate
-from generator.datatypes.char import CharacterType
-
 import random
+
+from src.generators.datatypes.char import CharacterType
+from src.tests.generators.datatypes.generators_fixtures import generate
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 

@@ -1,6 +1,7 @@
-from generator.datatypes.sequence import SequenceType
-from tests.generator.datatypes.generators_fixtures import generate
 import random
+
+from src.generators.datatypes.sequence import SequenceType
+from src.tests.generators.datatypes.generators_fixtures import generate
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 TEST_RANDOM_STEP = random.randint(1, 1000)
