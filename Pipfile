@@ -4,9 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+pytest = "*"
+flake8 = "*"
 
 [packages]
-click = "*"
+python-dateutil = "*"
+pandas = "==1.0.1"
 
 [requires]
 python_version = "3.7"
