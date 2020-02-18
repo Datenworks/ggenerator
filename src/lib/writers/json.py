@@ -1,7 +1,5 @@
 from pandas import DataFrame
 
-from src.lib.writers import valid_dataframe
-
 
 class JsonWriter(object):
     """Class that receive pandas dataframe
@@ -19,5 +17,5 @@ class JsonWriter(object):
          - file_path - str: path of the file to be written
          - **kwargs - additional arguments for "to_json" pandas method
         """
-        if valid_dataframe(dataframe=dataframe) is True:
+        if dataframe.shape[0] > 0:
             dataframe.to_json(file_path, **kwargs)
