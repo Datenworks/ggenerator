@@ -5,11 +5,10 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+flake8 = "*"
 
 [packages]
 python-dateutil = "*"
-pytest = "==5.3.5"
-flake8 = "*"
 pandas = "==1.0.1"
 
 [requires]
