@@ -49,3 +49,28 @@ def bool_specification():
 @fixture
 def char_specification():
     return sample('char', 'object')
+
+
+@fixture
+def float_specification():
+    return sample('float', 'float64')
+
+
+@fixture
+def timestamp_sequence_specification():
+    return sample('timestamp:sequence', 'datetime64[ns]')
+
+
+@fixture
+def integer_sequence_specification():
+    return sample('integer:sequence', 'int64')
+
+
+@fixture
+def string_specification():
+    return sample('string', 'object')
+
+
+@fixture
+def timestamp_specification():
+    return sample('timestamp', 'datetime64[ns]')
