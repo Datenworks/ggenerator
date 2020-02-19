@@ -1,11 +1,13 @@
-from dateutil.parser import parse
-from datetime import datetime
-from datetime import timedelta
-from pandas import date_range
 import pytz
+
+from datetime import datetime
+from dateutil.parser import parse
+from datetime import timedelta
 
 
 class TimestampSequenceType:
+    key = 'timestamp:sequence'
+
     def __init__(self, start_at: str = "1970-01-01T00:00:01",
                  datepart: str = "second", tz: str = "UTC"):
         """

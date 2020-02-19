@@ -1,7 +1,7 @@
 import random
 
-from tests.generator.datatypes.generators_fixtures import generate
-from generator.datatypes.boolean import BooleanType
+from src.generators.datatypes.boolean import BooleanType
+from src.tests.generators.datatypes.generators_fixtures import generate
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 

@@ -3,7 +3,7 @@ from os import remove
 from os.path import exists, isfile
 
 from src.lib.writers.csv import CsvWriter
-from tests.lib.writers.writers_fixtures import pandas_dataframe_with_data, \
+from src.tests.lib.writers.writers_fixtures import pandas_dataframe_with_data, \
     pandas_dataframe_without_data, test_file_path
 
 
