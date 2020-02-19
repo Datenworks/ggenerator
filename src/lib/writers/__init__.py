@@ -1,3 +1,9 @@
+from src.lib.writers.csv import CsvWriter
+from src.lib.writers.json import JsonWriter
+
+writers = {'csv': CsvWriter, 'json': JsonWriter}
+
+
 def valid_dataframe(dataframe):
     """Validates if dataframe contain records
 

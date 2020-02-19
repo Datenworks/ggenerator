@@ -2,6 +2,8 @@ from random import uniform
 
 
 class FloatType:
+    key = 'float'
+
     def __init__(self, start_at: float = 0, end_at: float = 100,
                  decimal_floor: int = 3):
         self.start_at = start_at

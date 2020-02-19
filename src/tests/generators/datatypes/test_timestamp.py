@@ -2,8 +2,8 @@ import random
 from datetime import datetime
 
 from dateutil.parser._parser import ParserError
-from generator.datatypes.timestamp import TimestampType
-from tests.generator.datatypes.generators_fixtures import generate
+from src.generators.datatypes.timestamp import TimestampType
+from src.tests.generators.datatypes.generators_fixtures import generate
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 

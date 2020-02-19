@@ -1,4 +1,6 @@
 class SequenceType:
+    key = 'integer:sequence'
+
     def __init__(self, start_at=1, step=1):
         self.start_at = start_at
         self.step = step
