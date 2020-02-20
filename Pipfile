@@ -11,6 +11,7 @@ pytest-mock = "==2.0.0"
 [packages]
 python-dateutil = "*"
 pandas = "==1.0.1"
+click = "*"
 
 [requires]
 python_version = "3.7"
