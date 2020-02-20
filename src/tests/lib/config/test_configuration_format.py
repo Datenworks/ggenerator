@@ -31,4 +31,4 @@ class TestConfigurationFormat(object):
         format_sample = {"type": "csv"}
         validator = ConfigurationFormat(format_sample)
         is_valid = validator.is_valid()
-        assert is_valid is False
+        assert is_valid is True
