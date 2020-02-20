@@ -1,5 +1,5 @@
 import click
-
+from src.generators.handler import GeneratorsHandler
 
 @click.command()
 @click.version_option(version="0.0.1")
@@ -18,4 +18,5 @@ def execute(spec_path, dryrun_flag):
 
 def generate(filepath):
     # TODO
+    GeneratorsHandler()
     yield
