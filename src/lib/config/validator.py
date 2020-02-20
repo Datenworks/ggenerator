@@ -9,6 +9,7 @@ class ConfigurationValidator(object):
     def get_config(self):
         file = open(self.file_path, 'r')
         configuration = json.loads(file.read())
+        file.close()
         return configuration
 
 
