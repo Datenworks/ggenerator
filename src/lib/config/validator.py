@@ -56,10 +56,7 @@ class ConfigurationFormat(object):
         format_type = self.format.get("type")
         has_format_type = format_type is not None and \
             isinstance(format_type, str)
-        format_header = self.format.get("header")
-        has_format_header = format_header is not None and \
-            isinstance(format_header, bool)
-        is_valid = has_format_header and has_format_type
+        is_valid = has_format_type
         return is_valid
 
 
