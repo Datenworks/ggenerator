@@ -1,22 +1,29 @@
 import click
 from src.generators.handler import GeneratorsHandler
+from src.cli.ascii_art import ASCII_ART
 
-@click.command()
-@click.version_option(version="0.0.1")
-@click.option('-s', '--spec', 'spec_path',
-              type=click.Path(exists=True,
-                              resolve_path=True,
-                              file_okay=True,
-                              dir_okay=False),
-              required=True, prompt=True)
-@click.option('-d', '--dryrun', 'dryrun',
-              is_flag=True, required=False)
-def execute(spec_path, dryrun_flag):
-    for generated_file in generate(spec_path):
-        click.echo(f"Finished, Saved on path: {generated_file}")
+VERSION = "0.1"
 
 
-def generate(filepath):
-    # TODO
-    GeneratorsHandler()
-    yield
+@click.group()
+@click.version_option(version=VERSION)
+def execute():
+    click.echo(ASCII_ART)
+    click.echo(VERSION)
+
+
+@click.argument('spec_path',
+                type=click.Path(exists=True,
+                                resolve_path=True,
+                                file_okay=True,
+                                dir_okay=False),
+                required=True)
+@execute.command()
+def generate(spec_path):
+    generator = \
+        GeneratorsHandler(arguments={'config_file': spec_path})
+    for dset_name, dset_format, dset_path in generator.generate():
+        click.echo("Finished!\n"
+                   f"Dataset name: {dset_name}\n"
+                   f"Dataset format: {dset_format}\n"
+                   f"Dataset path: {dset_path}")
