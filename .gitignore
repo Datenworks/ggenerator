@@ -1,5 +1,4 @@
 .vscode/
-__pycache__/
 *workspace
 .venv/
 .coverage

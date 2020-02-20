@@ -6,6 +6,8 @@ import pytz
 
 
 class TimestampType:
+    key = 'timestamp'
+
     def __init__(self, start_at: str = "1970-01-01T00:00:00UTC",
                  end_at: str = datetime.now(tz=pytz.UTC).isoformat(),
                  tz: str = "UTC"):

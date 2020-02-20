@@ -3,6 +3,8 @@ import string
 
 
 class CharacterType:
+    key = 'char'
+
     def generate(self) -> str:
         return random.choice(string.ascii_letters)
 
