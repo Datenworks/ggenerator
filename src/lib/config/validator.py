@@ -4,7 +4,7 @@ import json
 class ConfigurationValidator(object):
 
     def __init__(self, file_path):
-        self.file_path
+        self.file_path = file_path
 
     def get_config(self):
         file = open(self.file_path, 'r')
@@ -12,7 +12,7 @@ class ConfigurationValidator(object):
         return configuration
 
 
-class ConfigutarionDataset(object):
+class ConfigurationDataset(object):
 
     def __init__(self, id, size, fields, format, serializers):
         self.id = id
@@ -74,11 +74,11 @@ class ConfigurationFields(object):
         return True
 
     def __is_valid_field(self, field):
-        name = self.field.get("name")
+        name = field.get("name")
         has_name = name is not None and isinstance(name, str)
-        field_type = self.field.get("type")
+        field_type = field.get("type")
         has_field_type = field_type is not None and isinstance(field_type, str)
-        generator = self.field.get("generator")
+        generator = field.get("generator")
         has_generator = generator is not None and isinstance(generator, dict)
         is_valid = has_name and has_field_type and has_generator
         return is_valid

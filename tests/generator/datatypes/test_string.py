@@ -3,7 +3,7 @@ from tests.generator.datatypes.generators_fixtures import generate
 import random
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
-TEST_LENGTH_OF_STRING = random.randint(1, 10000)
+TEST_LENGTH_OF_STRING = random.randint(1, 10)
 
 
 class TestStringGenerator:
