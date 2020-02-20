@@ -12,13 +12,13 @@ def execute():
     click.echo(VERSION)
 
 
+@execute.command()
 @click.argument('spec_path',
                 type=click.Path(exists=True,
                                 resolve_path=True,
                                 file_okay=True,
                                 dir_okay=False),
                 required=True)
-@execute.command()
 def generate(spec_path):
     generator = \
         GeneratorsHandler(arguments={'config_file': spec_path})
