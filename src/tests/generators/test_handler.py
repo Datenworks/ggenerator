@@ -18,7 +18,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = simple_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == simple_specification['size']
@@ -32,7 +33,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = argumented_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == argumented_specification['size']
@@ -44,7 +46,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = integer_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == integer_specification['size']
@@ -56,7 +59,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = bool_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == bool_specification['size']
@@ -68,7 +72,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = char_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == char_specification['size']
@@ -80,7 +85,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = float_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == float_specification['size']
@@ -94,7 +100,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = integer_sequence_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == integer_sequence_specification['size']
@@ -108,7 +115,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = timestamp_sequence_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == timestamp_sequence_specification['size']
@@ -120,7 +128,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = string_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == string_specification['size']
@@ -132,7 +141,8 @@ class TestGeneratorsHandler(object):
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = timestamp_specification
         handler = GeneratorsHandler({'config_file': None})
-        dataframe = handler.generate_dataframe()
+        specification = handler.get_valid_specification()
+        dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == timestamp_specification['size']
