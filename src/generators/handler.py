@@ -2,7 +2,7 @@ from pandas import DataFrame, Series
 
 from src.generators.datatypes import generators_map
 from src.lib.config.validator import ConfigurationValidator, \
-    ConfigutarionDataset
+    ConfigurationDataset
 from src.lib.writers import writers
 
 
@@ -25,7 +25,7 @@ class GeneratorsHandler(object):
 
         datasets = config.get('datasets')
         for key in datasets.keys():
-            dataset_validator = ConfigutarionDataset(
+            dataset_validator = ConfigurationDataset(
                 id=key,
                 size=datasets[key]['size'],
                 fields=datasets[key]['fields'],
@@ -41,9 +41,13 @@ class GeneratorsHandler(object):
         datasets = self.specification.get('datasets')
         for key in datasets.keys():
             dataset = datasets[key]
+            dataset_format = dataset['format']
             dataframe = self.generate_dataframe(dataset)
-            for serializer in dataset['serializers']:
-                self.write_dataframe(dataframe, serializer)
+            for destination in dataset['serializers']['to']:
+                file_format, file_path = self.write_dataframe(dataframe,
+                                                              destination,
+                                                              dataset_format)
+                yield key, file_format, file_path
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']
@@ -66,11 +70,12 @@ class GeneratorsHandler(object):
 
     def write_dataframe(self,
                         dataframe: DataFrame,
-                        specification: dict) -> None:
-        file_format = specification['format']['type']
-        file_path = specification['to']['path']
-
+                        destination: dict,
+                        dataset_format: dict) -> (str, str):
+        file_format = dataset_format['type']
+        file_path = destination['uri']
         writer = self.writers[file_format]()
         writer.write(dataframe=dataframe,
                      file_path=file_path,
-                     **self.specification['format'])
+                     **dataset_format.get("options", {}))
+        return file_format, file_path

@@ -1,4 +1,4 @@
-.vscode/
+.vscode/*
 *workspace
 .venv/
 .coverage
@@ -6,6 +6,7 @@
 .kube/
 .pytest_cache/
 .Python
+test.json
 
 __pycache__
 
