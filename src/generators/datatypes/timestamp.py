@@ -15,6 +15,18 @@ class TimestampType:
         self.end_date = self.__parse_to_datetime(end_at)
         self.time_zone = pytz.timezone(tz)
 
+    @staticmethod
+    def check(generator):
+        start_at = generator.get("start_at")
+        end_at = generator.get("end_at")
+
+        try:
+            datetime.fromisoformat(start_at)
+            datetime.fromisoformat(end_at)
+        except ValueError:
+            return False
+        return True
+
     def generate(self) -> datetime:
         return self.__generate_random_date(self.start_date,
                                            self.end_date)\

@@ -34,7 +34,18 @@ class TimestampSequenceType:
         return self.start_date + self.__delta_step(delta)
 
     def __delta_step(self, delta):
-        return timedelta(seconds=self.datepart_in_seconds[self.datepart] * delta)
+        seconds = self.datepart_in_seconds[self.datepart]
+        return timedelta(seconds=seconds * delta)
+
+    @staticmethod
+    def check(generator):
+        start_at = generator.get("start_at")
+
+        try:
+            datetime.fromisoformat(start_at)
+        except ValueError:
+            return False
+        return True
 
     def generate_records(self, num_of_records) -> list:
         return [self.__generate_next(delta)

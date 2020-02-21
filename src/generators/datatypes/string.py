@@ -8,6 +8,11 @@ class StringType:
         self.length = length
         self.character = CharacterType
 
+    @staticmethod
+    def check(generator):
+        length = generator.get("length")
+        return length > 0
+
     def generate(self) -> str:
         return "".join(self.character().generate_records(self.length))
 

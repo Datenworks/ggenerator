@@ -8,6 +8,13 @@ class IntegerType:
         self.start_at = start_at
         self.end_at = end_at
 
+    @staticmethod
+    def check(generator):
+        start_at = generator.get("start_at")
+        end_at = generator.get("end_at")
+        return start_at > -2147483648 and start_at < 2147483648 \
+            and end_at > -2147483648 and end_at < 2147483648
+
     def generate(self) -> int:
         return randint(self.start_at, self.end_at)
 
