@@ -9,21 +9,22 @@ VERSION = "0.1"
 @click.version_option(version=VERSION)
 def execute():
     click.echo(ASCII_ART)
-    click.echo(VERSION)
+    click.echo(f"version: {VERSION}")
+    click.echo("-------------------")
 
 
 @execute.command()
-@click.argument('spec_path',
-                type=click.Path(exists=True,
-                                resolve_path=True,
-                                file_okay=True,
-                                dir_okay=False),
-                required=True)
+@click.option('-s', '--spec', 'spec_path',
+              type=click.Path(exists=True,
+                              resolve_path=True,
+                              file_okay=True,
+                              dir_okay=False),
+              required=True)
 def generate(spec_path):
     generator = \
         GeneratorsHandler(arguments={'config_file': spec_path})
     for dset_name, dset_format, dset_path in generator.generate():
-        click.echo("Finished!\n"
-                   f"Dataset name: {dset_name}\n"
-                   f"Dataset format: {dset_format}\n"
-                   f"Dataset path: {dset_path}")
+        click.echo("| Finished!\n"
+                   f"| Dataset name: {dset_name}\n"
+                   f"| Dataset format: {dset_format}\n"
+                   f"| Dataset path: {dset_path}\n")

@@ -6,7 +6,7 @@ class TestConfigurationFormat(object):
     def test_fields_format(self):
         format_sample = [{
             "name": "id",
-            "type": "sequence",
+            "type": ":integer:sequence",
             "generator": {}
         }]
         validator = ConfigurationFields(format_sample)
