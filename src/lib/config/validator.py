@@ -85,9 +85,9 @@ class ConfigurationFields(object):
     def __generator_type_is_valid(self, field):
         generator = field.get("generator", {})
         field_type = field.get("type")
-        if generator == {} and generators_map[field_type]['generator']['optional']:
+        if not generator and generators_map[field_type]['generator']['optional']:
             return True
-        if generator != {}:
+        if generator:
             arguments = generator.keys()
             return all([arg in generators_map[field_type]['generator']['arguments'] for arg in arguments])
         return False
