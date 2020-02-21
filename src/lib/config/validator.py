@@ -1,5 +1,5 @@
 import json
-
+from src.generators.datatypes import generators_map
 
 class ConfigurationValidator(object):
 
@@ -76,11 +76,19 @@ class ConfigurationFields(object):
         has_name = name is not None and isinstance(name, str)
         field_type = field.get("type")
         has_field_type = field_type is not None and isinstance(field_type, str)
+        has_valid_type = field_type in generators_map.keys()
         generator = field.get("generator")
-        has_generator = generator is not None and isinstance(generator, dict)
-        is_valid = has_name and has_field_type and has_generator
+        valid_generator = self.generator_type_is_valid(self, field_type, generator)
+        is_valid = has_name and has_field_type and valid_generator
         return is_valid
 
+    def generator_type_is_valid(self, field_type, generator):
+        if generator == {} and generators_map[field_type]['optional']:
+            return True
+        if generator != {}:
+            arguments = generator.keys()
+            return all([arg in generators_map[field_type]['arguments'] for arg in arguments])
+        return False
 
 class ConfigurationSerializer(object):
 

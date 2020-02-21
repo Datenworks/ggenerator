@@ -8,12 +8,13 @@ import pytz
 class TimestampType:
     key = 'timestamp'
 
-    def __init__(self, start_at: str = "1970-01-01T00:00:00UTC",
-                 end_at: str = datetime.now(tz=pytz.UTC).isoformat(),
+    def __init__(self, start_at: str,
+                 end_at: str,
                  tz: str = "UTC"):
+        self.time_zone = pytz.timezone(tz)
         self.start_date = self.__parse_to_datetime(start_at)
         self.end_date = self.__parse_to_datetime(end_at)
-        self.time_zone = pytz.timezone(tz)
+        
 
     def generate(self) -> datetime:
         return self.__generate_random_date(self.start_date,
@@ -21,7 +22,7 @@ class TimestampType:
                    .replace(tzinfo=self.time_zone)
 
     def __parse_to_datetime(self, iso_format_date) -> datetime:
-        return parse(iso_format_date)
+        return parse(iso_format_date).replace(tzinfo=self.time_zone)
 
     def __generate_random_date(self, start, end) -> datetime:
         """

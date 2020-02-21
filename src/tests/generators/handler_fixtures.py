@@ -24,7 +24,8 @@ def argumented_specification():
                         'expected': 'int64'},
                        {'name': 'date',
                         'type': 'timestamp',
-                        'generator': {'start_at': "2000-01-01T00:00:00UTC"},
+                        'generator': {'start_at': "2000-01-01T00:00:00UTC",
+                                      'end_at':  '2019-12-31T01:00:00UTC'},
                         'expected': 'datetime64[ns]'}]}
 
 
@@ -34,6 +35,26 @@ def sample(type, expected):
                         'type': type,
                         'generator': {},
                         'expected': expected}]}
+
+def sample_timestamp(type, expected):
+    return {'size': 200,
+            'fields': [{'name': 'id',
+                        'type': type,
+                        'generator': {
+                            'start_at': '2019-01-01T01:00:00UTC',
+                            'end_at':  '2019-12-31T01:00:00UTC'
+                        },
+                        'expected': expected}]}
+
+def sample_timestamp_sequence(type, expected):
+    return {'size': 200,
+            'fields': [{'name': 'id',
+                        'type': type,
+                        'generator': {
+                            'start_at': '2019-01-01T01:00:00UTC'
+                            },
+                        'expected': expected}]}
+
 
 
 @fixture
@@ -58,7 +79,7 @@ def float_specification():
 
 @fixture
 def timestamp_sequence_specification():
-    return sample('timestamp:sequence', 'datetime64[ns]')
+    return sample_timestamp_sequence('timestamp:sequence', 'datetime64[ns]')
 
 
 @fixture
@@ -73,4 +94,4 @@ def string_specification():
 
 @fixture
 def timestamp_specification():
-    return sample('timestamp', 'datetime64[ns]')
+    return sample_timestamp('timestamp', 'datetime64[ns]')
