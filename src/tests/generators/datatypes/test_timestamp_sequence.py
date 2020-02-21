@@ -1,9 +1,11 @@
 import random
+
 from datetime import datetime
+from pytest import raises
 
 from dateutil.parser._parser import ParserError
 from src.generators.datatypes.sequence_timestamp import TimestampSequenceType
-from src.tests.generators.datatypes.generators_fixtures import generate
+from src.tests.generators.datatypes.generators_fixtures import *  # noqa: F403, F401, E501
 
 TEST_NUM_OF_RECORDS = random.randint(1, 1000)
 
@@ -20,13 +22,16 @@ class TestTimestampGenerator:
             assert isinstance(record, datetime)
 
     def test_not_receive_date_format(self, generate):
-        import pytest
-        with pytest.raises(ParserError):
-            records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, start_at="sfsdfsdfs")
+        with raises(ParserError):
+            generate(TimestampSequenceType,
+                     TEST_NUM_OF_RECORDS,
+                     start_at="sfsdfsdfs")
 
     def test_minutes_sequence_part(self, generate):
         dateparts = ['second', 'minute', 'hour', 'day', 'month', 'year']
         for datepart in dateparts:
             print(datepart)
-            records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, datepart=datepart)
+            records = generate(TimestampSequenceType,
+                               TEST_NUM_OF_RECORDS,
+                               datepart=datepart)
             assert len(records) == TEST_NUM_OF_RECORDS

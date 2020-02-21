@@ -3,8 +3,7 @@ from os import remove
 from os.path import exists, isfile
 
 from src.lib.writers.csv import CsvWriter
-from src.tests.lib.writers.writers_fixtures import pandas_dataframe_with_data, \
-    pandas_dataframe_without_data, test_file_path
+from src.tests.lib.writers.writers_fixtures import *  # noqa: F403, F401
 
 
 class TestCsvWriter:
