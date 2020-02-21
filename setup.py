@@ -5,7 +5,7 @@ setup(
     name="ggnerator",
     version="0.1",
     packages=find_packages(),
-    include_packages_data=True,
+    include_package_data=True,
     install_requires=[
         'Click',
         'pandas',
@@ -13,5 +13,5 @@ setup(
     ],
     entry_points="""
     [console_scripts]
-    main
+    name=main
     """)
