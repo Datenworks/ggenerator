@@ -69,6 +69,8 @@ class ConfigurationFields(object):
         for field in self.fields:
             if self.__is_valid_field(field) is False:
                 return False
+            if self.__generator_type_is_valid(field) is False:
+                return False
         return True
 
     def __is_valid_field(self, field):
@@ -77,12 +79,12 @@ class ConfigurationFields(object):
         field_type = field.get("type")
         has_field_type = field_type is not None and isinstance(field_type, str)
         has_valid_type = field_type in generators_map.keys()
-        generator = field.get("generator")
-        valid_generator = self.generator_type_is_valid(field_type, generator)
-        is_valid = has_name and has_field_type and valid_generator
+        is_valid = has_name and has_field_type
         return is_valid
 
-    def generator_type_is_valid(self, field_type, generator):
+    def __generator_type_is_valid(self, field):
+        generator = field.get("generator", {})
+        field_type = field.get("type")
         if generator == {} and generators_map[field_type]['generator']['optional']:
             return True
         if generator != {}:

@@ -6,7 +6,7 @@ class TestConfigurationFormat(object):
     def test_fields_format(self):
         format_sample = [{
             "name": "id",
-            "type": ":integer:sequence",
+            "type": "integer:sequence",
             "generator": {}
         }]
         validator = ConfigurationFields(format_sample)
@@ -15,7 +15,7 @@ class TestConfigurationFormat(object):
 
     def test_fields_id_format(self):
         format_sample = [{
-            "type": "sequence",
+            "type": "timestamp:sequence",
             "generator": {}
         }]
         validator = ConfigurationFields(format_sample)
@@ -34,7 +34,10 @@ class TestConfigurationFormat(object):
     def test_fields_generator_format(self):
         format_sample = [{
             "name": "id",
-            "type": "sequence",
+            "type": "integer:sequence",
+            "generator":{
+                "asdasd": "asdasd"
+            }
         }]
         validator = ConfigurationFields(format_sample)
         is_valid = validator.is_valid()
