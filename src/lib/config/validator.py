@@ -78,16 +78,16 @@ class ConfigurationFields(object):
         has_field_type = field_type is not None and isinstance(field_type, str)
         has_valid_type = field_type in generators_map.keys()
         generator = field.get("generator")
-        valid_generator = self.generator_type_is_valid(self, field_type, generator)
+        valid_generator = self.generator_type_is_valid(field_type, generator)
         is_valid = has_name and has_field_type and valid_generator
         return is_valid
 
     def generator_type_is_valid(self, field_type, generator):
-        if generator == {} and generators_map[field_type]['optional']:
+        if generator == {} and generators_map[field_type]['generator']['optional']:
             return True
         if generator != {}:
             arguments = generator.keys()
-            return all([arg in generators_map[field_type]['arguments'] for arg in arguments])
+            return all([arg in generators_map[field_type]['generator']['arguments'] for arg in arguments])
         return False
 
 class ConfigurationSerializer(object):
