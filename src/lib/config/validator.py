@@ -71,6 +71,8 @@ class ConfigurationFields(object):
         for field in self.fields:
             if self.__is_valid_field(field) is False:
                 return False
+            if self.__generator_type_is_valid(field) is False:
+                return False
         return True
 
     def __is_valid_type(self, field):
@@ -80,7 +82,7 @@ class ConfigurationFields(object):
         if field_type not in generators_map:
             return False
 
-        clazz = generators_map[field_type]
+        clazz = generators_map[field_type]['type']
         return clazz.check(generator)
 
     def __is_valid_field(self, field):
@@ -98,6 +100,15 @@ class ConfigurationFields(object):
 
         return is_valid
 
+    def __generator_type_is_valid(self, field):
+        generator = field.get("generator", {})
+        field_type = field.get("type")
+        if not generator and generators_map[field_type]['generator']['optional']:
+            return True
+        if generator:
+            arguments = generator.keys()
+            return all([arg in generators_map[field_type]['generator']['arguments'] for arg in arguments])
+        return False
 
 class ConfigurationSerializer(object):
 

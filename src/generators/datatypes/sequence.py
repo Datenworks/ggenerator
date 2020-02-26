@@ -1,13 +1,15 @@
 class SequenceType:
     key = 'integer:sequence'
 
-    def __init__(self, start_at=1, step=1):
+    def __init__(self, start_at=0, step=1):
         self.start_at = start_at
         self.step = step
 
     @staticmethod
     def check(generator):
         start_at = generator.get("start_at")
+        if not isinstance(start_at, int):
+            return False
         return start_at > -2147483648 and start_at < 2147483648
 
     def generate_records(self, num_of_rows) -> list:
