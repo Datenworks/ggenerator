@@ -1,7 +1,7 @@
 import pytz
 
 from datetime import datetime
-from dateutil.parser import parse
+from dateutil.parser import isoparse
 from datetime import timedelta
 
 
@@ -28,7 +28,7 @@ class TimestampSequenceType:
         self.time_zone = pytz.timezone(tz)
 
     def __parse_to_datetime(self, iso_format_date) -> datetime:
-        return parse(iso_format_date)
+        return isoparse(iso_format_date)
 
     def __generate_next(self, delta) -> datetime:
         return self.start_date + self.__delta_step(delta)
@@ -42,7 +42,7 @@ class TimestampSequenceType:
         start_at = generator.get("start_at")
 
         try:
-            datetime.fromisoformat(start_at)
+            isoparse(start_at)
         except ValueError:
             return False
         return True

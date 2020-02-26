@@ -24,8 +24,8 @@ def argumented_specification():
                         'expected': 'int64'},
                        {'name': 'date',
                         'type': 'timestamp',
-                        'generator': {'start_at': "2000-01-01T00:00:00UTC",
-                                      'end_at':  '2019-12-31T01:00:00UTC'},
+                        'generator': {'start_at': "2000-01-01T00:00:00Z",
+                                      'end_at':  '2019-12-31T01:00:00Z'},
                         'expected': 'datetime64[ns]'}]}
 
 
@@ -41,8 +41,8 @@ def sample_timestamp(type, expected):
             'fields': [{'name': 'id',
                         'type': type,
                         'generator': {
-                            'start_at': '2019-01-01T01:00:00UTC',
-                            'end_at':  '2019-12-31T01:00:00UTC'
+                            'start_at': '2019-01-01T01:00:00Z',
+                            'end_at':  '2019-12-31T01:00:00Z'
                         },
                         'expected': expected}]}
 
@@ -51,7 +51,7 @@ def sample_timestamp_sequence(type, expected):
             'fields': [{'name': 'id',
                         'type': type,
                         'generator': {
-                            'start_at': '2019-01-01T01:00:00UTC'
+                            'start_at': '2019-01-01T01:00:00Z'
                             },
                         'expected': expected}]}
 

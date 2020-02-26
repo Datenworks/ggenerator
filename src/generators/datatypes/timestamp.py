@@ -1,4 +1,4 @@
-from dateutil.parser import parse
+from dateutil.parser import isoparse
 from datetime import datetime
 from random import randrange
 from datetime import timedelta
@@ -12,8 +12,8 @@ class TimestampType:
                  end_at: str,
                  tz: str = "UTC"):
         self.time_zone = pytz.timezone(tz)
-        self.start_date = self.__parse_to_datetime(start_at)
-        self.end_date = self.__parse_to_datetime(end_at)
+        self.start_date = start_at
+        self.end_date = end_at
         
 
     @staticmethod
@@ -22,19 +22,21 @@ class TimestampType:
         end_at = generator.get("end_at")
 
         try:
-            datetime.fromisoformat(start_at)
-            datetime.fromisoformat(end_at)
+            isoparse(start_at)
+            isoparse(end_at)
         except ValueError:
             return False
         return True
 
     def generate(self) -> datetime:
-        return self.__generate_random_date(self.start_date,
-                                           self.end_date)\
+        dt_start_at = self.__parse_to_datetime(self.start_date)
+        dt_end_at = self.__parse_to_datetime(self.end_date) 
+        return self.__generate_random_date(dt_start_at,
+                                           dt_end_at)\
                    .replace(tzinfo=self.time_zone)
 
     def __parse_to_datetime(self, iso_format_date) -> datetime:
-        return parse(iso_format_date).replace(tzinfo=self.time_zone)
+        return isoparse(iso_format_date).replace(tzinfo=self.time_zone)
 
     def __generate_random_date(self, start, end) -> datetime:
         """

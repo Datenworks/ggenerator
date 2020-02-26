@@ -107,7 +107,6 @@ class ConfigurationFields(object):
             return True
         if generator:
             arguments = generator.keys()
-            print(generators_map[field_type]['generator']['arguments'])
             return all([arg in generators_map[field_type]['generator']['arguments'] for arg in arguments])
         return False
 
