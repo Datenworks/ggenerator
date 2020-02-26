@@ -11,22 +11,22 @@ TEST_NUM_OF_RECORDS = random.randint(1, 1000)
 class TestTimestampGenerator:
 
     def test_num_of_records(self, generate):
-        records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS)
+        records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, start_at="2019-01-01T01:00:00Z",)
         assert len(records) == TEST_NUM_OF_RECORDS
 
     def test_all_records_datetime(self, generate):
-        records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS)
+        records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, start_at="2019-01-01T01:00:00Z",)
         for record in records:
             assert isinstance(record, datetime)
 
     def test_not_receive_date_format(self, generate):
         import pytest
-        with pytest.raises(ParserError):
+        with pytest.raises(ValueError):
             records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, start_at="sfsdfsdfs")
 
     def test_minutes_sequence_part(self, generate):
         dateparts = ['second', 'minute', 'hour', 'day', 'month', 'year']
         for datepart in dateparts:
             print(datepart)
-            records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, datepart=datepart)
+            records = generate(TimestampSequenceType, TEST_NUM_OF_RECORDS, start_at="2019-01-01T01:00:00Z", datepart=datepart)
             assert len(records) == TEST_NUM_OF_RECORDS

@@ -59,7 +59,7 @@ class GeneratorsHandler(object):
             field_type = field['type']
             field_arguments = field['generator']
 
-            generator_class = generators_map[field_type]
+            generator_class = generators_map[field_type]['type']
             generator = generator_class(**field_arguments)
 
             series = Series(generator.generate_records(size))
