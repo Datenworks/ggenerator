@@ -36,6 +36,7 @@ def sample(type, expected):
                         'generator': {},
                         'expected': expected}]}
 
+
 def sample_timestamp(type, expected):
     return {'size': 200,
             'fields': [{'name': 'id',
@@ -46,6 +47,7 @@ def sample_timestamp(type, expected):
                         },
                         'expected': expected}]}
 
+
 def sample_timestamp_sequence(type, expected):
     return {'size': 200,
             'fields': [{'name': 'id',
@@ -54,7 +56,6 @@ def sample_timestamp_sequence(type, expected):
                             'start_at': '2019-01-01T01:00:00Z'
                             },
                         'expected': expected}]}
-
 
 
 @fixture

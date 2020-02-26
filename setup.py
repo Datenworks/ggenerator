@@ -1,14 +1,18 @@
-from setuptools import setup, find_packages
 import os
+
+from setuptools import setup, find_packages
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 setup(
     name="ggnerator",
     author="Datenworks",
     author_email="contato@datenworks.com",
-    description="A tool capable to generate fake data with a given specification defined as a JSON DSL",
+    description=("A tool capable to generate fake data with a "
+                 "given specification defined as a JSON DSL"),
     url="https://datenworks.com/",
     license='MIT',
     project_urls={

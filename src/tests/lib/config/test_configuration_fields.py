@@ -38,9 +38,7 @@ class TestConfigurationFormat(object):
         format_sample = [{
             "name": "id",
             "type": "integer:sequence",
-            "generator":{
-                "asdasd": "asdasd"
-            }
+            "generator": {"asdasd": "asdasd"}
         }]
         validator = ConfigurationFields(format_sample)
         is_valid = validator.is_valid()
