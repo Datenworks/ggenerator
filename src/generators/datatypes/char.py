@@ -5,6 +5,10 @@ import string
 class CharacterType:
     key = 'char'
 
+    @staticmethod
+    def check(generator):
+        return True
+
     def generate(self) -> str:
         return random.choice(string.ascii_letters)
 
