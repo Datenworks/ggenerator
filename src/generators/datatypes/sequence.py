@@ -5,6 +5,11 @@ class SequenceType:
         self.start_at = start_at
         self.step = step
 
+    @staticmethod
+    def check(generator):
+        start_at = generator.get("start_at")
+        return start_at > -2147483648 and start_at < 2147483648
+
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)
 
