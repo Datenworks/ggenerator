@@ -15,7 +15,7 @@ setup(
         "Source Code": "https://github.com/Datenworks/ggenerator"
     },
     py_modules=['main'],
-    long_description="README.md",
+    long_description=read("README.md"),
     version="0.1",
     packages=find_packages(),
     include_package_data=True,
