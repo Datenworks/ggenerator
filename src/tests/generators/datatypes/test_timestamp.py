@@ -1,9 +1,10 @@
 import random
-from datetime import datetime
 
-from dateutil.parser._parser import ParserError
+from datetime import datetime
+from pytest import raises
+
 from src.generators.datatypes.timestamp import TimestampType
-from src.tests.generators.datatypes.generators_fixtures import generate
+from src.tests.generators.datatypes.generators_fixtures import *  # noqa: F403, F401, E501
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 
@@ -26,9 +27,8 @@ class TestTimestampGenerator:
             assert isinstance(record, datetime)
 
     def test_not_receive_date_format(self, generate):
-        import pytest
-        with pytest.raises(ValueError):
-            records = generate(TimestampType, TEST_NUM_OF_RECORDS,
-                           start_at="sdsfsdfs",
-                           end_at="sfsdfsdfsf",
-                           tz='UTC')
+        with raises(ValueError):
+            generate(TimestampType, TEST_NUM_OF_RECORDS,
+                     start_at="sdsfsdfs",
+                     end_at="sfsdfsdfsf",
+                     tz='UTC')

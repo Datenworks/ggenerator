@@ -1,8 +1,8 @@
-from dateutil.parser import isoparse
-from datetime import datetime
-from random import randrange
-from datetime import timedelta
 import pytz
+
+from dateutil.parser import isoparse
+from datetime import datetime, timedelta
+from random import randrange
 
 
 class TimestampType:
@@ -14,7 +14,6 @@ class TimestampType:
         self.time_zone = pytz.timezone(tz)
         self.start_date = start_at
         self.end_date = end_at
-        
 
     @staticmethod
     def check(generator):
@@ -30,7 +29,7 @@ class TimestampType:
 
     def generate(self) -> datetime:
         dt_start_at = self.__parse_to_datetime(self.start_date)
-        dt_end_at = self.__parse_to_datetime(self.end_date) 
+        dt_end_at = self.__parse_to_datetime(self.end_date)
         return self.__generate_random_date(dt_start_at,
                                            dt_end_at)\
                    .replace(tzinfo=self.time_zone)
