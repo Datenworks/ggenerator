@@ -28,7 +28,7 @@ jobs:
         password: $PIPY_TOKEN
         on:
           branch: develop
-          condition: $TRAVIS_EVENT_TYPE = push
+          condition: $git show --summary origin/develop HEAD | -q grep ^Merge:$
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
