@@ -18,7 +18,7 @@ jobs:
         - dist/*.tar.gz
         server: https://test.pypi.org/legacy/
         password:
-          secure: $PYPITOKEN
+          secure: $pypi-token
         on:
           branch: develop
     - stage: PyPI Release Production
@@ -29,10 +29,11 @@ jobs:
         - dist/*.whl
         - dist/*.tar.gz
         password:
-          secure: $PYPITOKEN
+          secure: $pypi-token
         on:
           branch: master
-
-install:
-- pip install pipenv twine wheel
+after_success:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
 
