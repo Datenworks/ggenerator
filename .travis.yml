@@ -26,9 +26,7 @@ jobs:
         - dist/*.tar.gz
         server: https://test.pypi.org/legacy/
         password: $PIPY_TOKEN
-        on:
-          branch: develop
-          condition: $git show --summary develop HEAD | -q grep ^Merge:$
+      if: branch = develop AND type = push
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
