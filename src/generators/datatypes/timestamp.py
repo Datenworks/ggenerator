@@ -24,11 +24,12 @@ class TimestampType:
             return False
 
         try:
-            isoparse(start_at)
-            isoparse(end_at)
+            start_at = isoparse(start_at)
+            end_at = isoparse(end_at)
+
+            return start_at < end_at
         except ValueError:
             return False
-        return True
 
     def generate(self) -> datetime:
         dt_start_at = self.__parse_to_datetime(self.start_date)
