@@ -13,12 +13,8 @@ jobs:
       script: 
         - pip install pipenv
         - pipenv install --dev
-    -
-      name: "Lint Flake8"
-      script: pipenv run flake8
-    -
-      name: "Unit Tests"
-      script: pipenv run python -m pytest --cov
+        - pipenv run flake8
+        - pipenv run python -m pytest --cov
     - stage: PyPI Release Develop
       before_deploy:
         - python setup.py sdist bdist_wheel
