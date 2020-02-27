@@ -12,8 +12,13 @@ class IntegerType:
     def check(generator):
         start_at = generator.get("start_at")
         end_at = generator.get("end_at")
-        return start_at > -2147483648 and start_at < 2147483648 \
-            and end_at > -2147483648 and end_at < 2147483648
+        return start_at is not None and \
+            start_at > -2147483648 and \
+            start_at < 2147483648 and \
+            end_at is not None and \
+            end_at > -2147483648 and \
+            end_at < 2147483648 and \
+            start_at < end_at
 
     def generate(self) -> int:
         return randint(self.start_at, self.end_at)

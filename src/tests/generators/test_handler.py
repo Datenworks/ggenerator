@@ -1,11 +1,7 @@
 from pandas import DataFrame
 
 from src.generators.handler import GeneratorsHandler
-from src.tests.generators.handler_fixtures import simple_specification, \
-    argumented_specification, integer_specification, bool_specification, \
-    char_specification, float_specification, string_specification, \
-    integer_sequence_specification, timestamp_sequence_specification, \
-    timestamp_specification
+from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 
 
 class TestGeneratorsHandler(object):
