@@ -25,9 +25,10 @@ class TestJsonWriter:
         remove(test_file_path)
         assert exists(test_file_path) is False
 
-    def test_writting_dataframe_with_records_orient_columns(self,
-                                             pandas_dataframe_with_data,
-                                             test_file_path):
+    def test_writting_dataframe_with_records_orient_columns(
+            self,
+            pandas_dataframe_with_data,
+            test_file_path):
         json_writer = JsonWriter()
         json_writer.write(dataframe=pandas_dataframe_with_data,
                           file_path=test_file_path,
@@ -43,9 +44,10 @@ class TestJsonWriter:
         remove(test_file_path)
         assert exists(test_file_path) is False
 
-    def test_writting_dataframe_with_records_orient_records(self,
-                                             pandas_dataframe_with_data,
-                                             test_file_path):
+    def test_writting_dataframe_with_records_orient_records(
+            self,
+            pandas_dataframe_with_data,
+            test_file_path):
         json_writer = JsonWriter()
         json_writer.write(dataframe=pandas_dataframe_with_data,
                           file_path=test_file_path,

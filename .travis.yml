@@ -1,0 +1,16 @@
+language: python
+branches:
+  only:
+    - master
+    - develop
+
+python:
+  - "3.7"
+  
+install:
+  - pip install pipenv
+  - pipenv install --dev
+
+script:
+  - pipenv run flake8
+  - pipenv run python -m pytest --cov
