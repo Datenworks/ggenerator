@@ -3,13 +3,15 @@ branches:
   only:
   - master
   - develop
+  - feature/buildci
 
 jobs:
   include:
-    - stage: Build
-      script: python setup.py sdist bdist_wheel
-      name: "Building the project"
     - stage: PyPI Release Develop
+      before_deploy:
+        - echo $TRAVIS_BRANCH
+        - echo $TRAVIS_EVENT_TYPE
+        - python setup.py sdist bdist_wheel
       deploy:
         provider: pypi
         user: "__token__"
@@ -17,23 +19,12 @@ jobs:
         - dist/*.whl
         - dist/*.tar.gz
         server: https://test.pypi.org/legacy/
-        password:
-          secure: $pypi-token
+        password: $PIPY_TOKEN
         on:
-          branch: develop
-    - stage: PyPI Release Production
-      deploy:
-        provider: pypi
-        user: "__token__"
-        file:
-        - dist/*.whl
-        - dist/*.tar.gz
-        password:
-          secure: $pypi-token
-        on:
-          branch: master
-after_success:
-  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-  - chmod +x send.sh
-  - ./send.sh success $WEBHOOK_URL
+          branch: feature/buildci
+          condition: $TRAVIS_EVENT_TYPE = push
+      after_deploy:
+        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh success $WEBHOOK_URL
 
