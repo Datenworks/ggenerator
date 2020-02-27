@@ -1,7 +1,7 @@
 import random
 
 from src.generators.datatypes.string import StringType
-from src.tests.generators.datatypes.generators_fixtures import generate
+from src.tests.generators.datatypes.generators_fixtures import *  # noqa: F403, F401, E501
 
 TEST_NUM_OF_RECORDS = random.randint(1, 10000)
 TEST_LENGTH_OF_STRING = random.randint(1, 15)

@@ -41,6 +41,9 @@ class TimestampSequenceType:
     def check(generator):
         start_at = generator.get("start_at")
 
+        if start_at is None:
+            return False
+
         try:
             isoparse(start_at)
         except ValueError:

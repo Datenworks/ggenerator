@@ -11,14 +11,14 @@ from src.generators.datatypes.timestamp import TimestampType
 primitive_generators = {
     BooleanType.key: {
         'type': BooleanType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': []
         }
     },
     CharacterType.key: {
         'type': CharacterType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': []
         }
@@ -27,42 +27,42 @@ primitive_generators = {
 basic_generators = {
     FloatType.key: {
         'type': FloatType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': ['start_at', 'end_at']
         }
     },
     IntegerType.key: {
         'type': IntegerType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': ['start_at', 'end_at']
         }
     },
     TimestampSequenceType.key: {
         'type': TimestampSequenceType,
-        'generator':{
+        'generator': {
             'optional': False,
             'arguments': ['start_at']
         }
     },
     SequenceType.key: {
         'type': SequenceType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': ['start_at']
         }
     },
     StringType.key: {
         'type': StringType,
-        'generator':{
+        'generator': {
             'optional': True,
             'arguments': ['length']
         }
     },
     TimestampType.key: {
         'type': TimestampType,
-        'generator':{
+        'generator': {
             'optional': False,
             'arguments': ['start_at', 'end_at']
         }
