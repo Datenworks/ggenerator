@@ -14,10 +14,17 @@ class FloatType:
     def check(generator):
         start_at = generator.get("start_at")
         end_at = generator.get("end_at")
-        return start_at > -2250738585072014e-308 and \
-            start_at < 7976931348623157e+308 and \
-            end_at > -2250738585072014e-308 and \
-            end_at < 7976931348623157e+308
+        min_value = -2250738585072014e-308
+        max_value = 7976931348623157e+308
+
+        is_start_valid = start_at is not None and \
+            start_at > min_value and \
+            start_at < max_value
+        is_end_valid = end_at is not None and \
+            end_at > min_value and \
+            end_at < max_value
+
+        return is_start_valid and is_end_valid
 
     def generate(self) -> float:
         return round(uniform(self.start_at, self.end_at), self.decimal_floor)
