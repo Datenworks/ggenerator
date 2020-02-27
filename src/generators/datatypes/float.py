@@ -24,7 +24,9 @@ class FloatType:
             end_at > min_value and \
             end_at < max_value
 
-        return is_start_valid and is_end_valid
+        return is_start_valid and \
+            is_end_valid and \
+            start_at < end_at
 
     def generate(self) -> float:
         return round(uniform(self.start_at, self.end_at), self.decimal_floor)
