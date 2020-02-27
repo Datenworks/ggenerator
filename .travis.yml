@@ -1,16 +1,33 @@
 language: python
 branches:
   only:
-    - master
-    - develop
-
+  - master
+  - develop
 python:
   - "3.7"
-  
-install:
-  - pip install pipenv
-  - pipenv install --dev
 
-script:
-  - pipenv run flake8
-  - pipenv run python -m pytest --cov
+jobs:
+  include:
+    - stage: Tests, Lint and Coverage
+      name: "Environment Setup"
+      script: 
+        - pip install pipenv
+        - pipenv install --dev
+        - pipenv run flake8
+        - pipenv run python -m pytest --cov
+    - stage: PyPI Release Develop
+      before_deploy:
+        - pipenv run python setup.py sdist bdist_wheel
+      deploy:
+        provider: pypi
+        user: "__token__"
+        file:
+        - dist/*.whl
+        - dist/*.tar.gz
+        server: https://test.pypi.org/legacy/
+        password: $PIPY_TOKEN
+      if: branch = develop AND type = push
+      after_deploy:
+        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh success $WEBHOOK_URL
