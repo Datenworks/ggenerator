@@ -17,5 +17,8 @@ class JsonWriter(object):
          - file_path - str: path of the file to be written
          - **kwargs - additional arguments for "to_json" pandas method
         """
+        if "orient" not in kwargs:
+            kwargs.update({"orient": "records"})
+
         if dataframe.shape[0] > 0:
             dataframe.to_json(file_path, **kwargs)
