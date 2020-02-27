@@ -1,0 +1,38 @@
+language: python
+branches:
+  only:
+  - master
+  - develop
+
+jobs:
+  include:
+    - stage: Build
+      script: python setup.py sdist bdist_wheel
+      name: "Building the project"
+    - stage: PyPI Release Develop
+      deploy:
+        provider: pypi
+        user: "__token__"
+        file:
+        - dist/*.whl
+        - dist/*.tar.gz
+        server: https://test.pypi.org/legacy/
+        password:
+          secure: $PYPITOKEN
+        on:
+          branch: develop
+    - stage: PyPI Release Production
+      deploy:
+        provider: pypi
+        user: "__token__"
+        file:
+        - dist/*.whl
+        - dist/*.tar.gz
+        password:
+          secure: $PYPITOKEN
+        on:
+          branch: master
+
+install:
+- pip install pipenv twine wheel
+
