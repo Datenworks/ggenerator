@@ -10,7 +10,9 @@ class SequenceType:
         start_at = generator.get("start_at")
         if not isinstance(start_at, int):
             return False
-        return start_at > -2147483648 and start_at < 2147483648
+        return start_at is not None and \
+            start_at > -2147483648 and \
+            start_at < 2147483648
 
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)

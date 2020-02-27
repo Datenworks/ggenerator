@@ -20,6 +20,9 @@ class TimestampType:
         start_at = generator.get("start_at")
         end_at = generator.get("end_at")
 
+        if start_at is None or end_at is None:
+            return False
+
         try:
             isoparse(start_at)
             isoparse(end_at)
