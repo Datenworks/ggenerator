@@ -9,6 +9,11 @@ python:
 jobs:
   include:
     - stage: Tests, Lint and Coverage
+      name: "Environment Setup"
+      script: 
+        - pip install pipenv
+        - pipenv install --dev
+    -
       name: "Lint Flake8"
       script: pipenv run flake8
     -
@@ -32,8 +37,3 @@ jobs:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-
-
-install:
-  - pip install pipenv
-  - pipenv install --dev
