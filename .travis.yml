@@ -3,6 +3,7 @@ branches:
   only:
   - master
   - develop
+  - feature/buildci
 python:
   - "3.7"
 
