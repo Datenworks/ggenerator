@@ -7,12 +7,13 @@ verify_ssl = true
 pytest = "==5.3.5"
 flake8 = "==3.7.9"
 pytest-mock = "==2.0.0"
-pytest-cov = "*"
+pytest-cov = "==2.8.1"
 
 [packages]
 python-dateutil = "*"
 pandas = "==1.0.1"
 click = "*"
+requests = "==2.23.0"
 
 [requires]
 python_version = "3.7"
