@@ -33,7 +33,7 @@ jobs:
       if: type = pull_request
 
 install:
-  - ls
+  - pip --version
   - pip install pipenv
   - pipenv install --dev
   - pip freeze > requirements.txt
