@@ -6,12 +6,16 @@ branches:
 python:
   - "3.7"
 
+env:
+  global:
+    - PIPENV_VENV_IN_PROJECT=1
+    - PIPENV_IGNORE_VIRTUALENVS=1
+
 jobs:
   include:
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
-        - pipenv install --dev
         - pipenv run flake8
         - pipenv run python -m pytest --cov
       if: type = pull_request
@@ -30,3 +34,4 @@ jobs:
 
 install:
   - pip install pipenv
+  - pipenv install --dev
