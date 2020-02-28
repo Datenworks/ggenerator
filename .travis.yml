@@ -10,7 +10,7 @@ python:
 jobs:
   include:
     - stage: PyPI Release Develop
-      deploy:
+      deploy: &pipy
         provider: pypi
         user: "__token__"
         server: https://test.pypi.org/legacy/
