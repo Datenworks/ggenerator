@@ -3,6 +3,7 @@ branches:
   only:
   - master
   - develop
+  - feature/buildci
 python:
   - "3.7"
 
@@ -16,11 +17,16 @@ jobs:
         server: https://test.pypi.org/legacy/
         distributions: "sdist bdist_wheel"
         password: $PIPY_TOKEN
+        on:
+          repo: datenworks/ggenerator
+          branches:
+            only:
+              - feature/buildci
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-      if: branch = develop AND type = push
+      if: type = push
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
