@@ -11,19 +11,16 @@ jobs:
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
+        - pipenv install --dev
         - pipenv run flake8
         - pipenv run python -m pytest --cov
       if: type = pull_request
     - stage: PyPI Release Develop
-      before_deploy:
-        - pipenv run python setup.py sdist bdist_wheel
       deploy:
         provider: pypi
         user: "__token__"
-        file:
-        - dist/*.whl
-        - dist/*.tar.gz
         server: https://test.pypi.org/legacy/
+        distributions: "sdist bdist_wheel"
         password: $PIPY_TOKEN
       if: branch = develop AND type = push
       after_deploy:
@@ -33,4 +30,3 @@ jobs:
 
 install:
   - pip install pipenv
-  - pipenv install --dev
