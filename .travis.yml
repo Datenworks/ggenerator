@@ -29,14 +29,6 @@ jobs:
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
-        - pipenv run flake8
-        - pipenv run python -m pytest --cov
+        - flake8
+        - python -m pytest --cov
       if: type = pull_request
-
-install:
-  - pip --version
-  - pip install pipenv
-  - pipenv shell
-  - pipenv install --dev
-  - pipenv run pip freeze > requirements.txt
-  - ls

@@ -18,5 +18,4 @@ htmlcov/
 jspm_packages/
 node_modules/
 
-requirements.txt
 test.json
