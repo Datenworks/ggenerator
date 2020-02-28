@@ -12,7 +12,6 @@ entrypoints==0.3
 flake8==3.7.9
 fsspec==0.6.2
 gcsfs==0.6.0
-ggnerator==0.1
 google-auth==1.11.2
 google-auth-oauthlib==0.4.1
 idna==2.9
