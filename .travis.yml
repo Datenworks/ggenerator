@@ -18,16 +18,25 @@ jobs:
       script:
         - pipenv run flake8
         - pipenv run python -m pytest --cov
-      if: type = pull_request
-    - stage: PyPI Release Develop
-      deploy:
-        provider: pypi
-        user: "__token__"
-        server: https://test.pypi.org/legacy/
-        distributions: "sdist bdist_wheel"
-        password: $PIPY_TOKEN
-      if: branch = feature/buildci AND type = push
-      after_deploy:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
-        - ./send.sh success $WEBHOOK_URL
+      if: type = pull_request      
+
+install:
+  - ls
+  - pip install pipenv
+  - pipenv install --dev
+  - pip freeze > requirements.txt
+  - ls
+
+deploy:
+  provider: pypi
+  user: "__token__"
+  server: https://test.pypi.org/legacy/
+  distributions: "sdist bdist_wheel"
+  password: $PIPY_TOKEN
+  on:
+    branch: feature/buildci
+    condition: type = push
+after_deploy:
+  - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
