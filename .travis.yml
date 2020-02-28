@@ -3,7 +3,6 @@ branches:
   only:
   - master
   - develop
-  - feature/buildci
 python:
   - "3.7"
 
@@ -21,7 +20,7 @@ jobs:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-      if: branch = feature/buildci AND type = push
+      if: branch = develop AND type = push
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
