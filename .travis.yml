@@ -10,7 +10,6 @@ python:
 env:
   global:
     - PIPENV_VENV_IN_PROJECT=1
-    - PIPENV_IGNORE_VIRTUALENVS=1
 
 jobs:
   include:
@@ -21,7 +20,7 @@ jobs:
         - pipenv run python -m pytest --cov
       if: type = pull_request
     - stage: PyPI Release Develop
-      before_deploy: pipenv shell
+      script: pipenv shell
       deploy:
         provider: pypi
         user: "__token__"
