@@ -20,7 +20,6 @@ jobs:
         - pipenv run python -m pytest --cov
       if: type = pull_request
     - stage: PyPI Release Develop
-      script: pipenv shell
       deploy:
         provider: pypi
         user: "__token__"
