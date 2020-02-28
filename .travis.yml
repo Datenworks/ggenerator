@@ -10,6 +10,7 @@ python:
 jobs:
   include:
     - stage: PyPI Release Develop
+      script: skip
       deploy: &pipy
         provider: pypi
         user: "__token__"
