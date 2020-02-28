@@ -8,25 +8,22 @@ python:
 
 jobs:
   include:
-    - stage: Tests, Lint and Coverage
-      name: "Environment Setup"
-      script:
-        - pipenv install --dev
-        - pipenv run flake8
-        - pipenv run python -m pytest --cov
-      if: type = pull_request
     - stage: PyPI Release Develop
-      deploy:
+      script: skip
+      deploy: &pipy
         provider: pypi
         user: "__token__"
         server: https://test.pypi.org/legacy/
         distributions: "sdist bdist_wheel"
         password: $PIPY_TOKEN
-      if: branch = develop AND type = push
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-
-install:
-  - pip install pipenv
+      if: branch = develop AND type = push
+    - stage: Tests, Lint and Coverage
+      name: "Environment Setup"
+      script:
+        - flake8
+        - python -m pytest --cov
+      if: type = pull_request
