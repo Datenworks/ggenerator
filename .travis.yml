@@ -3,7 +3,6 @@ branches:
   only:
   - master
   - develop
-  - feature/buildci
 python:
   - "3.7"
 
@@ -18,7 +17,7 @@ jobs:
         distributions: "sdist bdist_wheel"
         password: $PIPY_TOKEN
         on:
-          branch: feature/buildci
+          branch: develop
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
