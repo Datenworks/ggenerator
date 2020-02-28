@@ -36,6 +36,7 @@ jobs:
 install:
   - pip --version
   - pip install pipenv
+  - pipenv shell
   - pipenv install --dev
-  - pip freeze > requirements.txt
+  - pipenv run pip freeze > requirements.txt
   - ls
