@@ -1,10 +1,10 @@
+import json
 from pandas import DataFrame, Series
 
 from src.generators.datatypes import generators_map
 from src.lib.config.validator import ConfigurationValidator, \
     ConfigurationDataset
 from src.lib.writers import writers
-
 
 class GeneratorsHandler(object):
     """GeneratorsHandler is responsible to integrate
@@ -21,7 +21,7 @@ class GeneratorsHandler(object):
         config = config_reader.get_config()
 
         if 'datasets' not in config:
-            raise ValueError("Malformed specification file")
+            raise ValueError("Não possui datasets")
 
         datasets = config.get('datasets')
         for key in datasets.keys():
@@ -32,8 +32,13 @@ class GeneratorsHandler(object):
                 format=datasets[key]['format'],
                 serializers=datasets[key]['serializers']
             )
+            if dataset_validator.size <= 0:
+                raise ValueError("Propriedade ‘size’ deve ser maior que 0 (zero)")
+            if dataset_validator.size == "":
+                '''raise ValueError("Dataset XPTO: Propriedade ‘size’ é obrigatória")''' #levantando a exceção de arquivo mal formado no validator.py
             if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
+                raise ValueError("Não é válido")
+                '''raise ValueError("Malformed specification file")'''
 
         return config
 
