@@ -1,7 +1,8 @@
 import json
 
 from src.generators.datatypes import generators_map
-
+from src.lib.writers import writers, uri_writers
+from functools import reduce
 
 class ConfigurationValidator(object):
 
@@ -26,7 +27,8 @@ class ConfigurationDataset(object):
 
         self.format_validator = ConfigurationFormat(self.format)
         self.fields_validator = ConfigurationFields(self.fields)
-        self.serializer_validator = ConfigurationSerializer(self.serializers)
+        self.serializer_validator = ConfigurationSerializer(self.serializers,
+                                                            self.id)
 
     def is_valid(self):
         has_id = self.id is not None
@@ -116,7 +118,8 @@ class ConfigurationFields(object):
 
 class ConfigurationSerializer(object):
 
-    def __init__(self, serializers):
+    def __init__(self, serializers, dataset_id):
+        self.dataset_id = dataset_id
         self.serializers = serializers
 
     def is_valid(self):
@@ -129,12 +132,33 @@ class ConfigurationSerializer(object):
     def __is_valid_output(self, to):
         for output in to:
             output_type = output.get("type")
-            outpu_uri = output.get("uri")
-            verify_output_type = output_type is not None and\
-                isinstance(output_type, str)
-            verify_output_uri = outpu_uri is not None and\
-                isinstance(outpu_uri, str)
-            is_valid = verify_output_type and verify_output_uri
+            output_uri = output.get("uri")
+            is_valid_type = self.__has_valid_type(output_type)
+
+            if not output_uri and output_type in uri_writers:
+                output.update({"uri": self.__get_uri_from_user(output_type)})
+
+            is_valid_destination = \
+                self.__has_valid_destination(output_type, **output)
+
+            is_valid = is_valid_type and is_valid_destination
             if is_valid is False:
                 return False
         return True
+
+    def __has_valid_type(self, output_type):
+        if output_type is not None and\
+                    isinstance(output_type, str)\
+                    and output_type in writers:
+            return True
+        else:
+            msg_writers = reduce(lambda a, b: a + " | " + b, writers.keys(), '')
+            message = f"Please, insert a valid destination type: {msg_writers}"
+            raise Exception(message)
+
+    def __has_valid_destination(self, output_type, **kwargs):
+        return writers[output_type].is_valid_destination(**kwargs)
+
+    def __get_uri_from_user(self, output_type):
+        from src.cli.commands import get_uri
+        return get_uri(dataset_name=self.dataset_id, output_type=output_type)

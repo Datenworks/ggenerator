@@ -1,7 +1,7 @@
 from os import remove
 from os.path import exists, isfile
 
-from src.lib.writers.json import JsonWriter
+from src.lib.formatters.json import JsonFormatter
 from src.tests.lib.writers.writers_fixtures import *  # noqa: F403, F401
 
 
@@ -11,9 +11,9 @@ class TestJsonWriter:
     def test_writting_dataframe_with_records(self,
                                              pandas_dataframe_with_data,
                                              test_file_path):
-        json_writer = JsonWriter()
-        json_writer.write(dataframe=pandas_dataframe_with_data,
-                          file_path=test_file_path)
+        json_writer = JsonFormatter()
+        json_writer.format(dataframe=pandas_dataframe_with_data,
+                           path_or_buffer=test_file_path)
         assert exists(test_file_path) is True
         assert isfile(test_file_path) is True
 
@@ -29,10 +29,9 @@ class TestJsonWriter:
             self,
             pandas_dataframe_with_data,
             test_file_path):
-        json_writer = JsonWriter()
-        json_writer.write(dataframe=pandas_dataframe_with_data,
-                          file_path=test_file_path,
-                          orient="columns")
+        json_writer = JsonFormatter(specification={"options": {"orient": "columns"}})
+        json_writer.format(dataframe=pandas_dataframe_with_data,
+                           path_or_buffer=test_file_path)
         assert exists(test_file_path) is True
         assert isfile(test_file_path) is True
 
@@ -48,10 +47,9 @@ class TestJsonWriter:
             self,
             pandas_dataframe_with_data,
             test_file_path):
-        json_writer = JsonWriter()
-        json_writer.write(dataframe=pandas_dataframe_with_data,
-                          file_path=test_file_path,
-                          orient="records")
+        json_writer = JsonFormatter(specification={"options": {"orient": "records"}})
+        json_writer.format(dataframe=pandas_dataframe_with_data,
+                           path_or_buffer=test_file_path)
         assert exists(test_file_path) is True
         assert isfile(test_file_path) is True
 
@@ -66,8 +64,8 @@ class TestJsonWriter:
     def test_writting_dataframe_without_records(self,
                                                 pandas_dataframe_without_data,
                                                 test_file_path):
-        json_writer = JsonWriter()
-        json_writer.write(dataframe=pandas_dataframe_without_data,
-                          file_path=test_file_path)
+        json_writer = JsonFormatter()
+        json_writer.format(dataframe=pandas_dataframe_without_data,
+                           path_or_buffer=test_file_path)
         assert exists(test_file_path) is False
         assert isfile(test_file_path) is False

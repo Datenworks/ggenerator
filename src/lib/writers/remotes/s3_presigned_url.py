@@ -17,3 +17,7 @@ class S3PresignedUrlRemoteWriter(object):
                               path_or_buffer=buffer)
         signed_url = self.specification['uri']
         requests.put(url=signed_url, data=buffer)
+
+    @staticmethod
+    def is_valid_destination(**kwargs):
+        return kwargs['uri'][:7] == 'http://'

@@ -16,4 +16,16 @@ class GCSPresignedUrlRemoteWriter(object):
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=buffer)
         signed_url = self.specification['uri']
-        requests.put(url=signed_url, data=buffer)
+        self.__write(signed_url, buffer)
+
+    def __write(self, url, data):
+        try:
+            requests.put(url=url, data=data)
+        except Exception as e:
+            raise requests.RequestException("Can't send data to this given"
+                                            "URI try to check if still valid",
+                                            e)
+
+    @staticmethod
+    def is_valid_destination(**kwargs):
+        return kwargs['uri'][:7] == 'http://'

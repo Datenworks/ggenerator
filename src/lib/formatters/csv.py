@@ -7,7 +7,7 @@ class CsvFormatter(object):
     """
     key = 'csv'
 
-    def __init__(self, specification):
+    def __init__(self, specification={}):
         self.default = {'index': False}
         self.specification = specification
 

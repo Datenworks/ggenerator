@@ -28,3 +28,9 @@ def generate(spec_path):
                    f"| Dataset name: {dset_name}\n"
                    f"| Dataset format: {dset_format}\n"
                    f"| Dataset path: {dset_path}\n")
+
+
+def get_uri(dataset_name, output_type):
+    return click.prompt(f"Please, enter a valid URI of destination "
+                        f"for the dataset: {dataset_name} "
+                        f"and destination: {output_type}", type=str)
