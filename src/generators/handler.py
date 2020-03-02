@@ -1,8 +1,5 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
-from src.generators.datatypes import generators_map
-from src.lib.config.validator import ConfigurationValidator, \
-    ConfigurationDataset
 from src.lib.writers import writers
 from src.generators.basehandler import BaseHandler
 

@@ -1,15 +1,12 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
-from src.generators.datatypes import generators_map
-from src.lib.config.validator import ConfigurationValidator, \
-    ConfigurationDataset
 from tabulate import tabulate
 from src.generators.basehandler import BaseHandler
 
 
 class DryRunHandler(object):
-    """GeneratorsHandler is responsible to integrate
-    all the modules, serving like a facade to the user.
+    """DryRunHandler is responsible to give
+    a dataframe preview.
     """
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
