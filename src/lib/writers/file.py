@@ -20,3 +20,4 @@ class FileWriter(object):
         file_path = self.specification['uri']
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=file_path)
+        return file_path

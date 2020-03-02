@@ -17,3 +17,4 @@ class S3PresignedUrlRemoteWriter(object):
                               path_or_buffer=buffer)
         signed_url = self.specification['uri']
         requests.put(url=signed_url, data=buffer)
+        return signed_url

@@ -44,11 +44,10 @@ class GeneratorsHandler(object):
             dataset_format = dataset['format']
             dataframe = self.generate_dataframe(dataset)
             for destination in dataset['serializers']['to']:
-                self.write_dataframe(dataframe,
-                                     destination,
-                                     dataset_format)
+                file_path = self.write_dataframe(dataframe,
+                                                 destination,
+                                                 dataset_format)
                 file_format = dataset_format['type']
-                file_path = destination['uri']
                 yield key, file_format, file_path
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
@@ -82,4 +81,4 @@ class GeneratorsHandler(object):
         writer_class = writers[destination_type]
         writer = writer_class(formatter=formatter, specification=destination)
 
-        writer.write(dataframe=dataframe)
+        return writer.write(dataframe=dataframe)
