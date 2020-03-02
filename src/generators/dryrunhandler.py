@@ -13,11 +13,11 @@ class DryRunHandler(object):
     """
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
+        self.base = BaseHandler()
         self.specification = self.valid_specification_dryrun()
 
     def valid_specification_dryrun(self):
-        base = BaseHandler()
-        valid = base.valid_specification(self.file_path)
+        valid = self.base.valid_specification(self.file_path)
         return valid
 
     def generate(self):
@@ -45,7 +45,6 @@ class DryRunHandler(object):
                                   headers = dataframe.columns))
 
     def generate_dryrun(self, specification: dict) -> DataFrame:
-        base = BaseHandler()
         size = 10
-        dataframe = base.generate_dataframe(specification, size)
+        dataframe = self.base.generate_dataframe(specification, size)
         return dataframe

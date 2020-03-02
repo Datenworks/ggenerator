@@ -14,12 +14,12 @@ class GeneratorsHandler(object):
 
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
+        self.base = BaseHandler()
         self.specification = self.valid_specification_dataset()
         self.writers = writers
 
     def valid_specification_dataset(self):
-        base = BaseHandler()
-        valid = base.valid_specification(self.file_path)
+        valid = self.base.valid_specification(self.file_path)
         return valid
 
     def generate(self):
@@ -36,8 +36,7 @@ class GeneratorsHandler(object):
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']
-        base = BaseHandler()
-        dataframe = base.generate_dataframe(specification, size)
+        dataframe = self.base.generate_dataframe(specification, size)
         return dataframe
 
     def write_dataframe(self,
