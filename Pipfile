@@ -7,6 +7,7 @@ verify_ssl = true
 pytest = "==5.3.5"
 flake8 = "==3.7.9"
 pytest-mock = "==2.0.0"
+pytest-cov = "*"
 
 [packages]
 python-dateutil = "*"

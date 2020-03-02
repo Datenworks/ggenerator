@@ -1,9 +1,5 @@
 from src.lib.config.validator import ConfigurationFields
-from src.tests.lib.config.configuration_fields_fixtures import valid_boolean, \
-    invalid_boolean, valid_char, invalid_char, valid_float, invalid_float, \
-    valid_integer, invalid_integer, valid_timestamp_sequence, \
-    invalid_timestamp_sequence, valid_sequence, invalid_sequence, \
-    valid_string, invalid_string, valid_timestamp, invalid_timestamp
+from src.tests.lib.config.configuration_fields_fixtures import *  # noqa: F403, F401, E501
 
 
 class TestConfigurationFormat(object):
@@ -42,9 +38,7 @@ class TestConfigurationFormat(object):
         format_sample = [{
             "name": "id",
             "type": "integer:sequence",
-            "generator":{
-                "asdasd": "asdasd"
-            }
+            "generator": {"asdasd": "asdasd"}
         }]
         validator = ConfigurationFields(format_sample)
         is_valid = validator.is_valid()

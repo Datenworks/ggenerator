@@ -1,14 +1,16 @@
-.vscode/*
+__pycache__
+
 *workspace
-.venv/
+*.pyc
+
 .coverage
+.DS_Store
 .env/
 .kube/
 .pytest_cache/
 .Python
-test.json
-
-__pycache__
+.venv/
+.vscode/*
 
 develop-eggs/
 env/
@@ -16,6 +18,4 @@ htmlcov/
 jspm_packages/
 node_modules/
 
-*.pyc
-
-requirements.txt
+test.json
