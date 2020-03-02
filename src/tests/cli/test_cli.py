@@ -13,7 +13,7 @@ class TestCliExecutor:
         mock = mocker.patch.object(GeneratorsHandler, 'generate')
         mock.return_value = [("a", "b", "c")]
         mock_ = mocker.patch.object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_.return_value = {}
 
         with runner.isolated_filesystem():
@@ -29,7 +29,7 @@ class TestCliExecutor:
         mock = mocker.patch.object(GeneratorsHandler, 'generate')
         mock.return_value = [("a", "b", "c")]
         mock_ = mocker.patch.object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_.return_value = {}
 
         with runner.isolated_filesystem():
@@ -44,7 +44,7 @@ class TestCliExecutor:
         mock = mocker.patch.object(GeneratorsHandler, 'generate')
         mock.return_value = [("a", "b", "c")]
         mock_ = mocker.patch.object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_.return_value = {}
 
         with runner.isolated_filesystem():
