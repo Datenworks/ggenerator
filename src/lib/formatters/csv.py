@@ -8,7 +8,7 @@ class CsvFormatter(object):
     key = 'csv'
 
     def __init__(self, specification):
-        self.default = {'index': False}
+        self.default = {'index': False, 'sep': ','}
         self.specification = specification
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> None:
@@ -22,4 +22,4 @@ class CsvFormatter(object):
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
-            dataframe.to_csv(path_or_buf=path_or_buffer, **parameters)
+            return dataframe.to_csv(path_or_buf=path_or_buffer, **parameters)
