@@ -1,5 +1,6 @@
 attrs==19.3.0
 Click==7.0
+coverage==5.0.3
 entrypoints==0.3
 flake8==3.7.9
 importlib-metadata==1.5.0
@@ -14,6 +15,8 @@ pycodestyle==2.5.0
 pyflakes==2.1.1
 pyparsing==2.4.6
 pytest==5.3.5
+pytest-cov==2.8.1
+pytest-mock==2.0.0
 python-dateutil==2.8.1
 pytz==2019.3
 six==1.14.0
