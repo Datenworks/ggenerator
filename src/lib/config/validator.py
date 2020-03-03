@@ -1,5 +1,6 @@
 import json
 
+from src.lib.formatters import formatters
 from src.generators.datatypes import generators_map
 from src.lib.writers import writers
 
@@ -64,8 +65,9 @@ class ConfigurationFormat(object):
         format_type = self.format.get("type")
         has_format_type = format_type is not None and \
             isinstance(format_type, str)
-        is_valid = has_format_type
-        return is_valid
+
+        return has_format_type and \
+            format_type in formatters
 
 
 class ConfigurationFields(object):
