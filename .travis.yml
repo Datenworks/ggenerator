@@ -24,7 +24,9 @@ jobs:
         - ./send.sh success $WEBHOOK_URL
       if: type = push
     - stage: PyPI Release Production
-      script: skip
+      script:
+        - pip install pipenv
+        - pipenv run pip freeze > requirements.txt
       deploy: &pipy
         provider: pypi
         user: "__token__"
@@ -40,6 +42,8 @@ jobs:
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
-        - flake8
-        - python -m pytest --cov
+        - pip install pipenv
+        - pipenv install --dev
+        - pipenv run flake8
+        - pipenv run python -m pytest --cov
       if: type = pull_request
