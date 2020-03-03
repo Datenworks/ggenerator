@@ -12,7 +12,7 @@ class TestGcsWriter:
                                        specification_url_gcs,
                                        pandas_dataframe_with_data):
 
-        mock = mocker.patch.object(requests, 'post')
+        mock = mocker.patch.object(requests, 'put')
         resp = requests.Response()
         resp.status_code = 200
         mock.return_value = resp
@@ -30,7 +30,7 @@ class TestGcsWriter:
                                           pandas_dataframe_without_data,
                                           specification_url_gcs):
 
-        mock = mocker.patch.object(requests, 'post')
+        mock = mocker.patch.object(requests, 'put')
         resp = requests.Response()
         resp.status_code = 200
         mock.return_value = resp
