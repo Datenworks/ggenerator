@@ -40,13 +40,18 @@ class ConfigurationDataset(object):
         has_format = self.format is not None
         has_serializers = self.serializers is not None
 
+        if not (has_id and has_size and
+                has_fields and has_format and
+                has_serializers):
+            return False
+
         are_fields_valid = self.fields_validator.is_valid()
         is_format_valid = self.format_validator.is_valid()
         is_serializer_valid = self.serializer_validator.is_valid()
 
-        is_valid = has_id and has_size and has_fields \
-            and has_format and has_serializers and is_format_valid \
-            and is_serializer_valid and are_fields_valid
+        is_valid = is_format_valid and \
+            is_serializer_valid and \
+            are_fields_valid
         return is_valid
 
 
