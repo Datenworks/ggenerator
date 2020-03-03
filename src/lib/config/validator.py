@@ -60,11 +60,14 @@ class ConfigurationFormat(object):
         self.format = format
 
     def is_valid(self):
-        format_type = self.format.get("type")
-        has_format_type = format_type is not None and \
-            isinstance(format_type, str)
-        is_valid = has_format_type
-        return is_valid
+        if self.format is None:
+            return False
+        else:
+            format_type = self.format.get("type")
+            has_format_type = format_type is not None and \
+                isinstance(format_type, str)
+            is_valid = has_format_type
+            return is_valid
 
 
 class ConfigurationFields(object):

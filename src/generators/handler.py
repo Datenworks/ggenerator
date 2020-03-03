@@ -29,7 +29,7 @@ class GeneratorsHandler(object):
                 id=key,
                 size=datasets[key]['size'],
                 fields=datasets[key]['fields'],
-                format=datasets[key]['format'],
+                format=datasets[key].get('format'),
                 serializers=datasets[key]['serializers']
             )
             if dataset_validator.size <= 0:
