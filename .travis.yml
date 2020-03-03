@@ -6,6 +6,11 @@ branches:
 python:
   - "3.7"
 
+install:
+  - pip install pipenv
+  - pipenv install --dev
+  - pipenv lock --dev --requirements > requirements.txt
+
 jobs:
   include:
     - stage: PyPI Release Develop
@@ -23,9 +28,24 @@ jobs:
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
       if: type = push
+    - stage: PyPI Release Production
+      script: skip
+      deploy: &pipy
+        provider: pypi
+        user: "__token__"
+        distributions: "sdist bdist_wheel"
+        password: $PIPY_TOKEN
+        on:
+          branch: master
+      after_deploy:
+        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh success $WEBHOOK_URL
+      if: type = push
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
-        - flake8
-        - python -m pytest --cov
+        - pipenv run flake8
+        - pipenv run python -m pytest --cov
       if: type = pull_request
+

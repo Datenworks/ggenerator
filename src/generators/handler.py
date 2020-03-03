@@ -3,6 +3,7 @@ from pandas import DataFrame, Series
 from src.generators.datatypes import generators_map
 from src.lib.config.validator import ConfigurationValidator, \
     ConfigurationDataset
+from src.lib.formatters import formatters
 from src.lib.writers import writers
 
 
@@ -14,7 +15,6 @@ class GeneratorsHandler(object):
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
         self.specification = self.get_valid_specification()
-        self.writers = writers
 
     def get_valid_specification(self):
         config_reader = ConfigurationValidator(self.file_path)
@@ -46,9 +46,10 @@ class GeneratorsHandler(object):
             dataset_format = dataset['format']
             dataframe = self.generate_dataframe(dataset)
             for destination in dataset['serializers']['to']:
-                file_format, file_path = self.write_dataframe(dataframe,
-                                                              destination,
-                                                              dataset_format)
+                file_path = self.write_dataframe(dataframe,
+                                                 destination,
+                                                 dataset_format)
+                file_format = dataset_format['type']
                 yield key, file_format, file_path
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
@@ -73,11 +74,13 @@ class GeneratorsHandler(object):
     def write_dataframe(self,
                         dataframe: DataFrame,
                         destination: dict,
-                        dataset_format: dict) -> (str, str):
-        file_format = dataset_format['type']
-        file_path = destination['uri']
-        writer = self.writers[file_format]()
-        writer.write(dataframe=dataframe,
-                     file_path=file_path,
-                     **dataset_format.get("options", {}))
-        return file_format, file_path
+                        format_: dict):
+        file_format = format_['type']
+        formatter_class = formatters[file_format]
+        formatter = formatter_class(specification=format_)
+
+        destination_type = destination['type']
+        writer_class = writers[destination_type]
+        writer = writer_class(formatter=formatter, specification=destination)
+
+        return writer.write(dataframe=dataframe)
