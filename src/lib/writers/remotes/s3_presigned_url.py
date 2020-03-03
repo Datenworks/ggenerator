@@ -19,13 +19,13 @@ class S3PresignedUrlRemoteWriter(object):
 
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=buffer)
-        signed_url = self.specification['uri']
-        requests.put(url=signed_url, data=buffer)
+
         files = {'file': buffer.getvalue()}
-        response = requests.post(signed_url,
-                                 data=fields,
-                                 files=files)
+
         try:
+            response = requests.post(signed_url,
+                                     data=fields,
+                                     files=files)
             response.raise_for_status()
         except Exception as e:
             raise requests.RequestException("Can't send data to this given"

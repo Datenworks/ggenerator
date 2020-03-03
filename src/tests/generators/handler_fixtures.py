@@ -96,3 +96,61 @@ def string_specification():
 @fixture
 def timestamp_specification():
     return sample_timestamp('timestamp', 'datetime64[ns]')
+
+
+@fixture
+def valid_spec():
+    return {
+    "datasets": {
+      "$id": {
+        "size": 1000,
+        "fields": [
+          {
+            "name": "id",
+            "type": "integer:sequence",
+            "generator": {
+                "start_at": 0
+            }
+          }
+        ],
+        "format": {
+          "type": "csv",
+          "options": {
+            "header": True,
+            "sep": ","
+          }
+        },
+        "serializers": {
+          "to": [
+            {
+              "type": "file",
+              "uri": "myfile.csv"
+            }
+          ]
+        }
+      }
+    }
+  }
+
+@fixture
+def invalid_spec_no_ids():
+    return {
+        "datasets": {}
+    }
+
+@fixture
+def invalid_spec_no_dataset():
+    return {}
+
+@fixture
+def invalid_spec_no_infos_dataset():
+    return {
+        "datasets": {
+            "$id": {
+                "size": 10,
+                "fields": [],
+                "format": {},
+                "serializers": {}
+            }
+        }
+    }

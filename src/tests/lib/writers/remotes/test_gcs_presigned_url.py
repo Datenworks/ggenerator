@@ -1,35 +1,57 @@
-from src.lib.writers.remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
-from src.lib.formatters import formatters
-from src.tests.lib.\
-    writers.remotes.remotes_fixtures import (pandas_dataframe_with_data,
-                                             test_file_path)
+from src.lib.writers.remotes.gcs_presigned_url \
+    import GCSPresignedUrlRemoteWriter
+from src.lib.formatters.csv import CsvFormatter
+from src.tests.lib.writers.remotes.fixtures import *
 import pytest
 import requests
 
-spec_options = {
-        "uri": "http://anyurihere"
-    }
-
 
 class TestGcsWriter:
-    def test_write_dataframe_csv(self, mocker,
-                                 pandas_dataframe_with_data,
-                                 test_file_path):
-        mock = mocker.patch.object(requests, 'put')
-        mock.return_value = requests.codes.ok
-        csv_formatter = formatters['csv']({"options": {"header": True}})
-        gcs = GCSPresignedUrlRemoteWriter(formatter=csv_formatter,
-                                          specification=spec_options)
-        gcs.write(pandas_dataframe_with_data)
+    def test_writting_csv_with_records(self,
+                                       mocker,
+                                       specification_url_gcs,
+                                       pandas_dataframe_with_data):
 
-        assert True
+        mock = mocker.patch.object(requests, 'post')
+        resp = requests.Response()
+        resp.status_code = 200
+        mock.return_value = resp
 
-    def test_write_dataframe_json(self, mocker,
-                                  pandas_dataframe_with_data,
-                                  test_file_path):
-        json_formatter = formatters['json']({"options": {"orient": "records"}})
-        gcs = GCSPresignedUrlRemoteWriter(formatter=json_formatter,
-                                          specification=spec_options)
+        formatter = CsvFormatter(specification={})
+        writer = \
+            GCSPresignedUrlRemoteWriter(formatter=formatter,
+                                        specification=specification_url_gcs)
+
+        writer.write(dataframe=pandas_dataframe_with_data)
+        mock.assert_called()
+
+    def test_writting_csv_without_records(self,
+                                          mocker,
+                                          pandas_dataframe_without_data,
+                                          specification_url_gcs):
+
+        mock = mocker.patch.object(requests, 'post')
+        resp = requests.Response()
+        resp.status_code = 200
+        mock.return_value = resp
+        formatter = CsvFormatter(specification={})
+        writer = \
+            GCSPresignedUrlRemoteWriter(formatter=formatter,
+                                        specification=specification_url_gcs)
+
+        writer.write(dataframe=pandas_dataframe_without_data)
+        mock.assert_called()
+
+    def test_writting_raised(self,
+                             mocker,
+                             pandas_dataframe_without_data,
+                             specification_url_gcs):
+
+        formatter = CsvFormatter(specification={})
+        writer = \
+            GCSPresignedUrlRemoteWriter(formatter=formatter,
+                                        specification=specification_url_gcs)
 
         with pytest.raises(requests.RequestException):
-            gcs.write(pandas_dataframe_with_data)
+            writer.write(dataframe=pandas_dataframe_without_data)
+ 

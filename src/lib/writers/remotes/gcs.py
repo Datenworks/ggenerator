@@ -16,6 +16,7 @@ class GCSRemoteWriter(object):
         file_buffer = self.gcstorage_fs.open(key, 'w')
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=file_buffer)
+        return key
 
     @staticmethod
     def is_valid_destination(**kwargs):

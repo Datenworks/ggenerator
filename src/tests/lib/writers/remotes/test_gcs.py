@@ -1,8 +1,6 @@
 from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.formatters import formatters
-from src.tests.lib.\
-    writers.remotes.remotes_fixtures import (pandas_dataframe_with_data,
-                                             test_file_path)
+from src.tests.lib.writers.remotes.fixtures import *
 from csv import reader
 import gcsfs
 from io import StringIO
@@ -17,14 +15,14 @@ spec_options = {
 class TestGcsWriter:
     def test_write_dataframe_csv(self, mocker,
                                  pandas_dataframe_with_data,
-                                 test_file_path):
+                                 specification_gcs):
         buffer = StringIO()
         mock = mocker.patch.object(gcsfs, 'GCSFileSystem')
         mock.return_value.open.return_value = buffer
 
         csv_formatter = formatters['csv']({"options": {"header": True}})
         gcs = GCSRemoteWriter(formatter=csv_formatter,
-                              specification=spec_options)
+                              specification=specification_gcs)
         gcs.write(pandas_dataframe_with_data)
         expected = pandas_dataframe_with_data.to_dict(orient="list")
 
@@ -40,14 +38,14 @@ class TestGcsWriter:
 
     def test_write_dataframe_json(self, mocker,
                                   pandas_dataframe_with_data,
-                                  test_file_path):
+                                  specification_gcs):
         buffer = StringIO()
         mock = mocker.patch.object(gcsfs, 'GCSFileSystem')
         mock.return_value.open.return_value = buffer
 
         json_formatter = formatters['json']({"options": {"orient": "records"}})
         gcs = GCSRemoteWriter(formatter=json_formatter,
-                              specification=spec_options)
+                              specification=specification_gcs)
         gcs.write(pandas_dataframe_with_data)
         expected = pandas_dataframe_with_data.to_json(orient="records")
 

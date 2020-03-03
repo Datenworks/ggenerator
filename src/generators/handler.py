@@ -24,6 +24,10 @@ class GeneratorsHandler(object):
             raise ValueError("Malformed specification file")
 
         datasets = config.get('datasets')
+
+        if not datasets.keys():
+            raise ValueError("Malformed specification file")
+
         for key in datasets.keys():
             dataset_validator = ConfigurationDataset(
                 id=key,
