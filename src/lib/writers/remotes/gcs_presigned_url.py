@@ -2,6 +2,7 @@ import requests
 
 from io import StringIO
 from pandas import DataFrame
+from urllib.parse import urlparse
 
 
 class GCSPresignedUrlRemoteWriter(object):
@@ -24,15 +25,17 @@ class GCSPresignedUrlRemoteWriter(object):
 
         try:
             response = requests.put(signed_url,
-                                    data=fields,
-                                    files=files)
+                                    data=buffer.getvalue())
             response.raise_for_status()
         except Exception as e:
             raise requests.RequestException("Can't send data to this given"
                                             "URI try to check if still valid",
                                             e)
-        return signed_url
+        return self.__get_file_path_from_resp(response)
+
+    def __get_file_path_from_resp(self, resp):
+        return f"gs://{urlparse(resp.url).path}"
 
     @staticmethod
     def is_valid_destination(**kwargs):
-        return kwargs['uri'][:7] == 'http://'
+        return kwargs['uri'][:8] == 'https://'

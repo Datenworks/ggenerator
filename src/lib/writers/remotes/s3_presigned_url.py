@@ -48,4 +48,4 @@ class S3PresignedUrlRemoteWriter(object):
 
     @staticmethod
     def is_valid_destination(**kwargs):
-        return kwargs['uri'][:7] == 'http://'
+        return kwargs['uri'][:8] == 'https://'

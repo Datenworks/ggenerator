@@ -1,6 +1,7 @@
 from src.lib.config.validator import ConfigurationSerializer
 import pytest
 import click
+from src.tests.lib.config.fixtures import *  # noqa: F403, F401
 
 
 class TestConfigurationSerializers(object):
@@ -18,45 +19,12 @@ class TestConfigurationSerializers(object):
         assert is_valid is True
 
     def test_valid_s3(self, valid_s3_spec):
-        validator = ConfigurationSerializer(valid_s3_spec)
+        validator = ConfigurationSerializer(valid_s3_spec, 'id')
         is_valid = validator.is_valid()
         assert is_valid is True
 
     def test_invalid_s3(self, invalid_s3_spec):
-        validator = ConfigurationSerializer(invalid_s3_spec)
-        is_valid = validator.is_valid()
-        assert is_valid is False
-
-            }]
-        }
-        validator = ConfigurationSerializer(format_sample, 'id')
-        with pytest.raises(Exception):
-            validator.is_valid()
-
-    def test_valid_to_s3(self):
-        format_sample = {
-            "to": [{
-                "type": "s3",
-                "options": {
-                    "bucket": "abcde",
-                    "key": "path/to/file"
-                    }
-                }
-            ]
-        }
-        validator = ConfigurationSerializer(format_sample, 'id')
-        is_valid = validator.is_valid()
-        assert is_valid is True
-
-    def test_invalid_to_s3(self):
-        format_sample = {
-            "to": [{
-                "type": "s3",
-                "options": {}
-                }
-            ]
-        }
-        validator = ConfigurationSerializer(format_sample, 'id')
+        validator = ConfigurationSerializer(invalid_s3_spec, 'id')
         is_valid = validator.is_valid()
         assert is_valid is False
 
@@ -92,7 +60,7 @@ class TestConfigurationSerializers(object):
         format_sample = {
             "to": [{
                 "type": "s3-url",
-                "uri": "http://path/to/file.csv"
+                "uri": "https://path/to/file.csv"
             }
             ]
         }
@@ -120,7 +88,7 @@ class TestConfigurationSerializers(object):
             ]
         }
         mock = mocker.patch.object(click, 'prompt')
-        mock.return_value = "http://onevalidurl"
+        mock.return_value = "https://onevalidurl"
 
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
@@ -130,7 +98,7 @@ class TestConfigurationSerializers(object):
         format_sample = {
             "to": [{
                 "type": "gcs-url",
-                "uri": "http://path/to/file.csv"
+                "uri": "https://path/to/file.csv"
             }
             ]
         }
@@ -146,7 +114,7 @@ class TestConfigurationSerializers(object):
             ]
         }
         mock = mocker.patch.object(click, 'prompt')
-        mock.return_value = "http://onevalidurl"
+        mock.return_value = "https://onevalidurl"
 
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
@@ -164,13 +132,9 @@ class TestConfigurationSerializers(object):
         is_valid = validator.is_valid()
         assert is_valid is False
 
-    def test_valid_s3_presigned_url(self, valid_s3_presigned_spec):
-        validator = ConfigurationSerializer(valid_s3_presigned_spec)
-        is_valid = validator.is_valid()
-        assert is_valid is True
-
     def test_invalid_to(self):
         format_sample = {"to": [{}]}
-        validator = ConfigurationSerializer(format_sample)
-        is_valid = validator.is_valid()
-        assert is_valid is False
+        validator = ConfigurationSerializer(format_sample, 'id')
+
+        with pytest.raises(Exception):
+            validator.is_valid()
