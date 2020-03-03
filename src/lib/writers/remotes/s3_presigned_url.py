@@ -1,5 +1,6 @@
 import json
 import requests
+import os
 
 from io import StringIO
 from pandas import DataFrame
@@ -14,15 +15,17 @@ class S3PresignedUrlRemoteWriter(object):
 
     @staticmethod
     def check(specification):
-        options = specification.get('options')
-        if options is not None:
-            return options
-
-        return 'path' in options
+        return True
 
     def write(self, dataframe: DataFrame):
-        options = self.specification['options']
-        file_path = options['path']
+        options = self.specification.get('options')
+
+        if options is not None:
+            file_path = options['path']
+        else:
+            file_path = input("Enter the signed url json file path: ")
+            if os.path.isfile(file_path) is False:
+                raise ValueError('File not found')
 
         with open(file_path, 'r') as file:
             singed_post = json.loads(file.read())

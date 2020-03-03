@@ -38,13 +38,18 @@ def specification():
 
 
 @fixture
-def specification_url():
+def specification_with_url():
     return {
         'type': 's3-url',
         'options': {
             "path": "file/path/example.json"
         }
     }
+
+
+@fixture
+def specification_without_url():
+    return {'type': 's3-url'}
 
 
 @fixture
