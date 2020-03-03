@@ -8,7 +8,7 @@ def read(fname):
 
 
 setup(
-    name="ggnerator",
+    name="ggenerator",
     author="Datenworks",
     author_email="contato@datenworks.com",
     description=("A tool capable to generate fake data with a "
@@ -30,6 +30,6 @@ setup(
     ],
     entry_points="""
         [console_scripts]
-        ggnerator=main:run
+        ggenerator=main:run
     """,
     )
