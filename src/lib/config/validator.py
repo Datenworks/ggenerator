@@ -1,6 +1,7 @@
 import json
 
 from src.generators.datatypes import generators_map
+from src.lib.writers import writers
 
 
 class ConfigurationValidator(object):
@@ -129,12 +130,14 @@ class ConfigurationSerializer(object):
     def __is_valid_output(self, to):
         for output in to:
             output_type = output.get("type")
-            outpu_uri = output.get("uri")
-            verify_output_type = output_type is not None and\
+            verify_output_type = output_type is not None and \
                 isinstance(output_type, str)
-            verify_output_uri = outpu_uri is not None and\
-                isinstance(outpu_uri, str)
-            is_valid = verify_output_type and verify_output_uri
+
+            writer = writers.get(output_type)
+            is_valid = verify_output_type and \
+                writer is not None and \
+                writer.check(output)
+
             if is_valid is False:
                 return False
         return True

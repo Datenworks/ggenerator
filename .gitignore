@@ -23,3 +23,4 @@ dist/
 ggenerator.egg-info/
 
 test.json
+requirements.txt
