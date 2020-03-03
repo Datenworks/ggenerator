@@ -12,11 +12,22 @@ class S3PresignedUrlRemoteWriter(object):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
+        fields = self.specification.get('fields')
+        signed_url = self.specification['uri']
+
         buffer = StringIO()
+
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=buffer)
         signed_url = self.specification['uri']
         requests.put(url=signed_url, data=buffer)
+        files = {'file': buffer.getvalue()}
+        response = requests.post(signed_url,
+                                 data=fields,
+                                 files=files)
+        response.raise_for_status()
+
+        return signed_url
 
     @staticmethod
     def is_valid_destination(**kwargs):

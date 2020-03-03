@@ -44,11 +44,15 @@ class GeneratorsHandler(object):
             dataset_format = dataset['format']
             dataframe = self.generate_dataframe(dataset)
             for destination in dataset['serializers']['to']:
-                self.write_dataframe(dataframe,
-                                     destination,
-                                     dataset_format)
+                file_path = self.write_dataframe(dataframe,
+                                                 destination,
+                                                 dataset_format)
                 file_format = dataset_format['type']
+<<<<<<< HEAD
                 yield key, file_format, destination
+=======
+                yield key, file_format, file_path
+>>>>>>> origin/feature/s3_serializer
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']

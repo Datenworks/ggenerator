@@ -1,8 +1,8 @@
 import json
-
 from src.generators.datatypes import generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce
+
 
 class ConfigurationValidator(object):
 
@@ -141,7 +141,13 @@ class ConfigurationSerializer(object):
             is_valid_destination = \
                 self.__has_valid_destination(output_type, **output)
 
-            is_valid = is_valid_type and is_valid_destination
+            verify_output_type = output_type is not None and \
+                isinstance(output_type, str)
+            writer = writers.get(output_type)
+
+            is_valid = is_valid_type and is_valid_destination \
+                and verify_output_type and writer is not None
+
             if is_valid is False:
                 return False
         return True
@@ -152,7 +158,8 @@ class ConfigurationSerializer(object):
                     and output_type in writers:
             return True
         else:
-            msg_writers = reduce(lambda a, b: a + " | " + b, writers.keys(), '')
+            msg_writers = reduce(lambda a, b: a + " | " + b,
+                                 writers.keys(), '')
             message = f"Please, insert a valid destination type: {msg_writers}"
             raise Exception(message)
 

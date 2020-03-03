@@ -23,4 +23,4 @@ class FileWriter(object):
 
     @staticmethod
     def is_valid_destination(**kwargs):
-        return True
+        return 'uri' in kwargs
