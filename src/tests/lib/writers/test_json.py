@@ -31,7 +31,11 @@ class TestJsonWriter:
             pandas_dataframe_with_data,
             specification):
         test_file_path = specification['uri']
-        json_writer = JsonFormatter(specification={"options": {"orient": "columns"}})
+        json_writer = JsonFormatter(specification={
+            "options":
+                {"orient": "columns"}
+            }
+        )
         json_writer.format(dataframe=pandas_dataframe_with_data,
                            path_or_buffer=test_file_path)
         assert exists(test_file_path) is True
@@ -50,7 +54,11 @@ class TestJsonWriter:
             pandas_dataframe_with_data,
             specification):
         test_file_path = specification['uri']
-        json_writer = JsonFormatter(specification={"options": {"orient": "records"}})
+        json_writer = JsonFormatter(specification={
+            "options":
+                {"orient": "records"}
+            }
+        )
         json_writer.format(dataframe=pandas_dataframe_with_data,
                            path_or_buffer=test_file_path)
         assert exists(test_file_path) is True

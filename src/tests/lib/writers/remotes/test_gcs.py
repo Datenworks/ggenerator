@@ -1,6 +1,6 @@
 from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.formatters import formatters
-from src.tests.lib.writers.remotes.fixtures import *
+from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
 from csv import reader
 import gcsfs
 from io import StringIO
