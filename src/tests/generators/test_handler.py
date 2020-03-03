@@ -156,7 +156,8 @@ class TestGeneratorsHandler(object):
         with open(f"{absolute_path}/{file_name}", "w") as f:
             json.dump(valid_spec, f)
 
-        handler = GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        handler = \
+            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
         assert handler
 
     def test_invalid_no_ids_spec_handler(self, mocker, invalid_spec_no_ids):
@@ -184,8 +185,8 @@ class TestGeneratorsHandler(object):
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
 
-    def test_invalid_no_dataset_spec_handler(self, mocker,
-                                             invalid_spec_no_infos_dataset):
+    def test_invalid_no_dataset_info(self, mocker,
+                                     invalid_spec_no_infos_dataset):
         from os.path import abspath
         from uuid import uuid4
 

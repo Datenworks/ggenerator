@@ -1,14 +1,9 @@
 from src.lib.config.validator import ConfigurationSerializer
 import pytest
 import click
-from src.cli.commands import get_uri
 
 
 class TestConfigurationSerializers(object):
-
-    def invalid_serializer(self):
-        serializer_sample = {}
-        validator = ConfigurationSerializer(serializer_sample, 'id')
 
     def test_valid_to(self):
         format_sample = {
@@ -140,7 +135,7 @@ class TestConfigurationSerializers(object):
     def test_valid_to_gcp_without_url_user_input(self, mocker):
         format_sample = {
             "to": [{
-                "type": "gcs-url"            
+                "type": "gcs-url"
                 }
             ]
         }

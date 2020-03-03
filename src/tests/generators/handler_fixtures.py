@@ -101,36 +101,34 @@ def timestamp_specification():
 @fixture
 def valid_spec():
     return {
-    "datasets": {
-      "$id": {
-        "size": 1000,
-        "fields": [
-          {
-            "name": "id",
-            "type": "integer:sequence",
-            "generator": {
-                "start_at": 0
+        "datasets": {
+            "$id": {
+                "size": 1000,
+                "fields": [{
+                    "name": "id",
+                    "type": "integer:sequence",
+                    "generator": {
+                        "start_at": 0
+                    }
+                }],
+                "format": {
+                    "type": "csv",
+                    "options": {
+                        "header": True,
+                        "sep": ","
+                    }
+                },
+                "serializers": {
+                    "to": [{
+                            "type": "file",
+                            "uri": "myfile.csv"
+                        }
+                    ]
+                }
             }
-          }
-        ],
-        "format": {
-          "type": "csv",
-          "options": {
-            "header": True,
-            "sep": ","
-          }
-        },
-        "serializers": {
-          "to": [
-            {
-              "type": "file",
-              "uri": "myfile.csv"
-            }
-          ]
         }
-      }
     }
-  }
+
 
 @fixture
 def invalid_spec_no_ids():
@@ -138,9 +136,11 @@ def invalid_spec_no_ids():
         "datasets": {}
     }
 
+
 @fixture
 def invalid_spec_no_dataset():
     return {}
+
 
 @fixture
 def invalid_spec_no_infos_dataset():
