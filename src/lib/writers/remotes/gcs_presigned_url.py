@@ -17,6 +17,7 @@ class GCSPresignedUrlRemoteWriter(object):
                               path_or_buffer=buffer)
         signed_url = self.specification['uri']
         self.__write(signed_url, buffer)
+        return signed_url
 
     def __write(self, url, data):
         try:

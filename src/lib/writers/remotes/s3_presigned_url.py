@@ -25,8 +25,12 @@ class S3PresignedUrlRemoteWriter(object):
         response = requests.post(signed_url,
                                  data=fields,
                                  files=files)
-        response.raise_for_status()
-
+        try:
+            response.raise_for_status()
+        except Exception as e:
+            raise requests.RequestException("Can't send data to this given"
+                                            "URI try to check if still valid",
+                                            e)
         return signed_url
 
     @staticmethod

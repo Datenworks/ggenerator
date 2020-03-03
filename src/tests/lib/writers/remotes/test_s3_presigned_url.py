@@ -3,6 +3,7 @@ import requests
 from src.lib.formatters.csv import CsvFormatter
 from src.lib.writers.remotes.s3_presigned_url import S3PresignedUrlRemoteWriter
 from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
+import pytest
 
 
 class TestS3PresignedUrlRemoteWriter(object):
@@ -17,9 +18,10 @@ class TestS3PresignedUrlRemoteWriter(object):
         formatter = CsvFormatter(specification={})
         writer = S3PresignedUrlRemoteWriter(formatter=formatter,
                                             specification=specification_url)
-        writer.write(dataframe=pandas_dataframe_with_data)
-
-        mock.assert_called()
+        
+        with pytest.raises(Exception):
+            writer.write(dataframe=pandas_dataframe_with_data)
+            mock.assert_called()
 
     def test_writting_csv_without_records(self,
                                           mocker,
@@ -30,6 +32,7 @@ class TestS3PresignedUrlRemoteWriter(object):
         formatter = CsvFormatter(specification={})
         writer = S3PresignedUrlRemoteWriter(formatter=formatter,
                                             specification=specification_url)
-        writer.write(dataframe=pandas_dataframe_without_data)
 
-        mock.assert_called()
+        with pytest.raises(Exception):
+            writer.write(dataframe=pandas_dataframe_without_data)
+            mock.assert_called()

@@ -48,11 +48,7 @@ class GeneratorsHandler(object):
                                                  destination,
                                                  dataset_format)
                 file_format = dataset_format['type']
-<<<<<<< HEAD
-                yield key, file_format, destination
-=======
                 yield key, file_format, file_path
->>>>>>> origin/feature/s3_serializer
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']
