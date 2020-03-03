@@ -6,6 +6,10 @@ from src.cli.commands import get_uri
 
 class TestConfigurationSerializers(object):
 
+    def invalid_serializer(self):
+        serializer_sample = {}
+        validator = ConfigurationSerializer(serializer_sample, 'id')
+
     def test_valid_to(self):
         format_sample = {
             "to": [{
@@ -18,31 +22,70 @@ class TestConfigurationSerializers(object):
         is_valid = validator.is_valid()
         assert is_valid is True
 
+    def test_invalid_to(self):
+        format_sample = {
+            "to": [{
+
+            }]
+        }
+        validator = ConfigurationSerializer(format_sample, 'id')
+        with pytest.raises(Exception):
+            validator.is_valid()
+
     def test_valid_to_s3(self):
         format_sample = {
             "to": [{
                 "type": "s3",
-                "bucket": "abcde",
-                "key": "path/to/file"
-            }
+                "options": {
+                    "bucket": "abcde",
+                    "key": "path/to/file"
+                    }
+                }
             ]
         }
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
         assert is_valid is True
 
+    def test_invalid_to_s3(self):
+        format_sample = {
+            "to": [{
+                "type": "s3",
+                "options": {}
+                }
+            ]
+        }
+        validator = ConfigurationSerializer(format_sample, 'id')
+        is_valid = validator.is_valid()
+        assert is_valid is False
+
     def test_valid_to_gcs(self):
         format_sample = {
             "to": [{
                 "type": "gcs",
-                "bucket": "abcde",
-                "key": "path/to/file"
-            }
+                "options": {
+                    "bucket": "abcde",
+                    "key": "path/to/file"
+                    }
+                }
             ]
         }
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
         assert is_valid is True
+
+    def test_invalid_to_gcs(self):
+        format_sample = {
+            "to": [{
+                "type": "gcs",
+                "options": {
+                    }
+                }
+            ]
+        }
+        validator = ConfigurationSerializer(format_sample, 'id')
+        is_valid = validator.is_valid()
+        assert is_valid is False
 
     def test_valid_to_s3_url(self):
         format_sample = {
@@ -56,10 +99,22 @@ class TestConfigurationSerializers(object):
         is_valid = validator.is_valid()
         assert is_valid is True
 
-    def test_valid_to_s3_without_url(self, mocker):
+    def test_valid_to_s3_invalid_url(self):
         format_sample = {
             "to": [{
-                "type": "s3-url"            
+                "type": "s3-url",
+                "uri": "sdfsdfsdf"
+                }
+            ]
+        }
+        validator = ConfigurationSerializer(format_sample, 'id')
+        is_valid = validator.is_valid()
+        assert is_valid is False
+
+    def test_valid_to_s3_without_url_user_input(self, mocker):
+        format_sample = {
+            "to": [{
+                "type": "s3-url"
                 }
             ]
         }
@@ -82,7 +137,7 @@ class TestConfigurationSerializers(object):
         is_valid = validator.is_valid()
         assert is_valid is True
 
-    def test_valid_to_gcp_without_url(self, mocker):
+    def test_valid_to_gcp_without_url_user_input(self, mocker):
         format_sample = {
             "to": [{
                 "type": "gcs-url"            
@@ -96,12 +151,14 @@ class TestConfigurationSerializers(object):
         is_valid = validator.is_valid()
         assert is_valid is True
 
-    def test_invalid_to(self):
+    def test_valid_to_gcs_invalid_url(self):
         format_sample = {
             "to": [{
-
-            }]
+                "type": "gcs-url",
+                "uri": "sdfsdfsdf"
+                }
+            ]
         }
         validator = ConfigurationSerializer(format_sample, 'id')
-        with pytest.raises(Exception):
-            is_valid = validator.is_valid()
+        is_valid = validator.is_valid()
+        assert is_valid is False

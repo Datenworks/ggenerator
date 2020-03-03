@@ -48,8 +48,7 @@ class GeneratorsHandler(object):
                                      destination,
                                      dataset_format)
                 file_format = dataset_format['type']
-                file_path = destination['uri']
-                yield key, file_format, file_path
+                yield key, file_format, destination
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']
@@ -73,7 +72,7 @@ class GeneratorsHandler(object):
     def write_dataframe(self,
                         dataframe: DataFrame,
                         destination: dict,
-                        format_: dict):
+                        format_: dict) -> str:
         file_format = format_['type']
         formatter_class = formatters[file_format]
         formatter = formatter_class(specification=format_)
@@ -82,4 +81,4 @@ class GeneratorsHandler(object):
         writer_class = writers[destination_type]
         writer = writer_class(formatter=formatter, specification=destination)
 
-        writer.write(dataframe=dataframe)
+        return writer.write(dataframe=dataframe)

@@ -27,7 +27,7 @@ def generate(spec_path):
         click.echo("| Finished!\n"
                    f"| Dataset name: {dset_name}\n"
                    f"| Dataset format: {dset_format}\n"
-                   f"| Dataset path: {dset_path}\n")
+                   f"| Dataset destination info: {dset_path}\n")
 
 
 def get_uri(dataset_name, output_type):

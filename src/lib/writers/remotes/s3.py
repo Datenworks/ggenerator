@@ -16,6 +16,7 @@ class S3RemoteWriter(object):
 
     @staticmethod
     def is_valid_destination(**kwargs):
-        if kwargs['bucket'] and kwargs['key']:
+        options = kwargs.get('options')
+        if 'bucket' in options and 'key' in options:
             return True
         return False
