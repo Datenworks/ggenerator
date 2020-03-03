@@ -41,5 +41,12 @@ def specification():
 def specification_url():
     return {
         'type': 's3-url',
-        'uri': 'https://signed-url.example.com'
+        'options': {
+            "path": "file/path/example.json"
+        }
     }
+
+
+@fixture
+def signed_post_file():
+    return '{"url": "s3.url.com", "fields": {}}'

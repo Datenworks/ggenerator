@@ -1,3 +1,4 @@
+import json
 import requests
 
 from io import StringIO
@@ -13,17 +14,26 @@ class S3PresignedUrlRemoteWriter(object):
 
     @staticmethod
     def check(specification):
-        return "uri" in specification and \
-            "fields" in specification
+        options = specification.get('options')
+        if options is not None:
+            return options
+
+        return 'path' in options
 
     def write(self, dataframe: DataFrame):
-        fields = self.specification.get('fields')
-        signed_url = self.specification['uri']
+        options = self.specification['options']
+        file_path = options['path']
+
+        with open(file_path, 'r') as file:
+            singed_post = json.loads(file.read())
+
+        signed_url = singed_post.get('url')
+        fields = singed_post.get('fields')
 
         buffer = StringIO()
-
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=buffer)
+
         files = {'file': buffer.getvalue()}
         response = requests.post(signed_url,
                                  data=fields,
