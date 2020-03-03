@@ -36,9 +36,8 @@ class GeneratorsHandler(object):
                 raise ValueError("Propriedade ‘size’ deve ser maior que 0 (zero)")
             if dataset_validator.size == "":
                 '''raise ValueError("Dataset XPTO: Propriedade ‘size’ é obrigatória")''' #levantando a exceção de arquivo mal formado no validator.py
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Não é válido")
-                '''raise ValueError("Malformed specification file")'''
+            if dataset_validator.is_valid() is False:             
+                raise ValueError("Malformed specification file")
 
         return config
 

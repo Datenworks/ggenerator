@@ -10,16 +10,13 @@ class ConfigurationValidator(object):
 
     def get_config(self):
 
-        '''try:'''
-        file = open(self.file_path, 'r')
-        configuration = json.loads(file.read())
-        file.close()
-        return configuration
-        '''except ValueError:
-            raise ValueError("Arquivo mal formado") '''
-
-        
-
+        try:
+            file = open(self.file_path, 'r')
+            configuration = json.loads(file.read())
+            file.close()
+            return configuration
+        except ValueError:
+            raise ValueError("Arquivo mal formado/campo vazio")
 
 class ConfigurationDataset(object):
 
