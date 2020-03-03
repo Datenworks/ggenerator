@@ -23,6 +23,20 @@ jobs:
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
       if: type = push
+    - stage: PyPI Release Production
+      script: skip
+      deploy: &pipy
+        provider: pypi
+        user: "__token__"
+        distributions: "sdist bdist_wheel"
+        password: $PIPY_TOKEN
+        on:
+          branch: master
+      after_deploy:
+        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+        - chmod +x send.sh
+        - ./send.sh success $WEBHOOK_URL
+      if: type = push
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
