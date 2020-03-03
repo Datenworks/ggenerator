@@ -52,11 +52,14 @@ def specification_gcs():
 
 
 @fixture
-def specification_url_s3():
+def specification_with_url():
     return {
         'type': 's3-url',
-        'uri': 'https://signed-url.example.com'
+        'options': {
+            "path": "file/path/example.json"
+        }
     }
+
 
 @fixture
 def specification_url_gcs():
@@ -64,3 +67,13 @@ def specification_url_gcs():
         'type': 'gcs-url',
         'uri': 'https://signed-url.example.com'
     }
+
+
+@fixture
+def specification_without_url():
+    return {'type': 's3-url'}
+
+
+@fixture
+def signed_post_file():
+    return '{"url": "s3.url.com", "fields": {}}'

@@ -15,8 +15,8 @@ python-dateutil = "*"
 pandas = "==1.0.1"
 click = "*"
 requests = "==2.23.0"
-s3fs = "*"
 gcsfs = "*"
+s3fs = "==0.4.0"
 
 [requires]
 python_version = "3.7"
