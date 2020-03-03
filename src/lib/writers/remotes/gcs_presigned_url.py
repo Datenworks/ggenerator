@@ -13,15 +13,12 @@ class GCSPresignedUrlRemoteWriter(object):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
-        fields = self.specification.get('fields')
         signed_url = self.specification['uri']
 
         buffer = StringIO()
 
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=buffer)
-
-        files = {'file': buffer.getvalue()}
 
         try:
             response = requests.put(signed_url,

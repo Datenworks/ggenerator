@@ -1,7 +1,7 @@
 from src.lib.writers.remotes.gcs_presigned_url \
     import GCSPresignedUrlRemoteWriter
 from src.lib.formatters.csv import CsvFormatter
-from src.tests.lib.writers.remotes.fixtures import *
+from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
 import pytest
 import requests
 
@@ -54,4 +54,3 @@ class TestGcsWriter:
 
         with pytest.raises(requests.RequestException):
             writer.write(dataframe=pandas_dataframe_without_data)
- 

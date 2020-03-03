@@ -7,7 +7,6 @@ from pytest import raises
 from src.lib.formatters.csv import CsvFormatter
 from src.lib.writers.remotes.s3_presigned_url import S3PresignedUrlRemoteWriter
 from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
-import pytest
 
 
 class TestS3PresignedUrlRemoteWriter(object):

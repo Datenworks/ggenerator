@@ -36,6 +36,7 @@ def specification_s3():
         }
     }
 
+
 @fixture
 def specification_gcs():
     from uuid import uuid4
