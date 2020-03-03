@@ -23,9 +23,9 @@ class GCSPresignedUrlRemoteWriter(object):
         files = {'file': buffer.getvalue()}
 
         try:
-            response = requests.post(signed_url,
-                                     data=fields,
-                                     files=files)
+            response = requests.put(signed_url,
+                                    data=fields,
+                                    files=files)
             response.raise_for_status()
         except Exception as e:
             raise requests.RequestException("Can't send data to this given"
