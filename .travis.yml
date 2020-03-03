@@ -6,6 +6,11 @@ branches:
 python:
   - "3.7"
 
+install:
+  - pip install pipenv
+  - pipenv install --dev
+  - pipenv lock --dev --requirements > requirements.txt
+
 jobs:
   include:
     - stage: PyPI Release Develop
@@ -24,9 +29,7 @@ jobs:
         - ./send.sh success $WEBHOOK_URL
       if: type = push
     - stage: PyPI Release Production
-      script:
-        - pip install pipenv
-        - pipenv run pip freeze > requirements.txt
+      script: skip
       deploy: &pipy
         provider: pypi
         user: "__token__"
@@ -42,8 +45,7 @@ jobs:
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
       script:
-        - pip install pipenv
-        - pipenv install --dev
         - pipenv run flake8
         - pipenv run python -m pytest --cov
       if: type = pull_request
+
