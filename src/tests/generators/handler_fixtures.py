@@ -99,58 +99,38 @@ def timestamp_specification():
 
 
 @fixture
-def valid_spec():
-    return {
-        "datasets": {
-            "$id": {
-                "size": 1000,
-                "fields": [{
-                    "name": "id",
-                    "type": "integer:sequence",
-                    "generator": {
-                        "start_at": 0
-                    }
-                }],
-                "format": {
-                    "type": "csv",
-                    "options": {
-                        "header": True,
-                        "sep": ","
-                    }
-                },
-                "serializers": {
-                    "to": [{
-                            "type": "file",
-                            "uri": "myfile.csv"
-                        }
-                    ]
-                }
-            }
-        }
-    }
+def valid_specification():
+    return {"datasets": {
+                "teste3": {
+                    "fields": [{"type": "integer:sequence",
+                                "name": "id",
+                                "generator": {"start_at": 1}}],
+                    "size": 100,
+                    "format": {"type": "csv"},
+                    "serializers": {
+                        "to": [{"type": "file",
+                                "uri": "/tmp/teste.csv"}]}}}}
 
 
 @fixture
-def invalid_spec_no_ids():
-    return {
-        "datasets": {}
-    }
-
-
-@fixture
-def invalid_spec_no_dataset():
+def no_datasets_specification():
     return {}
 
 
 @fixture
-def invalid_spec_no_infos_dataset():
-    return {
-        "datasets": {
-            "$id": {
-                "size": 10,
-                "fields": [],
-                "format": {},
-                "serializers": {}
-            }
-        }
-    }
+def no_datasets_ids():
+    return {"datasets": {}}
+
+
+@fixture
+def invalid_dataset_specification():
+    return {"datasets": {
+                "teste3": {
+                    "fields": [{"type": "integer:sequence",
+                                "name": "id",
+                                "generator": {"start_at": 1}}],
+                    "size": "",
+                    "format": {"type": "csv"},
+                    "serializers": {
+                        "to": [{"type": "file",
+                                "uri": "/tmp/teste.csv"}]}}}}

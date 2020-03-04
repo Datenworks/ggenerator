@@ -21,13 +21,16 @@ def execute():
                               dir_okay=False),
               required=True)
 def generate(spec_path):
-    generator = \
-        GeneratorsHandler(arguments={'config_file': spec_path})
-    for dset_name, dset_format, dset_path in generator.generate():
-        click.echo("| Finished!\n"
-                   f"| Dataset name: {dset_name}\n"
-                   f"| Dataset format: {dset_format}\n"
-                   f"| Dataset destination info: {dset_path}\n")
+    try:
+        generator = \
+            GeneratorsHandler(arguments={'config_file': spec_path})
+        for dset_name, dset_format, dset_path in generator.generate():
+            click.echo("| Finished!\n"
+                       f"| Dataset name: {dset_name}\n"
+                       f"| Dataset format: {dset_format}\n"
+                       f"| Dataset path: {dset_path}\n")
+    except Exception as err:
+        click.echo(f"Error: {err}")
 
 
 def get_uri(dataset_name, output_type):
