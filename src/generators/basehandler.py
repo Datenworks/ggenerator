@@ -15,13 +15,15 @@ class BaseHandler(object):
             raise ValueError("Malformed specification file")
 
         datasets = config.get('datasets')
+        if not datasets.keys():
+            raise ValueError("Malformed specification file")
         for key in datasets.keys():
             dataset_validator = ConfigurationDataset(
                 id=key,
-                size=datasets[key]['size'],
-                fields=datasets[key]['fields'],
-                format=datasets[key]['format'],
-                serializers=datasets[key]['serializers']
+                size=datasets[key].get('size'),
+                fields=datasets[key].get('fields'),
+                format=datasets[key].get('format'),
+                serializers=datasets[key].get('serializers')
             )
             if dataset_validator.is_valid() is False:
                 raise ValueError("Malformed specification file")

@@ -2,6 +2,9 @@ from pandas import DataFrame
 
 from src.generators.handler import BaseHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
+import json
+import pytest
+from os import remove
 
 
 class TestBaseHundler(object):
@@ -153,3 +156,39 @@ class TestBaseHundler(object):
         assert dataframe.shape[0] == timestamp_specification['size']
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
+
+    def test_basehandler_valid(self, valid_dataset):
+        handler = BaseHandler()
+        with open('valid_spec.json', 'w') as f:
+            json.dump(valid_dataset, f)
+
+        config = handler.valid_specification('valid_spec.json')
+        assert valid_dataset == config
+        remove('valid_spec.json')
+
+    def test_basehandler_no_dataset(self, invalid_no_dataset):
+        handler = BaseHandler()
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_dataset, f)
+
+        with pytest.raises(ValueError):
+            handler.valid_specification('invalid_spec.json')
+        remove('invalid_spec.json')
+
+    def test_basehandler_no_dataset_ids(self, invalid_no_ids_dataset):
+        handler = BaseHandler()
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_ids_dataset, f)
+
+        with pytest.raises(ValueError):
+            handler.valid_specification('invalid_spec.json')
+        remove('invalid_spec.json')
+
+    def test_basehandler_no_dataset_size(self, invalid_no_size_dataset):
+        handler = BaseHandler()
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_size_dataset, f)
+
+        with pytest.raises(ValueError):
+            handler.valid_specification('invalid_spec.json')
+        remove('invalid_spec.json')

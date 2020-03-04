@@ -2,6 +2,9 @@ from pandas import DataFrame
 
 from src.generators.dryrunhandler import DryRunHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
+import pytest
+import json
+from os import remove
 
 
 class TestDryRunHandler(object):
@@ -145,5 +148,34 @@ class TestDryRunHandler(object):
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
 
-    def test_output(self):
-        pass
+    def test_dryrunhandler_valid(self, valid_dataset):
+        with open('valid_spec.json', 'w') as f:
+            json.dump(valid_dataset, f)
+        handler = DryRunHandler({'config_file': 'valid_spec.json'})
+        config = handler.valid_specification_dryrun()
+        assert valid_dataset == config
+        remove('valid_spec.json')
+
+    def test_dryrunhandler_no_dataset_ids(self, invalid_no_ids_dataset):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_ids_dataset, f)
+        with pytest.raises(ValueError):
+            handler = DryRunHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dryrun()
+        remove('invalid_spec.json')
+
+    def test_dryrunhandler_no_dataset(self, invalid_no_dataset):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_dataset, f)
+        with pytest.raises(ValueError):
+            handler = DryRunHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dryrun()
+        remove('invalid_spec.json')
+
+    def test_basehandler_no_dataset_size(self, invalid_no_size_dataset):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_size_dataset, f)
+        with pytest.raises(ValueError):
+            handler = DryRunHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dryrun()
+        remove('invalid_spec.json')

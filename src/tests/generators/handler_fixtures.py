@@ -54,7 +54,7 @@ def sample_timestamp_sequence(type, expected):
                         'type': type,
                         'generator': {
                             'start_at': '2019-01-01T01:00:00Z'
-                            },
+                        },
                         'expected': expected}]}
 
 
@@ -96,3 +96,67 @@ def string_specification():
 @fixture
 def timestamp_specification():
     return sample_timestamp('timestamp', 'datetime64[ns]')
+
+
+@fixture
+def valid_dataset():
+    return {
+        "datasets": {
+            "$id": {
+                "size": 100,
+                "fields": [{
+                    "name": "test",
+                    "type": "integer",
+                    "generator": {
+                        "start_at": 20,
+                        "end_at": 540
+                    }
+                }],
+                "format": {
+                    "type": "csv"
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "dataset.csv"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+
+@fixture
+def invalid_no_dataset():
+    return {}
+
+
+@fixture
+def invalid_no_ids_dataset():
+    return {"datasets": {}}
+
+
+@fixture
+def invalid_no_size_dataset():
+    return {"datasets": {
+        "$id": {
+            "fields": [],
+            "format": {},
+            "serializers": {}
+        }
+    }
+    }
+
+
+@fixture
+def invalid_no_size_dryrun():
+    return {"datasets": {
+        "$id": {
+            "fields": [],
+            "format": {},
+            "serializers": {}
+        }
+    }
+    }

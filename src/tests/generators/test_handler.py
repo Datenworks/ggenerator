@@ -2,6 +2,8 @@ from pandas import DataFrame
 
 from src.generators.handler import GeneratorsHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
+from os import remove
+import json
 
 
 class TestGeneratorsHandler(object):
@@ -144,3 +146,11 @@ class TestGeneratorsHandler(object):
         assert dataframe.shape[0] == timestamp_specification['size']
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
+
+    def test_generatorshandler_valid(self, valid_dataset):
+        with open('valid_spec.json', 'w') as f:
+            json.dump(valid_dataset, f)
+        handler = GeneratorsHandler({'config_file': 'valid_spec.json'})
+        config = handler.valid_specification_dataset()
+        assert valid_dataset == config
+        remove('valid_spec.json')

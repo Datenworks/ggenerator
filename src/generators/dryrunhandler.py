@@ -38,10 +38,10 @@ class DryRunHandler(object):
             print("   ", field['name'], ":", field['type'])
 
     def __print_dataframe(self, dataframe):
-        print(tabulate(dataframe, tablefmt="fancy_grid",
-                                  headers = dataframe.columns))
+        print(tabulate(
+            dataframe, tablefmt="fancy_grid",
+            headers=dataframe.columns))
 
     def generate_dryrun(self, specification: dict) -> DataFrame:
-        size = 10
-        dataframe = self.base.generate_dataframe(specification, size)
+        dataframe = self.base.generate_dataframe(specification, 10)
         return dataframe

@@ -2,6 +2,7 @@ import os
 
 from click.testing import CliRunner
 
+
 from src.cli.commands import execute
 from src.generators.handler import GeneratorsHandler
 from src.tests.cli.cli_fixture import *  # noqa: F403, F401
