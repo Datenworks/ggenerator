@@ -6,7 +6,7 @@ from src.tests.lib.config.fixtures import *  # noqa: F403, F401
 
 class TestConfigurationSerializers(object):
 
-    def test_valid_to(self):
+    def test_valid_to(self, mocker):
         format_sample = {
             "to": [{
                 "type": "file",
@@ -14,6 +14,9 @@ class TestConfigurationSerializers(object):
             }
             ]
         }
+        mock = mocker.patch.object(click, 'prompt')
+        mock.return_value = "https://onevalidurl"
+
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
         assert is_valid is True
@@ -67,18 +70,6 @@ class TestConfigurationSerializers(object):
         validator = ConfigurationSerializer(format_sample, 'id')
         is_valid = validator.is_valid()
         assert is_valid is True
-
-    def test_valid_to_s3_invalid_url(self):
-        format_sample = {
-            "to": [{
-                "type": "s3-url",
-                "uri": "sdfsdfsdf"
-                }
-            ]
-        }
-        validator = ConfigurationSerializer(format_sample, 'id')
-        is_valid = validator.is_valid()
-        assert is_valid is False
 
     def test_valid_to_s3_without_url_user_input(self, mocker):
         format_sample = {
