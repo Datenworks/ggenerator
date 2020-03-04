@@ -9,6 +9,7 @@ import pytest
 import json
 from os import remove
 
+
 class TestGeneratorsHandler(object):
     """Unit-test of GeneratorsHandler class"""
 
