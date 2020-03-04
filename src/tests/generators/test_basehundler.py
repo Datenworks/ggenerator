@@ -157,19 +157,19 @@ class TestBaseHundler(object):
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
 
-    def test_basehandler_valid(self, valid_dataset):
+    def test_basehandler_valid(self, valid_specification):
         handler = BaseHandler()
         with open('valid_spec.json', 'w') as f:
-            json.dump(valid_dataset, f)
+            json.dump(valid_specification, f)
 
         config = handler.valid_specification('valid_spec.json')
-        assert valid_dataset == config
+        assert valid_specification == config
         remove('valid_spec.json')
 
-    def test_basehandler_no_dataset(self, invalid_no_dataset):
+    def test_basehandler_no_dataset(self, no_datasets_specification):
         handler = BaseHandler()
         with open('invalid_spec.json', 'w') as f:
-            json.dump(invalid_no_dataset, f)
+            json.dump(no_datasets_specification, f)
 
         with pytest.raises(ValueError):
             handler.valid_specification('invalid_spec.json')

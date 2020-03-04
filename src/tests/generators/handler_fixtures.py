@@ -99,37 +99,21 @@ def timestamp_specification():
 
 
 @fixture
-def valid_dataset():
-    return {
-        "datasets": {
-            "$id": {
-                "size": 100,
-                "fields": [{
-                    "name": "test",
-                    "type": "integer",
-                    "generator": {
-                        "start_at": 20,
-                        "end_at": 540
-                    }
-                }],
-                "format": {
-                    "type": "csv"
-                },
-                "serializers": {
-                    "to": [
-                        {
-                            "type": "file",
-                            "uri": "dataset.csv"
-                        }
-                    ]
-                }
-            }
-        }
-    }
+def valid_specification():
+    return {"datasets": {
+                "teste3": {
+                    "fields": [{"type": "integer:sequence",
+                                "name": "id",
+                                "generator": {"start_at": 1}}],
+                    "size": 100,
+                    "format": {"type": "csv"},
+                    "serializers": {
+                        "to": [{"type": "file",
+                                "uri": "/tmp/teste.csv"}]}}}}
 
 
 @fixture
-def invalid_no_dataset():
+def no_datasets_specification():
     return {}
 
 
@@ -160,3 +144,14 @@ def invalid_no_size_dryrun():
         }
     }
     }
+def invalid_dataset_specification():
+    return {"datasets": {
+                "teste3": {
+                    "fields": [{"type": "integer:sequence",
+                                "name": "id",
+                                "generator": {"start_at": 1}}],
+                    "size": "",
+                    "format": {"type": "csv"},
+                    "serializers": {
+                        "to": [{"type": "file",
+                                "uri": "/tmp/teste.csv"}]}}}}

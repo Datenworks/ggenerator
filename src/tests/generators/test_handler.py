@@ -1,13 +1,88 @@
 from pandas import DataFrame
+from pytest import raises
 
 from src.generators.handler import GeneratorsHandler
+from src.lib.config.validator import ConfigurationValidator
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 from os import remove
 import json
+from src.lib.writers import writers
 
 
 class TestGeneratorsHandler(object):
     """Unit-test of GeneratorsHandler class"""
+
+    def test_valid_specification(self, mocker, valid_specification):
+        mock = mocker.patch \
+                     .object(ConfigurationValidator, 'get_config')
+        mock.return_value = valid_specification
+
+        GeneratorsHandler(arguments={'config_file': None})
+
+        mock.assert_called()
+
+    def test_without_dataset(self, mocker, no_datasets_specification):
+        mock = mocker.patch \
+                     .object(ConfigurationValidator, 'get_config')
+        mock.return_value = no_datasets_specification
+
+        with raises(ValueError):
+            GeneratorsHandler(arguments={'config_file': None})
+
+            mock.assert_called()
+
+    def test_invalid_dataset(self, mocker, invalid_dataset_specification):
+        mock = mocker.patch \
+                     .object(ConfigurationValidator, 'get_config')
+        mock.return_value = invalid_dataset_specification
+
+        with raises(ValueError):
+            GeneratorsHandler(arguments={'config_file': None})
+
+            mock.assert_called()
+
+    def test_generate(self, mocker, valid_specification):
+        mock_write = mocker.patch \
+                           .object(GeneratorsHandler, 'write_dataframe')
+        mock_write.return_value = 'file_path'
+        mock_config = mocker.patch \
+                            .object(GeneratorsHandler,
+                                    'get_valid_specification')
+        mock_config.return_value = valid_specification
+
+        handler = GeneratorsHandler(arguments={'config_file': None})
+        for key, format_, path in handler.generate():
+            assert key is not None
+            assert isinstance(key, str)
+            assert format_ is not None
+            assert isinstance(format_, str)
+            assert path is not None
+            assert isinstance(path, str)
+
+        mock_write.assert_called()
+
+    def test_write(self, mocker, valid_specification):
+        mock_config = mocker.patch \
+                            .object(GeneratorsHandler,
+                                    'get_valid_specification')
+        mock_config.return_value = valid_specification
+
+        handler = GeneratorsHandler(arguments={'config_file': None})
+        for key in valid_specification['datasets'].keys():
+            dataset = valid_specification['datasets'][key]
+            dataset_format = dataset['format']
+            dataframe = handler.generate_dataframe(dataset)
+            for destination in dataset['serializers']['to']:
+                file_type = destination['type']
+                writer = writers[file_type]
+                mock = mocker.patch.object(writer, 'write')
+                mock.return_value = 'file_path'
+                file_path = handler.write_dataframe(dataframe=dataframe,
+                                                    destination=destination,
+                                                    format_=dataset_format)
+
+                mock.assert_called()
+                assert file_path == 'file_path'
 
     def test_simple_specification_dataframe(self,
                                             mocker,
@@ -147,10 +222,10 @@ class TestGeneratorsHandler(object):
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
 
-    def test_generatorshandler_valid(self, valid_dataset):
+    def test_generatorshandler_valid(self, valid_specification):
         with open('valid_spec.json', 'w') as f:
-            json.dump(valid_dataset, f)
+            json.dump(valid_specification, f)
         handler = GeneratorsHandler({'config_file': 'valid_spec.json'})
         config = handler.valid_specification_dataset()
-        assert valid_dataset == config
+        assert valid_specification == config
         remove('valid_spec.json')

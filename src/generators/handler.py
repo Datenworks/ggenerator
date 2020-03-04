@@ -1,13 +1,11 @@
 from pandas import DataFrame
 
+from src.lib.formatters import formatters
 from src.lib.writers import writers
 from src.generators.basehandler import BaseHandler
 
 
 class GeneratorsHandler(object):
-    """GeneratorsHandler is responsible to integrate
-    all the modules, serving like a facade to the user.
-    """
 
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
@@ -26,9 +24,10 @@ class GeneratorsHandler(object):
             dataset_format = dataset['format']
             dataframe = self.generate_dataframe(dataset)
             for destination in dataset['serializers']['to']:
-                file_format, file_path = self.write_dataframe(dataframe,
-                                                              destination,
-                                                              dataset_format)
+                file_path = self.write_dataframe(dataframe,
+                                                 destination,
+                                                 dataset_format)
+                file_format = dataset_format['type']
                 yield key, file_format, file_path
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
@@ -39,11 +38,13 @@ class GeneratorsHandler(object):
     def write_dataframe(self,
                         dataframe: DataFrame,
                         destination: dict,
-                        dataset_format: dict) -> (str, str):
-        file_format = dataset_format['type']
-        file_path = destination['uri']
-        writer = self.writers[file_format]()
-        writer.write(dataframe=dataframe,
-                     file_path=file_path,
-                     **dataset_format.get("options", {}))
-        return file_format, file_path
+                        format_: dict):
+        file_format = format_['type']
+        formatter_class = formatters[file_format]
+        formatter = formatter_class(specification=format_)
+
+        destination_type = destination['type']
+        writer_class = writers[destination_type]
+        writer = writer_class(formatter=formatter, specification=destination)
+
+        return writer.write(dataframe=dataframe)

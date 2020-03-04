@@ -18,4 +18,9 @@ htmlcov/
 jspm_packages/
 node_modules/
 
+build/
+dist/
+ggenerator.egg-info/
+
 test.json
+requirements.txt

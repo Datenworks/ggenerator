@@ -20,14 +20,3 @@ def pandas_dataframe_with_data():
 @fixture
 def pandas_dataframe_without_data():
     return pandas_dataframe(data=[])
-
-
-@fixture
-def test_file_path():
-    from os.path import abspath
-    from uuid import uuid4
-
-    absolute_path = abspath(".")
-    file_name = uuid4()
-
-    return f"{absolute_path}/{file_name}"

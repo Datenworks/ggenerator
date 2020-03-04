@@ -1,6 +1,8 @@
 import json
 
+from src.lib.formatters import formatters
 from src.generators.datatypes import generators_map
+from src.lib.writers import writers
 
 
 class ConfigurationValidator(object):
@@ -39,13 +41,18 @@ class ConfigurationDataset(object):
         has_format = self.format is not None
         has_serializers = self.serializers is not None
 
+        if not (has_id and has_size and
+                has_fields and has_format and
+                has_serializers):
+            return False
+
         are_fields_valid = self.fields_validator.is_valid()
         is_format_valid = self.format_validator.is_valid()
         is_serializer_valid = self.serializer_validator.is_valid()
 
-        is_valid = has_id and has_size and has_fields \
-            and has_format and has_serializers and is_format_valid \
-            and is_serializer_valid and are_fields_valid
+        is_valid = is_format_valid and \
+            is_serializer_valid and \
+            are_fields_valid
         return is_valid
 
 
@@ -58,8 +65,9 @@ class ConfigurationFormat(object):
         format_type = self.format.get("type")
         has_format_type = format_type is not None and \
             isinstance(format_type, str)
-        is_valid = has_format_type
-        return is_valid
+
+        return has_format_type and \
+            format_type in formatters
 
 
 class ConfigurationFields(object):
@@ -129,12 +137,14 @@ class ConfigurationSerializer(object):
     def __is_valid_output(self, to):
         for output in to:
             output_type = output.get("type")
-            outpu_uri = output.get("uri")
-            verify_output_type = output_type is not None and\
+            verify_output_type = output_type is not None and \
                 isinstance(output_type, str)
-            verify_output_uri = outpu_uri is not None and\
-                isinstance(outpu_uri, str)
-            is_valid = verify_output_type and verify_output_uri
+
+            writer = writers.get(output_type)
+            is_valid = verify_output_type and \
+                writer is not None and \
+                writer.check(output)
+
             if is_valid is False:
                 return False
         return True
