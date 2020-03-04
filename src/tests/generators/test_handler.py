@@ -7,7 +7,7 @@ from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 from src.lib.writers import writers
 import pytest
 import json
-
+from os import remove
 
 class TestGeneratorsHandler(object):
     """Unit-test of GeneratorsHandler class"""
@@ -233,6 +233,8 @@ class TestGeneratorsHandler(object):
 
         handler = \
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+
+        remove(f"{absolute_path}/{file_name}")
         assert handler
 
     def test_invalid_no_ids_spec_handler(self, mocker, no_datasets_ids):
@@ -246,6 +248,7 @@ class TestGeneratorsHandler(object):
 
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")
 
     def test_invalid_no_dataset_spec_handler(self, mocker,
                                              no_datasets_specification):
@@ -259,6 +262,7 @@ class TestGeneratorsHandler(object):
 
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")
 
     def test_invalid_no_dataset_info(self, mocker,
                                      invalid_dataset_specification):
@@ -272,3 +276,4 @@ class TestGeneratorsHandler(object):
 
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")
