@@ -172,7 +172,7 @@ class TestDryRunHandler(object):
             handler.valid_specification_dryrun()
         remove('invalid_spec.json')
 
-    def test_basehandler_no_dataset_size(self, invalid_no_size_dataset):
+    def test_dryrunhandler_no_dataset_size(self, invalid_no_size_dataset):
         with open('invalid_spec.json', 'w') as f:
             json.dump(invalid_no_size_dataset, f)
         with pytest.raises(ValueError):

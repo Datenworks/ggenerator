@@ -7,6 +7,7 @@ from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 from os import remove
 import json
 from src.lib.writers import writers
+import pytest
 
 
 class TestGeneratorsHandler(object):
@@ -47,7 +48,7 @@ class TestGeneratorsHandler(object):
         mock_write.return_value = 'file_path'
         mock_config = mocker.patch \
                             .object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_config.return_value = valid_specification
 
         handler = GeneratorsHandler(arguments={'config_file': None})
@@ -64,7 +65,7 @@ class TestGeneratorsHandler(object):
     def test_write(self, mocker, valid_specification):
         mock_config = mocker.patch \
                             .object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_config.return_value = valid_specification
 
         handler = GeneratorsHandler(arguments={'config_file': None})
@@ -229,3 +230,27 @@ class TestGeneratorsHandler(object):
         config = handler.valid_specification_dataset()
         assert valid_specification == config
         remove('valid_spec.json')
+
+    def test_generatorshandler_no_dataset_ids(self, invalid_no_ids_dataset):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_ids_dataset, f)
+        with pytest.raises(ValueError):
+            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dataset()
+        remove('invalid_spec.json')
+
+    def test_GeneratorsHandler_no_dataset(self, no_datasets_specification):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(no_datasets_specification, f)
+        with pytest.raises(ValueError):
+            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dataset()
+        remove('invalid_spec.json')
+
+    def test_generatorshandler_no_dataset_size(self, invalid_no_size_dataset):
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_size_dataset, f)
+        with pytest.raises(ValueError):
+            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
+            handler.valid_specification_dataset()
+        remove('invalid_spec.json')
