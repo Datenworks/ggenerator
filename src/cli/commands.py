@@ -31,3 +31,9 @@ def generate(spec_path):
                        f"| Dataset path: {dset_path}\n")
     except Exception as err:
         click.echo(f"Error: {err}")
+
+
+def get_uri(dataset_name, output_type):
+    return click.prompt(f"Please, enter a valid URI of destination "
+                        f"for the dataset: {dataset_name} "
+                        f"and destination: {output_type}", type=str)

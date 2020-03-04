@@ -5,6 +5,9 @@ from src.generators.handler import GeneratorsHandler
 from src.lib.config.validator import ConfigurationValidator
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 from src.lib.writers import writers
+import pytest
+import json
+from os import remove
 
 
 class TestGeneratorsHandler(object):
@@ -88,7 +91,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = simple_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -103,7 +106,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = argumented_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -116,7 +119,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = integer_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -129,7 +132,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = bool_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -142,7 +145,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = char_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -155,7 +158,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = float_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -170,7 +173,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = integer_sequence_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -185,7 +188,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = timestamp_sequence_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -198,7 +201,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = string_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -211,7 +214,7 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'get_valid_specification')
         mock.return_value = timestamp_specification
-        handler = GeneratorsHandler({'config_file': None})
+        handler = GeneratorsHandler({"config_file": None})
         specification = handler.get_valid_specification()
         dataframe = handler.generate_dataframe(specification)
 
@@ -219,3 +222,59 @@ class TestGeneratorsHandler(object):
         assert dataframe.shape[0] == timestamp_specification['size']
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
+
+    def test_valid_spec_handler(self, mocker, valid_specification):
+        from os.path import abspath
+        from uuid import uuid4
+
+        absolute_path = abspath(".")
+        file_name = uuid4()
+        with open(f"{absolute_path}/{file_name}", "w") as f:
+            json.dump(valid_specification, f)
+
+        handler = \
+            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+
+        remove(f"{absolute_path}/{file_name}")
+        assert handler
+
+    def test_invalid_no_ids_spec_handler(self, mocker, no_datasets_ids):
+        from os.path import abspath
+        from uuid import uuid4
+
+        absolute_path = abspath(".")
+        file_name = uuid4()
+        with open(f"{absolute_path}/{file_name}", "w") as f:
+            json.dump(no_datasets_ids, f)
+
+        with pytest.raises(ValueError):
+            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")
+
+    def test_invalid_no_dataset_spec_handler(self, mocker,
+                                             no_datasets_specification):
+        from os.path import abspath
+        from uuid import uuid4
+
+        absolute_path = abspath(".")
+        file_name = uuid4()
+        with open(f"{absolute_path}/{file_name}", "w") as f:
+            json.dump(no_datasets_specification, f)
+
+        with pytest.raises(ValueError):
+            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")
+
+    def test_invalid_no_dataset_info(self, mocker,
+                                     invalid_dataset_specification):
+        from os.path import abspath
+        from uuid import uuid4
+
+        absolute_path = abspath(".")
+        file_name = uuid4()
+        with open(f"{absolute_path}/{file_name}", "w") as f:
+            json.dump(invalid_dataset_specification, f)
+
+        with pytest.raises(ValueError):
+            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
+        remove(f"{absolute_path}/{file_name}")

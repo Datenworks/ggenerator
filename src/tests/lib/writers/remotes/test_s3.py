@@ -12,16 +12,16 @@ class TestS3Writer(object):
 
     def test_writting_csv_with_records(self,
                                        pandas_dataframe_with_data,
-                                       specification):
+                                       specification_s3):
         with mock_s3():
-            bucket = specification['options']['bucket']
-            key = specification['options']['key']
+            bucket = specification_s3['options']['bucket']
+            key = specification_s3['options']['key']
             conn = boto3.resource('s3', region_name='us-east-1')
             conn.create_bucket(Bucket=bucket)
 
             formatter = CsvFormatter(specification={})
             writer = S3RemoteWriter(formatter=formatter,
-                                    specification=specification)
+                                    specification=specification_s3)
             writer.write(dataframe=pandas_dataframe_with_data)
 
             body = conn.Object(bucket, key).get()['Body'].read().decode()
@@ -39,16 +39,16 @@ class TestS3Writer(object):
 
     def test_writting_csv_without_records(self,
                                           pandas_dataframe_without_data,
-                                          specification):
+                                          specification_s3):
         with mock_s3():
-            bucket = specification['options']['bucket']
-            key = specification['options']['key']
+            bucket = specification_s3['options']['bucket']
+            key = specification_s3['options']['key']
             conn = boto3.resource('s3', region_name='us-east-1')
             conn.create_bucket(Bucket=bucket)
 
             formatter = CsvFormatter(specification={})
             writer = S3RemoteWriter(formatter=formatter,
-                                    specification=specification)
+                                    specification=specification_s3)
             writer.write(dataframe=pandas_dataframe_without_data)
 
             object_ = conn.Object(bucket, key).get()

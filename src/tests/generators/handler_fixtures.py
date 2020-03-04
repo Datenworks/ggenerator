@@ -118,6 +118,11 @@ def no_datasets_specification():
 
 
 @fixture
+def no_datasets_ids():
+    return {"datasets": {}}
+
+
+@fixture
 def invalid_dataset_specification():
     return {"datasets": {
                 "teste3": {
