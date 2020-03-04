@@ -79,3 +79,24 @@ def valid_spec():
 @fixture
 def invalid_spec():
     return ""
+
+
+@fixture
+def invalid_spec_missing():
+
+    dict1 = {"datasets": {
+        "sample": {
+            "size": '-1',
+            "fields": [
+
+            ],
+            "format": {
+
+            }
+        },
+        "serializers": {
+
+        }
+    }
+    }
+    return dict1

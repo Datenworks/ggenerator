@@ -3,7 +3,8 @@ import json
 from mock import patch, mock_open
 from pytest import raises
 
-from src.lib.config.validator import ConfigurationValidator
+from src.lib.config.validator import ConfigurationValidator, \
+    ConfigurationDataset
 from src.tests.lib.config.fixtures import *
 
 
@@ -24,5 +25,20 @@ class TestConfigurationValidator(object):
             with raises(ValueError):
                 validator.get_config()
     
-    def test_valid_constructor(self):
+    def test_invalid_fields(self, invalid_spec_missing):
+        myDict = invalid_spec_missing
+        sample = "sample"
+        size = myDict['datasets']['sample']['size']
+        fields = myDict['datasets']['sample']['fields']
+        format = myDict['datasets']['sample']['format']
+        serializers = myDict['datasets']['serializers']
+        validator = ConfigurationDataset(
+            sample,
+            size,
+            fields,
+            format,
+            serializers)
+
+        with raises(ValueError):
+            validator.__valid_fields(invalid_spec_missing)
         
