@@ -11,10 +11,6 @@ class FileWriter(object):
         self.formatter = formatter
         self.specification = specification
 
-    @staticmethod
-    def check(specification):
-        return "uri" in specification
-
     def write(self, dataframe: DataFrame) -> None:
         """Write all dataframe on a .json file.
 
@@ -25,3 +21,7 @@ class FileWriter(object):
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=file_path)
         return file_path
+
+    @staticmethod
+    def is_valid_destination(**kwargs):
+        return 'uri' in kwargs

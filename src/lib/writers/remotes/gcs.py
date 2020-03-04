@@ -1,26 +1,26 @@
-from s3fs.core import S3FileSystem
 from pandas import DataFrame
+import gcsfs
 
 
-class S3RemoteWriter(object):
-    key = 's3'
+class GCSRemoteWriter(object):
+    key = 'gcs'
 
     def __init__(self, formatter, specification):
         self.formatter = formatter
         self.specification = specification
+        self.gcstorage_fs = gcsfs.GCSFileSystem()
 
     def write(self, dataframe: DataFrame) -> None:
-        s3 = S3FileSystem(anon=False)
         options = self.specification['options']
-        key = f's3://{options["bucket"]}/{options["key"]}'
+        key = f'gs://{options["bucket"]}/{options["key"]}'
+        file_buffer = self.gcstorage_fs.open(key, 'w')
         self.formatter.format(dataframe=dataframe,
-                              path_or_buffer=s3.open(key, mode='w'))
-
+                              path_or_buffer=file_buffer)
         return key
 
     @staticmethod
     def is_valid_destination(**kwargs):
         options = kwargs.get('options')
-        if options and 'bucket' in options and 'key' in options:
+        if 'bucket' in options and 'key' in options:
             return True
         return False

@@ -24,6 +24,10 @@ class GeneratorsHandler(object):
             raise ValueError("Don't have any datasets")
 
         datasets = config.get('datasets')
+
+        if not datasets.keys():
+            raise ValueError("Malformed specification file")
+
         for key in datasets.keys():
             dataset_validator = ConfigurationDataset(
                 id=key,
@@ -74,7 +78,7 @@ class GeneratorsHandler(object):
     def write_dataframe(self,
                         dataframe: DataFrame,
                         destination: dict,
-                        format_: dict):
+                        format_: dict) -> str:
         file_format = format_['type']
         formatter_class = formatters[file_format]
         formatter = formatter_class(specification=format_)

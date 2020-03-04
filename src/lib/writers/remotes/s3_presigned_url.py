@@ -13,10 +13,6 @@ class S3PresignedUrlRemoteWriter(object):
         self.formatter = formatter
         self.specification = specification
 
-    @staticmethod
-    def check(specification):
-        return True
-
     def write(self, dataframe: DataFrame):
         options = self.specification.get('options')
 
@@ -38,9 +34,18 @@ class S3PresignedUrlRemoteWriter(object):
                               path_or_buffer=buffer)
 
         files = {'file': buffer.getvalue()}
-        response = requests.post(signed_url,
-                                 data=fields,
-                                 files=files)
-        response.raise_for_status()
 
+        try:
+            response = requests.post(signed_url,
+                                     data=fields,
+                                     files=files)
+            response.raise_for_status()
+        except Exception as e:
+            raise requests.RequestException("Can't send data to this given"
+                                            "URI try to check if still valid",
+                                            e)
         return signed_url
+
+    @staticmethod
+    def is_valid_destination(**kwargs):
+        return True

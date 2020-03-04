@@ -23,7 +23,7 @@ def pandas_dataframe_without_data():
 
 
 @fixture
-def specification():
+def specification_s3():
     from uuid import uuid4
 
     file_name = uuid4().hex
@@ -38,12 +38,35 @@ def specification():
 
 
 @fixture
+def specification_gcs():
+    from uuid import uuid4
+
+    file_name = uuid4().hex
+
+    return {
+        'type': 'gcs',
+        'options': {
+            'bucket': 'mybucket',
+            'key': file_name
+        }
+    }
+
+
+@fixture
 def specification_with_url():
     return {
         'type': 's3-url',
         'options': {
             "path": "file/path/example.json"
         }
+    }
+
+
+@fixture
+def specification_url_gcs():
+    return {
+        'type': 'gcs-url',
+        'uri': 'https://signed-url.example.com'
     }
 
 
