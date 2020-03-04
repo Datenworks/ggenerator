@@ -27,15 +27,15 @@ class GeneratorsHandler(object):
         for key in datasets.keys():
             dataset_validator = ConfigurationDataset(
                 id=key,
-                size=datasets[key]['size'],
-                fields=datasets[key]['fields'],
+                size=datasets[key].get('size'),
+                fields=datasets[key].get('fields'),
                 format=datasets[key].get('format'),
-                serializers=datasets[key]['serializers']
+                serializers=datasets[key].get('serializers')
             )
-            if dataset_validator.size <= 0:
-                raise ValueError("'size' must be bigger than 0")
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
+            try:
+                dataset_validator.is_valid()
+            except ValueError as e:
+                raise ValueError("Malformed specification file: ", e)
 
         return config
 
