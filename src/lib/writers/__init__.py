@@ -6,13 +6,13 @@ from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
 
 writers = {
-    'file': FileWriter,
+    's3-url': S3PresignedUrlRemoteWriter,
     's3': S3RemoteWriter,
     'gcs': GCSRemoteWriter
 }
 
 uri_writers = {
-    's3-url': S3PresignedUrlRemoteWriter,
+    'file': FileWriter,
     'gcs-url': GCSPresignedUrlRemoteWriter
 }
 
