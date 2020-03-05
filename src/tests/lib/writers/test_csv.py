@@ -2,8 +2,8 @@ from csv import reader
 from os import remove
 from os.path import exists, isfile
 
-from src.lib.writers.csv import CsvWriter
-from src.tests.lib.writers.writers_fixtures import *  # noqa: F403, F401
+from src.lib.formatters.csv import CsvFormatter
+from src.tests.lib.writers.fixtures import *  # noqa: F403, F401
 
 
 class TestCsvWriter:
@@ -11,11 +11,11 @@ class TestCsvWriter:
 
     def test_writting_dataframe_with_records(self,
                                              pandas_dataframe_with_data,
-                                             test_file_path):
-        csv_writer = CsvWriter()
-        csv_writer.write(dataframe=pandas_dataframe_with_data,
-                         file_path=test_file_path,
-                         index=False)
+                                             specification):
+        test_file_path = specification['uri']
+        csv_writer = CsvFormatter(specification={"options": {"index": False}})
+        csv_writer.format(dataframe=pandas_dataframe_with_data,
+                          path_or_buffer=test_file_path)
         assert exists(test_file_path) is True
         assert isfile(test_file_path) is True
 
@@ -36,10 +36,10 @@ class TestCsvWriter:
 
     def test_writting_dataframe_without_records(self,
                                                 pandas_dataframe_without_data,
-                                                test_file_path):
-        csv_writer = CsvWriter()
-        csv_writer.write(dataframe=pandas_dataframe_without_data,
-                         file_path=test_file_path,
-                         index=False)
+                                                specification):
+        test_file_path = specification['uri']
+        csv_writer = CsvFormatter(specification={"options": {"index": False}})
+        csv_writer.format(dataframe=pandas_dataframe_without_data,
+                          path_or_buffer=test_file_path)
         assert exists(test_file_path) is False
         assert isfile(test_file_path) is False
