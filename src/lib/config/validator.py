@@ -60,7 +60,7 @@ class ConfigurationDataset(object):
         else:
             raise ValueError("format must not be empty/none")
 
-    def _valid_serializer(self, serializers):
+    def _valid_serializers(self, serializers):
         if self.serializers is not None and \
                 len(self.serializers) > 0:
             return True
@@ -72,16 +72,11 @@ class ConfigurationDataset(object):
         has_size = self._valid_size(self.size)
         has_fields = self._valid_fields(self.fields)
         has_format = self._valid_format(self.format)
-        has_serializers = self._valid_serializer(self.serializers)
+        has_serializers = self._valid_serializers(self.serializers)
 
-        if not (has_id and has_size and
-                has_fields and has_format and
-                has_serializers):
-            return False
-
-        if not (has_id and has_size and
-                has_fields and has_format and
-                has_serializers):
+        if (has_id or has_size or
+                has_fields or has_format or
+                has_serializers) == ValueError:
             return False
 
         are_fields_valid = self.fields_validator.is_valid()

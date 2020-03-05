@@ -24,7 +24,7 @@ class TestConfigurationValidator(object):
 
             with raises(ValueError):
                 validator.get_config()
-    
+
     def test_invalid_fields(self, invalid_spec_missing):
         myDict = invalid_spec_missing
         sample = "sample"
@@ -40,5 +40,10 @@ class TestConfigurationValidator(object):
             serializers)
 
         with raises(ValueError):
-            validator.__valid_fields(invalid_spec_missing)
-        
+            validator._valid_fields(fields)
+        with raises(ValueError):
+            validator._valid_size(size)
+        with raises(ValueError):
+            validator._valid_format(format)
+        with raises(ValueError):
+            validator._valid_serializers(serializers)
