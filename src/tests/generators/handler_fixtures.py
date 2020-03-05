@@ -54,7 +54,7 @@ def sample_timestamp_sequence(type, expected):
                         'type': type,
                         'generator': {
                             'start_at': '2019-01-01T01:00:00Z'
-                            },
+                        },
                         'expected': expected}]}
 
 
@@ -118,8 +118,32 @@ def no_datasets_specification():
 
 
 @fixture
-def no_datasets_ids():
+def invalid_no_ids_dataset():
     return {"datasets": {}}
+
+
+@fixture
+def invalid_no_size_dataset():
+    return {"datasets": {
+        "$id": {
+            "fields": [],
+            "format": {},
+            "serializers": {}
+        }
+    }
+    }
+
+
+@fixture
+def invalid_no_size_dryrun():
+    return {"datasets": {
+        "$id": {
+            "fields": [],
+            "format": {},
+            "serializers": {}
+        }
+    }
+    }
 
 
 @fixture
@@ -134,3 +158,14 @@ def invalid_dataset_specification():
                     "serializers": {
                         "to": [{"type": "file",
                                 "uri": "/tmp/teste.csv"}]}}}}
+
+
+@fixture
+def valid_dryrun():
+    return {"size": 10,
+            "fields": [{
+                "name": "code",
+                "type": "integer:sequence",
+                "generator": {"start_at": 10}
+                }]
+            }
