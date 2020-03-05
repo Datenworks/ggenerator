@@ -48,7 +48,7 @@ class TestGeneratorsHandler(object):
         mock_write.return_value = 'file_path'
         mock_config = mocker.patch \
                             .object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_config.return_value = valid_specification
 
         handler = GeneratorsHandler(arguments={'config_file': None})
@@ -65,7 +65,7 @@ class TestGeneratorsHandler(object):
     def test_write(self, mocker, valid_specification):
         mock_config = mocker.patch \
                             .object(GeneratorsHandler,
-                                    'get_valid_specification')
+                                    'valid_specification_dataset')
         mock_config.return_value = valid_specification
 
         handler = GeneratorsHandler(arguments={'config_file': None})
@@ -89,10 +89,10 @@ class TestGeneratorsHandler(object):
                                             mocker,
                                             simple_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = simple_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -104,10 +104,10 @@ class TestGeneratorsHandler(object):
                                                 mocker,
                                                 argumented_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = argumented_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -117,10 +117,10 @@ class TestGeneratorsHandler(object):
 
     def test_integer_dataframe(self, mocker, integer_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = integer_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -130,10 +130,10 @@ class TestGeneratorsHandler(object):
 
     def test_bool_dataframe(self, mocker, bool_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = bool_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -143,10 +143,10 @@ class TestGeneratorsHandler(object):
 
     def test_char_dataframe(self, mocker, char_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = char_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -156,10 +156,10 @@ class TestGeneratorsHandler(object):
 
     def test_float_dataframe(self, mocker, float_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = float_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -171,10 +171,10 @@ class TestGeneratorsHandler(object):
                                         mocker,
                                         integer_sequence_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = integer_sequence_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -186,10 +186,10 @@ class TestGeneratorsHandler(object):
                                           mocker,
                                           timestamp_sequence_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = timestamp_sequence_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -199,10 +199,10 @@ class TestGeneratorsHandler(object):
 
     def test_string_dataframe(self, mocker, string_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = string_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -212,10 +212,10 @@ class TestGeneratorsHandler(object):
 
     def test_timestamp_dataframe(self, mocker, timestamp_specification):
         mock = mocker.patch \
-                     .object(GeneratorsHandler, 'get_valid_specification')
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = timestamp_specification
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
+        specification = handler.valid_specification_dataset()
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -238,14 +238,15 @@ class TestGeneratorsHandler(object):
         remove(f"{absolute_path}/{file_name}")
         assert handler
 
-    def test_invalid_no_ids_spec_handler(self, mocker, no_datasets_ids):
+    def test_invalid_no_ids_spec_handler(self, mocker,
+                                         invalid_no_ids_dataset):
         from os.path import abspath
         from uuid import uuid4
 
         absolute_path = abspath(".")
         file_name = uuid4()
         with open(f"{absolute_path}/{file_name}", "w") as f:
-            json.dump(no_datasets_ids, f)
+            json.dump(invalid_no_ids_dataset, f)
 
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})

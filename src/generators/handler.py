@@ -1,45 +1,21 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 
-from src.generators.datatypes import generators_map
-from src.lib.config.validator import ConfigurationValidator, \
-    ConfigurationDataset
 from src.lib.formatters import formatters
 from src.lib.writers import writers
+from src.generators.basehandler import BaseHandler
 
 
 class GeneratorsHandler(object):
-    """GeneratorsHandler is responsible to integrate
-    all the modules, serving like a facade to the user.
-    """
 
     def __init__(self, arguments: dict):
         self.file_path = arguments['config_file']
-        self.specification = self.get_valid_specification()
+        self.base = BaseHandler()
+        self.specification = self.valid_specification_dataset()
+        self.writers = writers
 
-    def get_valid_specification(self):
-        config_reader = ConfigurationValidator(self.file_path)
-        config = config_reader.get_config()
-
-        if 'datasets' not in config:
-            raise ValueError("Malformed specification file")
-
-        datasets = config.get('datasets')
-
-        if not datasets.keys():
-            raise ValueError("Malformed specification file")
-
-        for key in datasets.keys():
-            dataset_validator = ConfigurationDataset(
-                id=key,
-                size=datasets[key].get('size'),
-                fields=datasets[key].get('fields'),
-                format=datasets[key].get('format'),
-                serializers=datasets[key].get('serializers')
-            )
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
-
-        return config
+    def valid_specification_dataset(self):
+        valid = self.base.valid_specification(self.file_path)
+        return valid
 
     def generate(self):
         datasets = self.specification.get('datasets')
@@ -56,21 +32,7 @@ class GeneratorsHandler(object):
 
     def generate_dataframe(self, specification: dict) -> DataFrame:
         size = specification['size']
-        fields = specification['fields']
-
-        dataframe = DataFrame()
-        for field in fields:
-            field_name = field['name']
-            field_type = field['type']
-            field_arguments = field['generator']
-
-            generator_class = generators_map[field_type]['type']
-            generator = generator_class(**field_arguments)
-
-            series = Series(generator.generate_records(size))
-
-            dataframe[field_name] = series.values
-
+        dataframe = self.base.generate_dataframe(specification, size)
         return dataframe
 
     def write_dataframe(self,

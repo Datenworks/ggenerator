@@ -1,5 +1,6 @@
 import click
 from src.generators.handler import GeneratorsHandler
+from src.generators.dryrunhandler import DryRunHandler
 from src.cli.ascii_art import ASCII_ART
 
 VERSION = "0.1"
@@ -20,7 +21,18 @@ def execute():
                               file_okay=True,
                               dir_okay=False),
               required=True)
-def generate(spec_path):
+@click.option("--dryrun", "dryrun_flag",
+              is_flag=True, default=False,
+              required=False,
+              help="This generate a sample of 10 records by the spec")
+def generate(spec_path, dryrun_flag):
+    if dryrun_flag:
+        generate_dryrun(spec_path)
+    else:
+        generate_datasets(spec_path)
+
+
+def generate_datasets(spec_path):
     try:
         generator = \
             GeneratorsHandler(arguments={'config_file': spec_path})
@@ -37,3 +49,8 @@ def get_uri(dataset_name, output_type):
     return click.prompt(f"Please, enter a valid URI of destination "
                         f"for the dataset: {dataset_name} "
                         f"and destination: {output_type}", type=str)
+
+
+def generate_dryrun(spec_path):
+    dryrun = DryRunHandler(arguments={'config_file': spec_path})
+    dryrun.generate()
