@@ -199,8 +199,4 @@ class TestDryRunHandler(object):
         mock_config.return_value = valid_specification
 
         handler = DryRunHandler(arguments={'config_file': None})
-        for key, fields in handler.generate():
-            assert key is not None
-            assert isinstance(key, str)
-            assert fields is not None
-            assert isinstance(fields, list)
+        assert handler.generate() is None

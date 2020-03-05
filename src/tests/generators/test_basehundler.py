@@ -33,8 +33,9 @@ class TestBaseHundler(object):
         mock.return_value = argumented_specification
         handler = BaseHandler()
         specification = handler.valid_specification()
-        dataframe = handler.generate_dataframe(specification,
-                                               argumented_specification['size'])
+        dataframe = handler.generate_dataframe(
+            specification,
+            argumented_specification['size'])
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == argumented_specification['size']
@@ -105,8 +106,9 @@ class TestBaseHundler(object):
         mock.return_value = integer_sequence_specification
         handler = BaseHandler()
         specification = handler.valid_specification()
-        dataframe = handler.generate_dataframe(specification,
-                                               integer_sequence_specification['size'])
+        dataframe = handler.generate_dataframe(
+            specification,
+            integer_sequence_specification['size'])
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == integer_sequence_specification['size']
@@ -121,8 +123,9 @@ class TestBaseHundler(object):
         mock.return_value = timestamp_sequence_specification
         handler = BaseHandler()
         specification = handler.valid_specification()
-        dataframe = handler.generate_dataframe(specification,
-                                               timestamp_sequence_specification['size'])
+        dataframe = handler.generate_dataframe(
+            specification,
+            timestamp_sequence_specification['size'])
 
         assert isinstance(dataframe, DataFrame) is True
         assert dataframe.shape[0] == timestamp_sequence_specification['size']
