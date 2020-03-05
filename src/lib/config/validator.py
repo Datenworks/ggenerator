@@ -1,6 +1,6 @@
 import json
 
-from src.lib.formatters import formatters
+from src.lib.formatters import formatters  # noqa: F403, F401
 from src.generators.datatypes import generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce

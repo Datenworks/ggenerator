@@ -5,7 +5,7 @@ from pytest import raises
 
 from src.lib.config.validator import ConfigurationValidator, \
     ConfigurationDataset
-from src.tests.lib.config.fixtures import *
+from src.tests.lib.config.fixtures import *  # noqa: F403, F401
 
 
 class TestConfigurationValidator(object):
