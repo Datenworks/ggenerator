@@ -144,6 +144,9 @@ def invalid_no_size_dryrun():
         }
     }
     }
+
+
+@fixture
 def invalid_dataset_specification():
     return {"datasets": {
                 "teste3": {
@@ -155,3 +158,14 @@ def invalid_dataset_specification():
                     "serializers": {
                         "to": [{"type": "file",
                                 "uri": "/tmp/teste.csv"}]}}}}
+
+
+@fixture
+def valid_dryrun():
+    return {"size": 10,
+            "fields": [{
+                "name": "code",
+                "type": "integer:sequence",
+                "generator": {"start_at": 10}
+                }]
+        }

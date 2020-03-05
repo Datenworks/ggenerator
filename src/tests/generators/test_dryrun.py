@@ -1,5 +1,6 @@
 from pandas import DataFrame
 
+from src.generators.basehandler import BaseHandler
 from src.generators.dryrunhandler import DryRunHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 import pytest
@@ -179,3 +180,14 @@ class TestDryRunHandler(object):
             handler = DryRunHandler({'config_file': 'invalid_spec.json'})
             handler.valid_specification_dryrun()
         remove('invalid_spec.json')
+
+    def test_output(self, valid_dryrun, valid_specification):
+        with open('valid_spec.json', 'w') as f:
+            json.dump(valid_specification, f)
+        handler = BaseHandler()
+        dry = DryRunHandler({'config_file': 'valid_spec.json'})
+        dataframe = handler.generate_dataframe(valid_dryrun, 10)
+        key = "sample"
+        dataset_fields = valid_dryrun['fields']
+        assert dry.print_dryrun(dataframe, key, dataset_fields) is None
+        remove('valid_spec.json')
