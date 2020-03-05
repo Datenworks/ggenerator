@@ -191,3 +191,16 @@ class TestDryRunHandler(object):
         dataset_fields = valid_dryrun['fields']
         assert dry.print_dryrun(dataframe, key, dataset_fields) is None
         remove('valid_spec.json')
+
+    def test_generate_dryrun(self, mocker, valid_specification):
+        mock_config = mocker.patch \
+                            .object(DryRunHandler,
+                                    'valid_specification_dryrun')
+        mock_config.return_value = valid_specification
+
+        handler = DryRunHandler(arguments={'config_file': None})
+        for key, fields in handler.generate():
+            assert key is not None
+            assert isinstance(key, str)
+            assert fields is not None
+            assert isinstance(fields, list)

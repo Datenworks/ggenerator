@@ -24,6 +24,7 @@ class DryRunHandler(object):
             dataset_fields = dataset['fields']
             dataframe = self.generate_dryrun(dataset)
             self.print_dryrun(dataframe, key, dataset_fields)
+            yield key, dataset_fields
 
     def print_dryrun(self, dataframe, key, dataset_fields):
         print("Dataset: ", key)
