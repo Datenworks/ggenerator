@@ -74,9 +74,9 @@ class ConfigurationDataset(object):
         has_format = self._valid_format(self.format)
         has_serializers = self._valid_serializers(self.serializers)
 
-        if (has_id or has_size or
-                has_fields or has_format or
-                has_serializers) == ValueError:
+        if not (has_id and has_size and
+                has_fields and has_format and
+                has_serializers):
             return False
 
         are_fields_valid = self.fields_validator.is_valid()
