@@ -1,6 +1,6 @@
 import json
 
-from src.lib.formatters import formatters  # noqa: F403, F401
+from src.lib.formatters import formatters
 from src.generators.datatypes import generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce
@@ -100,7 +100,8 @@ class ConfigurationFormat(object):
         else:
             format_type = self.format.get("type")
             has_format_type = format_type is not None and \
-                isinstance(format_type, str)
+                isinstance(format_type, str) and \
+                format_type in formatters
             is_valid = has_format_type
             return is_valid
 
