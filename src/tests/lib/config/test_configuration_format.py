@@ -12,6 +12,12 @@ class TestConfigurationFormat(object):
         is_valid = validator.is_valid()
         assert is_valid is True
 
+    def test_invalid_format(self):
+        format_sample = None
+        validator = ConfigurationFormat(format_sample)
+        is_valid = validator.is_valid()
+        assert is_valid is False
+
     def test_json_valid_format(self):
         format_sample = {
             "type": "json",

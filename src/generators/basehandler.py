@@ -12,11 +12,13 @@ class BaseHandler(object):
         config = config_reader.get_config()
 
         if 'datasets' not in config:
-            raise ValueError("Malformed specification file")
+            raise ValueError("Don't have any datasets")
 
         datasets = config.get('datasets')
+
         if not datasets.keys():
             raise ValueError("Malformed specification file")
+
         for key in datasets.keys():
             dataset_validator = ConfigurationDataset(
                 id=key,
@@ -25,8 +27,10 @@ class BaseHandler(object):
                 format=datasets[key].get('format'),
                 serializers=datasets[key].get('serializers')
             )
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
+            try:
+                dataset_validator.is_valid()
+            except ValueError as e:
+                raise ValueError("Malformed specification file: ", e)
 
         return config
 
