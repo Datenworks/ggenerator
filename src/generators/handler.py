@@ -36,10 +36,10 @@ class GeneratorsHandler(object):
                 format=datasets[key].get('format'),
                 serializers=datasets[key].get('serializers')
             )
-            if dataset_validator.size <= 0:
-                raise ValueError("'size' must be bigger than 0")
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
+            try:
+                dataset_validator.is_valid()
+            except ValueError as e:
+                raise ValueError("Malformed specification file: ", e)
 
         return config
 

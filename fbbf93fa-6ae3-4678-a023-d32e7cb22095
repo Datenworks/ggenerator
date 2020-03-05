@@ -1,0 +1,1 @@
+{"datasets": {"teste3": {"fields": [{"type": "integer:sequence", "name": "id", "generator": {"start_at": 1}}], "size": "", "format": {"type": "csv"}, "serializers": {"to": [{"type": "file", "uri": "/tmp/teste.csv"}]}}}}

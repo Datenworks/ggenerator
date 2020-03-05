@@ -1,6 +1,6 @@
 import json
 
-from src.lib.formatters import formatters
+from src.lib.formatters import formatters  # noqa: F403, F401
 from src.generators.datatypes import generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce
@@ -37,16 +37,42 @@ class ConfigurationDataset(object):
         self.serializer_validator = ConfigurationSerializer(self.serializers,
                                                             self.id)
 
+    def _valid_size(self, size):
+        if self.size is not None and \
+                isinstance(self.size, int) and \
+                self.size > 0:
+            return True
+        else:
+            raise ValueError("size must be int and bigger than 0")
+
+    def _valid_fields(self, fields):
+        if self.fields is not None and \
+                isinstance(self.fields, list) and \
+                len(self.fields) > 0:
+            return True
+        else:
+            raise ValueError("fields must be a list and bigger than 0")
+
+    def _valid_format(self, format):
+        if self.format is not None and \
+                len(self.format) > 0:
+            return True
+        else:
+            raise ValueError("format must not be empty/none")
+
+    def _valid_serializers(self, serializers):
+        if self.serializers is not None and \
+                len(self.serializers) > 0:
+            return True
+        else:
+            raise ValueError("serializers must not be empty/none")
+
     def is_valid(self):
         has_id = self.id is not None
-        has_size = self.size is not None and \
-            isinstance(self.size, int) and \
-            self.size > 0
-        has_fields = self.fields is not None and \
-            isinstance(self.fields, list) and \
-            len(self.fields) > 0
-        has_format = self.format is not None
-        has_serializers = self.serializers is not None
+        has_size = self._valid_size(self.size)
+        has_fields = self._valid_fields(self.fields)
+        has_format = self._valid_format(self.format)
+        has_serializers = self._valid_serializers(self.serializers)
 
         if not (has_id and has_size and
                 has_fields and has_format and
@@ -69,12 +95,14 @@ class ConfigurationFormat(object):
         self.format = format
 
     def is_valid(self):
-        format_type = self.format.get("type")
-        has_format_type = format_type is not None and \
-            isinstance(format_type, str)
-
-        return has_format_type and \
-            format_type in formatters
+        if self.format is None:
+            return False
+        else:
+            format_type = self.format.get("type")
+            has_format_type = format_type is not None and \
+                isinstance(format_type, str)
+            is_valid = has_format_type
+            return is_valid
 
 
 class ConfigurationFields(object):
