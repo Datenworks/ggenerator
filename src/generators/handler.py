@@ -13,36 +13,9 @@ class GeneratorsHandler(object):
         self.specification = self.valid_specification_dataset()
         self.writers = writers
 
-<<<<<<< HEAD
-    def get_valid_specification(self):
-        config_reader = ConfigurationValidator(self.file_path)
-        config = config_reader.get_config()
-
-        if 'datasets' not in config:
-            raise ValueError("Malformed specification file")
-
-        datasets = config.get('datasets')
-
-        if not datasets.keys():
-            raise ValueError("Malformed specification file")
-
-        for key in datasets.keys():
-            dataset_validator = ConfigurationDataset(
-                id=key,
-                size=datasets[key].get('size'),
-                fields=datasets[key].get('fields'),
-                format=datasets[key].get('format'),
-                serializers=datasets[key].get('serializers')
-            )
-            if dataset_validator.is_valid() is False:
-                raise ValueError("Malformed specification file")
-
-        return config
-=======
     def valid_specification_dataset(self):
         valid = self.base.valid_specification(self.file_path)
         return valid
->>>>>>> feature/dryrun
 
     def generate(self):
         datasets = self.specification.get('datasets')

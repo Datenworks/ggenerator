@@ -4,15 +4,10 @@ from pytest import raises
 from src.generators.handler import GeneratorsHandler
 from src.lib.config.validator import ConfigurationValidator
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
-from os import remove
-import json
 from src.lib.writers import writers
 import pytest
-<<<<<<< HEAD
 import json
 from os import remove
-=======
->>>>>>> feature/dryrun
 
 
 class TestGeneratorsHandler(object):
@@ -96,13 +91,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = simple_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -116,13 +106,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = argumented_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -134,13 +119,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = integer_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -152,13 +132,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = bool_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -170,13 +145,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = char_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -188,13 +158,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = float_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -208,13 +173,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = integer_sequence_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -228,13 +188,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = timestamp_sequence_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -246,13 +201,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = string_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -264,13 +214,8 @@ class TestGeneratorsHandler(object):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')
         mock.return_value = timestamp_specification
-<<<<<<< HEAD
         handler = GeneratorsHandler({"config_file": None})
-        specification = handler.get_valid_specification()
-=======
-        handler = GeneratorsHandler({'config_file': None})
         specification = handler.valid_specification_dataset()
->>>>>>> feature/dryrun
         dataframe = handler.generate_dataframe(specification)
 
         assert isinstance(dataframe, DataFrame) is True
@@ -278,7 +223,6 @@ class TestGeneratorsHandler(object):
         for field in timestamp_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
 
-<<<<<<< HEAD
     def test_valid_spec_handler(self, mocker, valid_specification):
         from os.path import abspath
         from uuid import uuid4
@@ -294,14 +238,15 @@ class TestGeneratorsHandler(object):
         remove(f"{absolute_path}/{file_name}")
         assert handler
 
-    def test_invalid_no_ids_spec_handler(self, mocker, no_datasets_ids):
+    def test_invalid_no_ids_spec_handler(self, mocker,
+                                         invalid_no_ids_dataset):
         from os.path import abspath
         from uuid import uuid4
 
         absolute_path = abspath(".")
         file_name = uuid4()
         with open(f"{absolute_path}/{file_name}", "w") as f:
-            json.dump(no_datasets_ids, f)
+            json.dump(invalid_no_ids_dataset, f)
 
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
@@ -334,36 +279,3 @@ class TestGeneratorsHandler(object):
         with pytest.raises(ValueError):
             GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
         remove(f"{absolute_path}/{file_name}")
-=======
-    def test_generatorshandler_valid(self, valid_specification):
-        with open('valid_spec.json', 'w') as f:
-            json.dump(valid_specification, f)
-        handler = GeneratorsHandler({'config_file': 'valid_spec.json'})
-        config = handler.valid_specification_dataset()
-        assert valid_specification == config
-        remove('valid_spec.json')
-
-    def test_generatorshandler_no_dataset_ids(self, invalid_no_ids_dataset):
-        with open('invalid_spec.json', 'w') as f:
-            json.dump(invalid_no_ids_dataset, f)
-        with pytest.raises(ValueError):
-            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
-            handler.valid_specification_dataset()
-        remove('invalid_spec.json')
-
-    def test_GeneratorsHandler_no_dataset(self, no_datasets_specification):
-        with open('invalid_spec.json', 'w') as f:
-            json.dump(no_datasets_specification, f)
-        with pytest.raises(ValueError):
-            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
-            handler.valid_specification_dataset()
-        remove('invalid_spec.json')
-
-    def test_generatorshandler_no_dataset_size(self, invalid_no_size_dataset):
-        with open('invalid_spec.json', 'w') as f:
-            json.dump(invalid_no_size_dataset, f)
-        with pytest.raises(ValueError):
-            handler = GeneratorsHandler({'config_file': 'invalid_spec.json'})
-            handler.valid_specification_dataset()
-        remove('invalid_spec.json')
->>>>>>> feature/dryrun
