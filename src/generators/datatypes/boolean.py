@@ -2,9 +2,9 @@ import random
 
 
 class BooleanType:
-    key = 'boolean'
+    key = 'bool'
 
-    def __init__(self, value=None):
+    def __init__(self, value=None, *args, **kwargs):
         self.value = value
 
     @staticmethod

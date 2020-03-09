@@ -141,6 +141,19 @@ class TestGeneratorsHandler(object):
         for field in bool_specification['fields']:
             assert dataframe[field['name']].dtype.name == field['expected']
 
+    def test_name_dataframe(self, mocker, name_specification):
+        mock = mocker.patch \
+                     .object(GeneratorsHandler, 'valid_specification_dataset')
+        mock.return_value = name_specification
+        handler = GeneratorsHandler({"config_file": None})
+        specification = handler.valid_specification_dataset()
+        dataframe = handler.generate_dataframe(specification)
+
+        assert isinstance(dataframe, DataFrame) is True
+        assert dataframe.shape[0] == name_specification['size']
+        for field in name_specification['fields']:
+            assert dataframe[field['name']].dtype.name == field['expected']
+
     def test_char_dataframe(self, mocker, char_specification):
         mock = mocker.patch \
                      .object(GeneratorsHandler, 'valid_specification_dataset')

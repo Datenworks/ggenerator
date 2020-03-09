@@ -1,9 +1,11 @@
 import json
 
 from src.lib.formatters import formatters
-from src.generators.datatypes import generators_map
+from src.generators.datatypes import get_generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce
+
+generators_map = get_generators_map()
 
 
 class ConfigurationValidator(object):
@@ -196,8 +198,8 @@ class ConfigurationSerializer(object):
 
     def __has_valid_type(self, output_type):
         if output_type is not None and\
-                    isinstance(output_type, str)\
-                    and output_type in writers:
+                isinstance(output_type, str)\
+                and output_type in writers:
             return True
         else:
             msg_writers = reduce(lambda a, b: a + " | " + b,

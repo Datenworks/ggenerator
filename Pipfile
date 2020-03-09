@@ -19,6 +19,7 @@ tabulate = "*"
 requests = "==2.23.0"
 gcsfs = "*"
 s3fs = "==0.4.0"
+faker = "*"
 
 [requires]
 python_version = "3.7"

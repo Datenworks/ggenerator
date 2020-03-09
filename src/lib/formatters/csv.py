@@ -1,4 +1,5 @@
 from pandas import DataFrame
+import csv
 
 
 class CsvFormatter(object):
@@ -22,4 +23,5 @@ class CsvFormatter(object):
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
-            return dataframe.to_csv(path_or_buf=path_or_buffer, **parameters)
+            return dataframe.to_csv(path_or_buf=path_or_buffer,
+                                    quoting=csv.QUOTE_NONNUMERIC, **parameters)

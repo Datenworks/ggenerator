@@ -123,3 +123,8 @@ class TestConfigurationFormat(object):
         validator = ConfigurationFields(invalid_timestamp)
         is_valid = validator.is_valid()
         assert is_valid is False
+
+    def test_valid_name(self, valid_name):
+        validator = ConfigurationFields(valid_name)
+        is_valid = validator.is_valid()
+        assert is_valid is True
