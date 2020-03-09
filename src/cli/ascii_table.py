@@ -1,6 +1,7 @@
 from tabulate import tabulate
-from faker import Faker
+# from faker import Faker
 from src.generators.datatypes import basic_generators, primitive_generators
+from src.cli.ascii_table_fixtures import typeSamples
 
 
 def print_asciiTable():
@@ -11,7 +12,7 @@ def print_asciiTable():
         "Sample": [],
         "Parameters": []}}
     # faking data
-    fake = Faker('pt_BR')
+    # fake = Faker('pt_BR')
 
     # creating the lists
     nameSpace_list = []
@@ -22,14 +23,20 @@ def print_asciiTable():
     for x in primitive_generators:
         nameSpace_list.append("PrimitiveType")
         type_list.append(x)
-        sample_list.append(fake.name())
+        sample_list.append(typeSamples(x))
+        parameters_list.append(
+            primitive_generators[x]['generator'].get('arguments'))
     for x in basic_generators:
         nameSpace_list.append("BasicType")
         type_list.append(x)
+        sample_list.append(typeSamples(x))
+        parameters_list.append(
+            basic_generators[x]['generator'].get('arguments'))
     # setting values
     dataSet['datasets']["NameSpace"] = nameSpace_list
     dataSet['datasets']["Type"] = type_list
     dataSet['datasets']["Sample"] = sample_list
+    dataSet['datasets']["Parameters"] = parameters_list
 
     nameSpace = dataSet["datasets"].get('NameSpace')
     type = dataSet["datasets"].get('Type')
