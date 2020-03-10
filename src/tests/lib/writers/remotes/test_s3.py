@@ -7,6 +7,7 @@ from src.lib.writers.remotes.s3 import S3RemoteWriter
 from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
 import pandas as pd
 
+
 class TestS3Writer(object):
     """Unit-test for S3Writer class"""
 
