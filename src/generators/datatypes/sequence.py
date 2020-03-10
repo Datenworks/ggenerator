@@ -19,7 +19,7 @@ class SequenceType:
     def sample():
         start_at = 0
         step = 1
-        num_of_rows = 0
+        num_of_rows = 8
         return [x for x in range(start_at,
                                  start_at + num_of_rows * step,
                                  step)]
