@@ -1,9 +1,11 @@
 import json
 
 from src.lib.formatters import formatters
-from src.generators.datatypes import generators_map
+from src.generators.datatypes import get_generators_map
 from src.lib.writers import writers, uri_writers
 from functools import reduce
+
+generators_map = get_generators_map()
 
 
 class ConfigurationValidator(object):
@@ -25,9 +27,10 @@ class ConfigurationValidator(object):
 
 class ConfigurationDataset(object):
 
-    def __init__(self, id, size, fields, format, serializers):
+    def __init__(self, id, size, locale, fields, format, serializers):
         self.id = id
         self.size = size
+        self.locale = locale
         self.fields = fields
         self.format = format
         self.serializers = serializers
@@ -37,7 +40,7 @@ class ConfigurationDataset(object):
         self.serializer_validator = ConfigurationSerializer(self.serializers,
                                                             self.id)
 
-    def _valid_size(self, size):
+    def _valid_size(self):
         if self.size is not None and \
                 isinstance(self.size, int) and \
                 self.size > 0:
@@ -45,7 +48,15 @@ class ConfigurationDataset(object):
         else:
             raise ValueError("size must be int and bigger than 0")
 
-    def _valid_fields(self, fields):
+    def _valid_locale(self):
+        if self.locale is not None \
+           and isinstance(self.locale, str) \
+           and self.locale != "":
+            return True
+        else:
+            raise ValueError("serializers must not be empty/none")
+
+    def _valid_fields(self):
         if self.fields is not None and \
                 isinstance(self.fields, list) and \
                 len(self.fields) > 0:
@@ -53,14 +64,14 @@ class ConfigurationDataset(object):
         else:
             raise ValueError("fields must be a list and bigger than 0")
 
-    def _valid_format(self, format):
+    def _valid_format(self):
         if self.format is not None and \
                 len(self.format) > 0:
             return True
         else:
             raise ValueError("format must not be empty/none")
 
-    def _valid_serializers(self, serializers):
+    def _valid_serializers(self):
         if self.serializers is not None and \
                 len(self.serializers) > 0:
             return True
@@ -69,14 +80,15 @@ class ConfigurationDataset(object):
 
     def is_valid(self):
         has_id = self.id is not None
-        has_size = self._valid_size(self.size)
-        has_fields = self._valid_fields(self.fields)
-        has_format = self._valid_format(self.format)
-        has_serializers = self._valid_serializers(self.serializers)
+        has_size = self._valid_size()
+        has_locale = self._valid_locale()
+        has_fields = self._valid_fields()
+        has_format = self._valid_format()
+        has_serializers = self._valid_serializers()
 
         if not (has_id and has_size and
                 has_fields and has_format and
-                has_serializers):
+                has_serializers and has_locale):
             return False
 
         are_fields_valid = self.fields_validator.is_valid()
@@ -196,8 +208,8 @@ class ConfigurationSerializer(object):
 
     def __has_valid_type(self, output_type):
         if output_type is not None and\
-                    isinstance(output_type, str)\
-                    and output_type in writers:
+                isinstance(output_type, str)\
+                and output_type in writers:
             return True
         else:
             msg_writers = reduce(lambda a, b: a + " | " + b,

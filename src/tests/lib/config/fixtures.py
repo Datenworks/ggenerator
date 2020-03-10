@@ -86,6 +86,7 @@ def invalid_spec_missing():
 
     dict1 = {"datasets": {
         "sample": {
+            "locale": "",
             "size": '-1',
             "fields": [
 

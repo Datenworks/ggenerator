@@ -5,6 +5,7 @@ from moto import mock_s3
 from src.lib.formatters.csv import CsvFormatter
 from src.lib.writers.remotes.s3 import S3RemoteWriter
 from src.tests.lib.writers.remotes.fixtures import *  # noqa: F403, F401
+import pandas as pd
 
 
 class TestS3Writer(object):
@@ -24,15 +25,9 @@ class TestS3Writer(object):
                                     specification=specification_s3)
             writer.write(dataframe=pandas_dataframe_with_data)
 
-            body = conn.Object(bucket, key).get()['Body'].read().decode()
+            body = conn.Object(bucket, key).get()['Body']
 
-            body = body.split('\n')
-            body = [x.split(',') for x in body]
-            headers = body[0]
-            rows = body[1:len(body) - 1]
-            csv_reader = {headers[index]: [row[index]
-                                           for row in rows]
-                          for index in range(0, len(headers))}
+            csv_reader = pd.read_csv(body).to_dict(orient="list")
             expected = pandas_dataframe_with_data.to_dict(orient="list")
 
             assert csv_reader == expected

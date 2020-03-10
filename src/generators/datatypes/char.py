@@ -6,6 +6,9 @@ class CharacterType:
     key = 'char'
     namespace = 'PrimitiveType'
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     @staticmethod
     def check(generator):
         return True

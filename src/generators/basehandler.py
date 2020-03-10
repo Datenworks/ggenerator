@@ -1,6 +1,6 @@
 from pandas import DataFrame, Series
 
-from src.generators.datatypes import generators_map
+from src.generators.datatypes import get_generators_map
 from src.lib.config.validator import ConfigurationValidator, \
     ConfigurationDataset
 
@@ -23,6 +23,7 @@ class BaseHandler(object):
             dataset_validator = ConfigurationDataset(
                 id=key,
                 size=datasets[key].get('size'),
+                locale=datasets[key].get('locale'),
                 fields=datasets[key].get('fields'),
                 format=datasets[key].get('format'),
                 serializers=datasets[key].get('serializers')
@@ -37,6 +38,8 @@ class BaseHandler(object):
     def generate_dataframe(self, specification: dict, size) -> DataFrame:
         size = size
         fields = specification['fields']
+        locale = specification['locale']
+        generators_map = get_generators_map(locale)
 
         dataframe = DataFrame()
         for field in fields:

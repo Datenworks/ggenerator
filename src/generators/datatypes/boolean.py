@@ -5,7 +5,7 @@ class BooleanType:
     key = 'boolean'
     namespace = 'PrimitiveType'
 
-    def __init__(self, value=None):
+    def __init__(self, value=None, *args, **kwargs):
         self.value = value
 
     @staticmethod

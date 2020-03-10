@@ -11,7 +11,8 @@ class TimestampType:
 
     def __init__(self, start_at: str,
                  end_at: str,
-                 tz: str = "UTC"):
+                 tz: str = "UTC",
+                 *args, **kwargs):
         self.time_zone = pytz.timezone(tz)
         self.start_date = start_at
         self.end_date = end_at

@@ -5,14 +5,14 @@ from pytest import fixture
 def valid_boolean():
     return [{
         "name": "test",
-        "type": "boolean",
+        "type": "bool",
         "generator": {}
     }]
 
 
 @fixture
 def invalid_boolean():
-    return [{"type": "boolean"}]
+    return [{"type": "bool"}]
 
 
 @fixture
@@ -136,4 +136,13 @@ def invalid_timestamp():
         "type": "timestamp",
         "generator": {"start_at": "20/11/2019 00:00:00",
                       "end_at": "2020-11-17T21:00:00"}
+    }]
+
+
+@fixture
+def valid_name():
+    return [{
+        "name": "test",
+        "type": "name",
+        "generator": {}
     }]

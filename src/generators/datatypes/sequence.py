@@ -2,7 +2,7 @@ class SequenceType:
     key = 'integer:sequence'
     namespace = 'BasicType'
 
-    def __init__(self, start_at=0, step=1):
+    def __init__(self, start_at=0, step=1, *args, **kwargs):
         self.start_at = start_at
         self.step = step
 
