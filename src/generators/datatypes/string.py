@@ -4,7 +4,7 @@ from src.generators.datatypes.char import CharacterType
 class StringType:
     key = 'string'
 
-    def __init__(self, length: int = 40):
+    def __init__(self, length: int = 40, *args, **kwargs):
         self.length = length
         self.character = CharacterType
 

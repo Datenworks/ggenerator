@@ -5,6 +5,9 @@ import string
 class CharacterType:
     key = 'char'
 
+    def __init__(self, *args, **kwargs):
+        pass
+
     @staticmethod
     def check(generator):
         return True

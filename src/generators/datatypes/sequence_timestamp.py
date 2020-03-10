@@ -9,7 +9,8 @@ class TimestampSequenceType:
     key = 'timestamp:sequence'
 
     def __init__(self, start_at: str,
-                 datepart: str = "second", tz: str = "UTC"):
+                 datepart: str = "second", tz: str = "UTC",
+                 *args, **kwargs):
         """
         step must be
         second | minute | hour | day | month | year
