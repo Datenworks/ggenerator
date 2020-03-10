@@ -4,10 +4,15 @@ import string
 
 class CharacterType:
     key = 'char'
+    namespace = 'PrimitiveType'
 
     @staticmethod
     def check(generator):
         return True
+
+    @staticmethod
+    def sample():
+        return random.choice(string.ascii_letters)
 
     def generate(self) -> str:
         return random.choice(string.ascii_letters)

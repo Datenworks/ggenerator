@@ -1,51 +1,40 @@
 import random
+from src.generators.datatypes import *
 
 
 def typeSamples(type):
+    bool1 = BooleanType()
+    char1 = CharacterType()
+    float1 = FloatType()
+    integer1 = IntegerType()
+    sequence_timestamp1 = TimestampSequenceType(
+        "1994-02-20T15:48:33-03:00")
+    sequence1 = SequenceType()
+    string1 = StringType()
+    timestamp1 = TimestampType(
+        "1994-02-20T15:48:33-03:00", "2012-07-31T19:55:00-03:00"
+    )
     if type == 'boolean':
-        list1 = [True, False]
-        return random.sample(list1, len(list1))
+        return bool1.generate()
+        # return boolean.BooleanType.generate() SUGESTÃO LUKITA
 
     if type == 'char':
-        list1 = ['a', 'b', 'c']
-        return random.sample(list1, len(list1))
+        return char1.generate()
 
     if type == 'float':
-        list1 = [12312.21, 235.98, 45.8]
-        return random.sample(list1, len(list1))
+        return float1.generate()
 
     if type == 'integer':
-        list1 = [5]
-        return random.sample(list1, len(list1))
+        return integer1.generate()
 
     if type == 'timestamp:sequence':
-        list1 = ['1994-02-20 18:48:33',
-                 '1994-02-20 18:48:34',
-                 ]
-        return random.sample(list1, len(list1))
+        return sequence_timestamp1.generate_records(1)
 
     if type == 'integer:sequence':
-        list1 = [1, 2, 3, 4, 5]
-        return list1
+        return sequence1.generate_records(8)
 
     if type == 'string':
-        list1 = ['KJZWEqsMnUZCnIo',
-                 'QyksAoTESCkDdiT',
-                 'leuvVpOMCffDmpl',
-                 'iOdCxyBunDGlyBP',
-                 'RemSUYMSuPNUibT',
-                 'csXdrjehwcNwhrV',
-                 'nnLQoOWGkJipUpD',
-                 'ogmoZkWnhkqIQfb',
-                 'DbLLOuiKTRFvXsC',
-                 'gqltfyuhyeRUANb']
-        return random.sample(list1, 2)
+        return string1.generate()
 
     if type == 'timestamp':
-        list1 = ['2000-07-28 09:03:58',
-                 '2006-11-10 05:29:55',
-                 '2001-12-02 23:54:50',
-                 '2010-06-26 22:16:58',
-                 '1994-11-11 17:52:57',
-                 ]
-        return random.sample(list1, 2)
+        return timestamp1.generate()

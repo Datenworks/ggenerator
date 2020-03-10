@@ -3,6 +3,7 @@ from random import uniform
 
 class FloatType:
     key = 'float'
+    namespace = 'BasicType'
 
     def __init__(self, start_at: float = 0, end_at: float = 100,
                  decimal_floor: int = 3):
@@ -27,6 +28,13 @@ class FloatType:
         return is_start_valid and \
             is_end_valid and \
             start_at < end_at
+
+    @staticmethod
+    def sample():
+        start_at = 0
+        end_at = 100
+        decimal_floor = 3
+        return round(uniform(start_at, end_at), decimal_floor)
 
     def generate(self) -> float:
         return round(uniform(self.start_at, self.end_at), self.decimal_floor)

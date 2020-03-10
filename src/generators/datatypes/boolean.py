@@ -3,6 +3,7 @@ import random
 
 class BooleanType:
     key = 'boolean'
+    namespace = 'PrimitiveType'
 
     def __init__(self, value=None):
         self.value = value
@@ -15,6 +16,10 @@ class BooleanType:
             return value is True or value is False
 
         return True
+
+    @staticmethod
+    def sample():
+        return bool(random.getrandbits(1))
 
     def __generate_random(self):
         return bool(random.getrandbits(1))

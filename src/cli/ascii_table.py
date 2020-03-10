@@ -1,7 +1,33 @@
 from tabulate import tabulate
 # from faker import Faker
 from src.generators.datatypes import basic_generators, primitive_generators
+from src.generators.datatypes import generators_map
 from src.cli.ascii_table_fixtures import typeSamples
+import inspect
+
+dataSet = {
+        "NameSpace": [],
+        "Type": [],
+        "Sample": [],
+        "Parameters": []}
+
+
+def teste():
+    for datatype_name, datatype in generators_map.items():
+        typeName = datatype_name
+        dataSet['Type'].append(typeName)
+        gen = datatype['type']
+        namespace = gen.namespace
+        dataSet['NameSpace'].append(namespace)
+        sample = gen.sample()
+        dataSet['Sample'].append(sample)
+        arguments = inspect.getfullargspec(gen).annotations
+        parsed_args = []
+        for arg, dtype in arguments.items():
+            parsed_args.append((arg, dtype.__name__))
+        dataSet['Parameters'].append(parsed_args)
+
+    print(tabulate(dataSet, headers=("keys"), tablefmt="grid"))
 
 
 def print_asciiTable():
