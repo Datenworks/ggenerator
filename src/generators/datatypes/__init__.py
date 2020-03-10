@@ -79,7 +79,7 @@ def get_generators_map(locale: str = None):
                 'arguments': []
             }
         }
-        for dtype in faker_proxy.datatypes
+        for dtype in faker_proxy.list_of_generators
     }
 
     generators_map = {}
