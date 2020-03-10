@@ -29,21 +29,17 @@ class TestConfigurationValidator(object):
         myDict = invalid_spec_missing
         sample = "sample"
         size = myDict['datasets']['sample']['size']
+        locale = myDict['datasets']['sample']['locale']
         fields = myDict['datasets']['sample']['fields']
         format = myDict['datasets']['sample']['format']
         serializers = myDict['datasets']['serializers']
         validator = ConfigurationDataset(
             sample,
             size,
+            locale,
             fields,
             format,
             serializers)
 
         with raises(ValueError):
-            validator._valid_fields(fields)
-        with raises(ValueError):
-            validator._valid_size(size)
-        with raises(ValueError):
-            validator._valid_format(format)
-        with raises(ValueError):
-            validator._valid_serializers(serializers)
+            validator.is_valid()
