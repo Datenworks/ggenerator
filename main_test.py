@@ -1,11 +1,10 @@
-
-from src.cli.ascii_table import print_asciiTable, teste
+from src.cli.ascii_table import asciiTable_print
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
 
 
 def main():
 
-    teste()
+    asciiTable_print()
 
 
 main()

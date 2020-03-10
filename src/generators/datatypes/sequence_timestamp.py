@@ -62,7 +62,7 @@ class TimestampSequenceType:
         int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
         random_second = randrange(int_delta)
         date = (start + timedelta(seconds=random_second)).isoformat()
-        date2 = (start + timedelta(seconds=random_second + 1)).isoformat(   )
+        date2 = (start + timedelta(seconds=random_second + 1)).isoformat()
         return [date, date2]
 
     def generate_records(self, num_of_records) -> list:
