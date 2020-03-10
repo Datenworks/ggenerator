@@ -143,7 +143,19 @@ def invalid_no_size_dataset():
             "serializers": {}
         }
     }
+}
+
+@fixture
+def invalid_no_locale_dataset():
+    return {"datasets": {
+        "$id": {
+            "fields": [],
+            "size": 10,
+            "format": {},
+            "serializers": {}
+        }
     }
+}
 
 
 @fixture

@@ -23,6 +23,7 @@ class BaseHandler(object):
             dataset_validator = ConfigurationDataset(
                 id=key,
                 size=datasets[key].get('size'),
+                locale=datasets[key].get('locale'),
                 fields=datasets[key].get('fields'),
                 format=datasets[key].get('format'),
                 serializers=datasets[key].get('serializers')

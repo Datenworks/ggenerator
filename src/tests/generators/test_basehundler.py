@@ -195,3 +195,12 @@ class TestBaseHundler(object):
         with pytest.raises(ValueError):
             handler.valid_specification('invalid_spec.json')
         remove('invalid_spec.json')
+
+    def test_basehandler_no_dataset_locale(self, invalid_no_locale_dataset):
+        handler = BaseHandler()
+        with open('invalid_spec.json', 'w') as f:
+            json.dump(invalid_no_locale_dataset, f)
+
+        with pytest.raises(ValueError):
+            handler.valid_specification('invalid_spec.json')
+        remove('invalid_spec.json')
