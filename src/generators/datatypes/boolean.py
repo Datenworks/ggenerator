@@ -2,7 +2,7 @@ import random
 
 
 class BooleanType:
-    key = 'boolean'
+    key = 'bool'
     namespace = 'PrimitiveType'
 
     def __init__(self, value=None, *args, **kwargs):

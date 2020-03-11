@@ -5,7 +5,7 @@ from pytest import fixture
 def valid_boolean():
     return [{
         "name": "test",
-        "type": "boolean",
+        "type": "bool",
         "generator": {}
     }]
 
