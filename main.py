@@ -1,9 +1,5 @@
-from src.cli.commands import execute, list_generators
+from src.cli.commands import execute
 
 
 def run():
     execute()
-    list_generators()
-
-
-run()
