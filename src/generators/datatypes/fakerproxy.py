@@ -61,3 +61,6 @@ class FakerType(object):
     @staticmethod
     def check(generator):
         return True
+
+    def sample(self):
+        return self.__parse_data(self.generator_type())

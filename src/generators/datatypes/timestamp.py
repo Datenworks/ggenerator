@@ -7,6 +7,7 @@ from random import randrange
 
 class TimestampType:
     key = 'timestamp'
+    namespace = 'BasicType'
 
     def __init__(self, start_at: str,
                  end_at: str,
@@ -31,6 +32,15 @@ class TimestampType:
             return start_at < end_at
         except ValueError:
             return False
+
+    @staticmethod
+    def sample():
+        start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
+        end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
+        delta = end - start
+        int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+        random_second = randrange(int_delta)
+        return (start + timedelta(seconds=random_second)).isoformat()
 
     def generate(self) -> datetime:
         dt_start_at = self.__parse_to_datetime(self.start_date)

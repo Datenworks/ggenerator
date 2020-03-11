@@ -1,5 +1,6 @@
 class SequenceType:
     key = 'integer:sequence'
+    namespace = 'BasicType'
 
     def __init__(self, start_at=0, step=1, *args, **kwargs):
         self.start_at = start_at
@@ -13,6 +14,15 @@ class SequenceType:
         return start_at is not None and \
             start_at > -2147483648 and \
             start_at < 2147483648
+
+    @staticmethod
+    def sample():
+        start_at = 0
+        step = 1
+        num_of_rows = 8
+        return [x for x in range(start_at,
+                                 start_at + num_of_rows * step,
+                                 step)]
 
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)

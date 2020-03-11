@@ -7,6 +7,7 @@ from datetime import timedelta
 
 class TimestampSequenceType:
     key = 'timestamp:sequence'
+    namespace = 'BasicType'
 
     def __init__(self, start_at: str,
                  datepart: str = "second", tz: str = "UTC",
@@ -50,6 +51,19 @@ class TimestampSequenceType:
         except ValueError:
             return False
         return True
+
+    @staticmethod
+    def sample():
+        from random import randrange
+
+        start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
+        end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
+        delta = end - start
+        int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+        random_second = randrange(int_delta)
+        date = (start + timedelta(seconds=random_second)).isoformat()
+        date2 = (start + timedelta(seconds=random_second + 1)).isoformat()
+        return [date, date2]
 
     def generate_records(self, num_of_records) -> list:
         return [self.__generate_next(delta)

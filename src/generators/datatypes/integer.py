@@ -3,6 +3,7 @@ from random import randint
 
 class IntegerType:
     key = 'integer'
+    namespace = 'BasicType'
 
     def __init__(self, start_at: int = 0, end_at: int = 100,
                  *args, **kwargs):
@@ -20,6 +21,12 @@ class IntegerType:
             end_at > -2147483648 and \
             end_at < 2147483648 and \
             start_at < end_at
+
+    @staticmethod
+    def sample():
+        start_at = 0
+        end_at = 100
+        return randint(start_at, end_at)
 
     def generate(self) -> int:
         return randint(self.start_at, self.end_at)

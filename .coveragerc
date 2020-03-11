@@ -7,5 +7,5 @@ source = src/cli
          main.py
 
 [report]
-fail_under = 97
+fail_under = 90
 omit = src/tests/*

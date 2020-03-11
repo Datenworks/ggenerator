@@ -3,6 +3,7 @@ from src.generators.datatypes.char import CharacterType
 
 class StringType:
     key = 'string'
+    namespace = 'BasicType'
 
     def __init__(self, length: int = 40, *args, **kwargs):
         self.length = length
@@ -12,6 +13,10 @@ class StringType:
     def check(generator):
         length = generator.get("length")
         return length > 0
+
+    @staticmethod
+    def sample():
+        return "".join(CharacterType().generate_records(40))
 
     def generate(self) -> str:
         return "".join(self.character().generate_records(self.length))
