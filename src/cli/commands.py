@@ -2,6 +2,7 @@ import click
 from src.generators.handler import GeneratorsHandler
 from src.generators.dryrunhandler import DryRunHandler
 from src.cli.ascii_art import ASCII_ART
+from src.cli.ascii_table import asciiTable_print
 
 VERSION = "0.1"
 
@@ -30,6 +31,11 @@ def generate(spec_path, dryrun_flag):
         generate_dryrun(spec_path)
     else:
         generate_datasets(spec_path)
+
+
+@execute.command()
+def list_generators():
+    click.echo(asciiTable_print())
 
 
 def generate_datasets(spec_path):
