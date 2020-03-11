@@ -70,7 +70,7 @@ def integer_specification():
 
 @fixture
 def bool_specification():
-    return sample('boolean', 'bool')
+    return sample('bool', 'bool')
 
 
 @fixture
