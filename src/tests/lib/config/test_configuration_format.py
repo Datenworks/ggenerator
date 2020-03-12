@@ -20,7 +20,7 @@ class TestConfigurationFormat(object):
 
     def test_json_valid_format(self):
         format_sample = {
-            "type": "json",
+            "type": "json-array",
             "header": True
         }
         validator = ConfigurationFormat(format_sample)
