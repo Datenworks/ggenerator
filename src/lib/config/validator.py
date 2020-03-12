@@ -54,7 +54,7 @@ class ConfigurationDataset(object):
            and self.locale != "":
             return True
         else:
-            raise ValueError("serializers must not be empty/none")
+            raise ValueError("locale must not be empty/none")
 
     def _valid_fields(self):
         if self.fields is not None and \
