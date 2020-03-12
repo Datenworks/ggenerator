@@ -21,6 +21,13 @@ class S3RemoteWriter(object):
     @staticmethod
     def is_valid_destination(**kwargs):
         options = kwargs.get('options')
+        if options is None:
+            raise ValueError(
+                            "Options not in specifications, please add it")
+        if 'bucket' not in options or options['bucket'] == "":
+            raise ValueError("Please, add your bucket name")
+        if 'key' not in options or options['key'] == "":
+            raise ValueError("Please, add your key/path")
         if options and 'bucket' in options and 'key' in options:
             return True
         return False
