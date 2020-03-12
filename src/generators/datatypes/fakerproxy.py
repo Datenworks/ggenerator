@@ -5,13 +5,15 @@ import inspect
 class FakerProxy(object):
     def __init__(self, locale: str):
         self.faker = Faker(locale=locale)
+        self.blacklist_namespaces = ['generic', 'python']
         self.list_of_generators = self.__get_generators_types()
         self.__infer_types()
 
     def __get_generators_types(self) -> list:
         return [generator for _, generator
                 in self.faker.factories[0].__dict__.items()
-                if callable(generator)]
+                if callable(generator) and
+                self.__get_namespace(generator) not in self.blacklist_namespaces]
 
     def __infer_types(self) -> None:
         for generator_type in self.list_of_generators:
