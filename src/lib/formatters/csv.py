@@ -1,5 +1,6 @@
-from pandas import DataFrame
 import csv
+
+from pandas import DataFrame
 
 
 class CsvFormatter(object):
@@ -11,6 +12,15 @@ class CsvFormatter(object):
     def __init__(self, specification):
         self.default = {'index': False, 'sep': ','}
         self.specification = specification
+
+    @staticmethod
+    def rules():
+        return {'required': {},
+                'optional': {
+                    'options.header': {'none': False, 'type': bool},
+                    'options.sep': {'none': False, 'type': str},
+                    'options.index': {'none': False, 'type': bool}
+                }}
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> None:
         """Format dataframe to csv.
