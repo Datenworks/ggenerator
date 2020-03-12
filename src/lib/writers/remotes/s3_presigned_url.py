@@ -47,5 +47,6 @@ class S3PresignedUrlRemoteWriter(object):
         return signed_url
 
     @staticmethod
-    def is_valid_destination(**kwargs):
-        return True
+    def check():
+        return {'required': {},
+                'optional': {'options.path': {'none': False, 'type': str}}}

@@ -19,8 +19,7 @@ class GCSRemoteWriter(object):
         return key
 
     @staticmethod
-    def is_valid_destination(**kwargs):
-        options = kwargs.get('options')
-        if 'bucket' in options and 'key' in options:
-            return True
-        return False
+    def check():
+        return {'required': {'options.bucket': {'none': False, 'type': str},
+                             'options.key': {'none': False, 'type': str}},
+                'optional': {}}

@@ -19,8 +19,7 @@ class S3RemoteWriter(object):
         return key
 
     @staticmethod
-    def is_valid_destination(**kwargs):
-        options = kwargs.get('options')
-        if options and 'bucket' in options and 'key' in options:
-            return True
-        return False
+    def rules():
+        return {'required': {'options.bucket': {'none': False, 'type': str},
+                             'options.key': {'none': False, 'type': str}},
+                'optional': {}}
