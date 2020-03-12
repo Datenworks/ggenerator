@@ -24,6 +24,9 @@ class FakerProxy(object):
                          FakerType(generator_type=generator_type,
                                    namespace=namespace))
 
+    def __get_type_info(self, generator_type):
+        return inspect.getfullargspec(generator_type)
+
     def __get_namespace(self, obj) -> str:
         try:
             return inspect.getmodule(obj).__name__.split('.')[2]
@@ -32,6 +35,8 @@ class FakerProxy(object):
 
 
 class FakerType(object):
+    optional_arguments = True
+
     def __init__(self, generator_type, namespace):
         self.generator_type = generator_type
         self.key = generator_type.__name__

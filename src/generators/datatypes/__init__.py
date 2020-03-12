@@ -1,3 +1,4 @@
+import inspect
 from src.generators.datatypes.boolean import BooleanType
 from src.generators.datatypes.char import CharacterType
 from src.generators.datatypes.float import FloatType
@@ -7,83 +8,89 @@ from src.generators.datatypes.sequence import SequenceType
 from src.generators.datatypes.string import StringType
 from src.generators.datatypes.timestamp import TimestampType
 from src.generators.datatypes.fakerproxy import FakerProxy
+from itertools import zip_longest
+from pandas import DataFrame, Series
 
 
-def get_generators_map(locale: str = None):
-    primitive_generators = {
-        BooleanType.key: {
-            'type': BooleanType,
-            'generator': {
-                'optional': True,
-                'arguments': []
-            }
-        },
-        CharacterType.key: {
-            'type': CharacterType,
-            'generator': {
-                'optional': True,
-                'arguments': []
-            }
-        }}
+class Metadata(object):
+    def __init__(self, locale):
+        self.locale = locale
+        self.generators = (BooleanType, CharacterType,
+                           FloatType, IntegerType,
+                           TimestampType, TimestampSequenceType,
+                           StringType, SequenceType)
+        self.faker = FakerProxy(locale=self.locale)
 
-    basic_generators = {
-        FloatType.key: {
-            'type': FloatType,
-            'generator': {
-                'optional': True,
-                'arguments': ['start_at', 'end_at']
-            }
-        },
-        IntegerType.key: {
-            'type': IntegerType,
-            'generator': {
-                'optional': True,
-                'arguments': ['start_at', 'end_at']
-            }
-        },
-        TimestampSequenceType.key: {
-            'type': TimestampSequenceType,
-            'generator': {
-                'optional': False,
-                'arguments': ['start_at']
-            }
-        },
-        SequenceType.key: {
-            'type': SequenceType,
-            'generator': {
-                'optional': True,
-                'arguments': ['start_at']
-            }
-        },
-        StringType.key: {
-            'type': StringType,
-            'generator': {
-                'optional': True,
-                'arguments': ['length']
-            }
-        },
-        TimestampType.key: {
-            'type': TimestampType,
-            'generator': {
-                'optional': False,
-                'arguments': ['start_at', 'end_at']
-            }
-        }}
+    def info(self) -> DataFrame:
+        return self.__dataframe_info()
 
-    faker_proxy = FakerProxy(locale=locale)
-    faker_types = {
-        dtype.__name__: {
-            'type': faker_proxy.__getattribute__(dtype.__name__),
-            'generator': {
-                'optional': True,
-                'arguments': []
+    def __dataframe_info(self):
+        df = DataFrame(columns=['type', 'namespace', 'parameters'])
+        for key, value in self.get_generators_map().items():
+            info = Series(
+                {
+                    'namespace': value['namespace'],
+                    'type': key,
+                    'parameters': value['generator']['arguments']
+                })
+            df = df.append(info, ignore_index=True)
+        return df
+
+    def get_generators_map(self) -> dict:
+        generators_map = {
+            generator.key: {
+                'type': generator,
+                'namespace': generator.namespace,
+                'generator': {
+                    'optional': generator.optional_arguments,
+                    'arguments': self.__get_args_info(generator)
+                }
             }
+            for generator in self.generators}
+
+        faker_types = {
+            dtype.__name__: {
+                'type': self.faker.__getattribute__(dtype.__name__),
+                'namespace': self.faker.__getattribute__(dtype.__name__)
+                                       .namespace,
+                'generator': {
+                    'optional': self.faker.__getattribute__(dtype.__name__)
+                                          .optional_arguments,
+                    'arguments': self.__get_args_info(
+                        self.faker.__getattribute__(dtype.__name__)
+                                  .generator_type
+                    )
+                }
+            }
+            for dtype in self.faker.list_of_generators
         }
-        for dtype in faker_proxy.list_of_generators
-    }
 
-    generators_map = {}
-    generators_map.update(primitive_generators)
-    generators_map.update(basic_generators)
-    generators_map.update(faker_types)
-    return generators_map
+        generators_map.update(faker_types)
+        return generators_map
+
+    def __get_args_info(self, func):
+        argspec = self.__get_full_arg_spec(func)
+        args = argspec.args or []
+        if 'self' in args:
+            args.remove('self')
+
+        defaults = argspec.defaults or ()
+        annotations = argspec.annotations or {}
+
+        infos = []
+        for arg, default in zip_longest(args, list(defaults)):
+            info = ""
+            if arg is not None:
+                info += f"{arg}"
+            # if default is not None:
+            #     info += f", default: {default}"
+            # arg_type = annotations.get(arg)
+            # if arg_type is not None:
+            #     info += f", type: {arg_type.__name__}"
+
+            infos.append(info)
+
+        return ' | '.join(infos)
+
+    def __get_full_arg_spec(self, func):
+        return inspect.getfullargspec(func)

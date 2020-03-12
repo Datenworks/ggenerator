@@ -2,7 +2,8 @@ import click
 from src.generators.handler import GeneratorsHandler
 from src.generators.dryrunhandler import DryRunHandler
 from src.cli.ascii_art import ASCII_ART
-from src.cli.ascii_table import asciiTable_print
+from src.generators.datatypes import Metadata
+from tabulate import tabulate
 
 VERSION = "0.1"
 
@@ -34,8 +35,15 @@ def generate(spec_path, dryrun_flag):
 
 
 @execute.command()
-def list_generators():
-    click.echo(asciiTable_print())
+@click.option("--locale", "locale",
+              type=click.STRING,
+              required=False,
+              default="en_US")
+def list_generators(locale):
+    metadata = Metadata(locale=locale)
+    infos = metadata.info()
+    print_tabulate(dataframe=infos, headers=infos.columns,
+                   tablefmt="fancy_grid")
 
 
 def generate_datasets(spec_path):
@@ -60,3 +68,7 @@ def get_uri(dataset_name, output_type):
 def generate_dryrun(spec_path):
     dryrun = DryRunHandler(arguments={'config_file': spec_path})
     dryrun.generate()
+
+
+def print_tabulate(dataframe, headers, tablefmt):
+    click.echo(tabulate(dataframe, headers=headers, tablefmt=tablefmt))
