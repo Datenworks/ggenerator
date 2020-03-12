@@ -107,6 +107,13 @@ class ConfigurationFormat(object):
         self.format = format
 
     def is_valid(self):
+        jsonArray_type = self.format.get("type")
+        if jsonArray_type == "json-array":
+            try:
+                jsonArray_type.get('indent') != ("pretty", "minify")
+            except ValueError:
+                raise ValueError(
+                                "json-array suports only 'pretty' and 'minify'")
         if self.format is None:
             return False
         else:
