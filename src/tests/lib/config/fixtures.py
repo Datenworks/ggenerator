@@ -101,3 +101,27 @@ def invalid_spec_missing():
     }
     }
     return dict1
+
+
+@fixture
+def invalid_s3_bucket():
+    return {
+        "to": [{
+            "type": "s3",
+            "options": {
+                "key": "key"
+            }}
+        ]
+    }
+
+
+@fixture
+def invalid_s3_key():
+    return {
+        "to": [{
+            "type": "s3",
+            "options": {
+                "bucket": "bucket"
+            }}
+        ]
+    }

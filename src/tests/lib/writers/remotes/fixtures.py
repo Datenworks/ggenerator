@@ -78,3 +78,20 @@ def specification_without_url():
 @fixture
 def signed_post_file():
     return '{"url": "s3.url.com", "fields": {}}'
+
+
+@fixture
+def s3_without_options():
+    return {
+        'type': 's3'
+    }
+
+
+@fixture
+def s3_without_bucket():
+    return {
+        "type": "s3",
+        "options": {
+            "key": "/path/to/file.json"
+        }
+    }

@@ -24,10 +24,9 @@ class S3RemoteWriter(object):
         if options is None:
             raise ValueError(
                             "Options not in specifications, please add it")
-        if 'bucket' not in options or options['bucket'] == "":
+        elif 'bucket' not in options or options['bucket'] == "":
             raise ValueError("Please, add your bucket name")
-        if 'key' not in options or options['key'] == "":
+        elif 'key' not in options or options['key'] == "":
             raise ValueError("Please, add your key/path")
-        if options and 'bucket' in options and 'key' in options:
+        elif options and 'bucket' in options and 'key' in options:
             return True
-        return False

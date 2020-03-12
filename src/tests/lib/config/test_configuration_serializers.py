@@ -28,8 +28,18 @@ class TestConfigurationSerializers(object):
 
     def test_invalid_s3(self, invalid_s3_spec):
         validator = ConfigurationSerializer(invalid_s3_spec, 'id')
-        is_valid = validator.is_valid()
-        assert is_valid is False
+        with pytest.raises(ValueError):
+            validator.is_valid()
+
+    def test_invalid_s3_bucket(self, invalid_s3_bucket):
+        validator = ConfigurationSerializer(invalid_s3_bucket, 'id')
+        with pytest.raises(ValueError):
+            validator.is_valid()
+
+    def test_invalid_s3_key(self, invalid_s3_key):
+        validator = ConfigurationSerializer(invalid_s3_key, 'id')
+        with pytest.raises(ValueError):
+            validator.is_valid()
 
     def test_valid_to_gcs(self):
         format_sample = {
