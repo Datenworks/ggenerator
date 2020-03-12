@@ -9,20 +9,20 @@ def generate_files():
 @fixture
 def generators_map():
     return {
-            "integer": {
-                'type': "integer",
-                'namespace': "basic_type",
-                'generator': {
+        "integer": {
+            'type': "integer",
+            'namespace': "basic_type",
+            'generator': {
                     'optional': True,
                     'arguments': "start_at | end_at"
-                }
-            },
-            "string": {
-                'type': "string",
-                'namespace': "basic_type",
-                'generator': {
+            }
+        },
+        "string": {
+            'type': "string",
+            'namespace': "basic_type",
+            'generator': {
                     'optional': True,
                     'arguments': "length"
-                }
             }
         }
+    }

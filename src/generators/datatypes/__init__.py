@@ -8,7 +8,6 @@ from src.generators.datatypes.sequence import SequenceType
 from src.generators.datatypes.string import StringType
 from src.generators.datatypes.timestamp import TimestampType
 from src.generators.datatypes.fakerproxy import FakerProxy
-from itertools import zip_longest
 from pandas import DataFrame, Series
 
 
@@ -74,19 +73,11 @@ class Metadata(object):
         if 'self' in args:
             args.remove('self')
 
-        defaults = argspec.defaults or ()
-        annotations = argspec.annotations or {}
-
         infos = []
-        for arg, default in zip_longest(args, list(defaults)):
+        for arg in args:
             info = ""
             if arg is not None:
                 info += f"{arg}"
-            # if default is not None:
-            #     info += f", default: {default}"
-            # arg_type = annotations.get(arg)
-            # if arg_type is not None:
-            #     info += f", type: {arg_type.__name__}"
 
             infos.append(info)
 
