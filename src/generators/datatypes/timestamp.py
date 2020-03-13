@@ -7,7 +7,7 @@ from random import randrange
 
 class TimestampType:
     key = 'timestamp'
-    namespace = 'basic)type'
+    namespace = 'basic_type'
     optional_arguments = False
 
     def __init__(self, start_at: str,
