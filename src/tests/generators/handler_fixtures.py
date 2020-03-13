@@ -40,6 +40,27 @@ def sample(type, expected):
                         'expected': expected}]}
 
 
+def dataframe_sample(type, expected):
+    return {
+        'datasets': {
+            'sample': {'size': 200,
+                       'locale': 'pt_BR',
+                       'fields': [{'name': 'id',
+                                   'type': type,
+                                   'generator': {},
+                                   'expected': expected}],
+                       'format': {'type': 'csv'},
+                       'serializers': {
+                            'to': [
+                                {
+                                    'type': 'file',
+                                    'uri': ''
+                                }
+                            ]}}
+        }
+    }
+
+
 def sample_timestamp(type, expected):
     return {'size': 200,
             'locale': 'pt_BR',
@@ -70,7 +91,7 @@ def integer_specification():
 
 @fixture
 def bool_specification():
-    return sample('bool', 'bool')
+    return dataframe_sample('bool', 'bool')
 
 
 @fixture

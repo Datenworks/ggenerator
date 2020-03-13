@@ -162,11 +162,14 @@ class TestBaseHundler(object):
 
     def test_basehandler_valid(self, valid_specification):
         handler = BaseHandler()
+
         with open('valid_spec.json', 'w') as f:
             json.dump(valid_specification, f)
 
         config = handler.valid_specification('valid_spec.json')
+
         assert valid_specification == config
+
         remove('valid_spec.json')
 
     def test_basehandler_no_dataset(self, no_datasets_specification):
