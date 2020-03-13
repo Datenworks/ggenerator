@@ -1,11 +1,9 @@
 import json
 
 from src.lib.formatters import formatters
-from src.generators.datatypes import get_generators_map
+from src.generators.datatypes import Metadata
 from src.lib.writers import writers, uri_writers
 from functools import reduce
-
-generators_map = get_generators_map()
 
 
 class ConfigurationValidator(object):
@@ -34,9 +32,8 @@ class ConfigurationDataset(object):
         self.fields = fields
         self.format = format
         self.serializers = serializers
-
         self.format_validator = ConfigurationFormat(self.format)
-        self.fields_validator = ConfigurationFields(self.fields)
+        self.fields_validator = ConfigurationFields(self.fields, self.locale)
         self.serializer_validator = ConfigurationSerializer(self.serializers,
                                                             self.id)
 
@@ -120,8 +117,9 @@ class ConfigurationFormat(object):
 
 class ConfigurationFields(object):
 
-    def __init__(self, fields):
+    def __init__(self, fields, locale):
         self.fields = fields
+        self.generators_map = Metadata(locale=locale).get_generators_map()
 
     def is_valid(self):
         for field in self.fields:
@@ -135,10 +133,10 @@ class ConfigurationFields(object):
         field_type = field.get("type")
         generator = field.get("generator")
 
-        if field_type not in generators_map:
+        if field_type not in self.generators_map:
             return False
 
-        clazz = generators_map[field_type]['type']
+        clazz = self.generators_map[field_type]['type']
         return clazz.check(generator)
 
     def __is_valid_field(self, field):
@@ -159,12 +157,12 @@ class ConfigurationFields(object):
     def __generator_type_is_valid(self, field):
         generator = field.get("generator", {})
         field_type = field.get("type")
-        type_ = generators_map[field_type]
+        type_ = self.generators_map[field_type]
         if not generator and type_['generator']['optional']:
             return True
         if generator:
             arguments = generator.keys()
-            type_ = generators_map[field_type]
+            type_ = self.generators_map[field_type]
             return all([arg in type_['generator']['arguments']
                         for arg in arguments])
         return False

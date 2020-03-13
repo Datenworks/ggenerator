@@ -10,3 +10,10 @@ def generate():
     def _generate(DataType, num_of_records, **kwargs):
         return generate_records(DataType(**kwargs), num_of_records)
     return _generate
+
+
+@fixture
+def sample():
+    def _sample(DataType):
+        return DataType.sample()
+    return _sample

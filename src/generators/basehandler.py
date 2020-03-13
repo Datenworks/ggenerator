@@ -1,6 +1,6 @@
 from pandas import DataFrame, Series
 
-from src.generators.datatypes import get_generators_map
+from src.generators.datatypes import Metadata
 from src.lib.config.validator import ConfigurationValidator, \
     ConfigurationDataset
 
@@ -39,7 +39,7 @@ class BaseHandler(object):
         size = size
         fields = specification['fields']
         locale = specification['locale']
-        generators_map = get_generators_map(locale)
+        generators_map = Metadata(locale=locale).get_generators_map()
 
         dataframe = DataFrame()
         for field in fields:
