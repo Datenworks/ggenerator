@@ -16,8 +16,8 @@ class TestConfigurationFormat(object):
     def test_invalid_format(self):
         format_sample = None
         validator = ConfigurationFormat(format_sample)
-        is_valid = validator.is_valid()
-        assert is_valid is False
+        with pytest.raises(ValueError):
+            validator.is_valid()
 
     def test_json_valid_format(self):
         format_sample = {
@@ -31,8 +31,8 @@ class TestConfigurationFormat(object):
     def test_witout_type_format(self):
         format_sample = {"header": True}
         validator = ConfigurationFormat(format_sample)
-        is_valid = validator.is_valid()
-        assert is_valid is False
+        with pytest.raises(ValueError):
+            validator.is_valid()
 
     def test_without_header_format(self):
         format_sample = {"type": "csv"}

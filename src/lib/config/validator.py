@@ -108,47 +108,20 @@ class ConfigurationFormat(object):
 
     def is_valid(self):
         if self.format is None:
-            return False
+            raise ValueError("No Format, you must specify a"
+                             " format property on specification")
 
         if 'type' not in self.format:
-            return False
-        json_array_type = self.format.get("type")
+            raise ValueError("You must specify a type in specification")
+        format_type = self.format.get("type")
 
-        if json_array_type == "json-array":
-            if 'options' in self.format:
-                indent = self.format.get('options').get("indent")
-                type_of_indent = self.validade_typeof_indent_jsonarray(indent)
-                is_valid = self.validate_jsonarray_format(type_of_indent)
-                return is_valid
-            return True
-        else:
-            format_type = self.format.get("type")
-            has_format_type = format_type is not None and \
-                isinstance(format_type, str) and \
-                format_type in formatters
-            is_valid = has_format_type
-            return is_valid
+        if format_type not in formatters:
+            raise ValueError("Wrong format type, please use a valid type")
 
-    def validade_typeof_indent_jsonarray(self, indent):
-        rules = [
-            "pretty",
-            "minify",
-            "",
-            None
-        ]
-        if indent in rules:
-            format_type = self.format.get("type")
-            return format_type
-        else:
-            raise ValueError(
-                            "json-array suports only 'pretty' and 'minify'")
+        if 'options' in self.format:
+            formatters[format_type].check(self.format['options'])
 
-    def validate_jsonarray_format(self, format_type):
-        has_format_type = format_type is not None and \
-            isinstance(format_type, str) and \
-            format_type in formatters
-        is_valid = has_format_type
-        return is_valid
+        return True
 
 
 class ConfigurationFields(object):
