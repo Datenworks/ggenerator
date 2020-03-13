@@ -23,6 +23,14 @@ class Metadata(object):
     def info(self) -> DataFrame:
         return self.__dataframe_info()
 
+    def sample(self, datatype):
+        generators_map = self.get_generators_map()
+        return generators_map[datatype]['type'].sample() \
+            if datatype in generators_map \
+            else "Type not found\n"\
+                 "Check the specification to use a valid one\n"\
+                 "List all the types using the command list-generators"
+
     def __dataframe_info(self):
         df = DataFrame(columns=['type', 'namespace', 'parameters'])
         for key, value in self.get_generators_map().items():
@@ -73,14 +81,7 @@ class Metadata(object):
         if 'self' in args:
             args.remove('self')
 
-        infos = []
-        for arg in args:
-            info = ""
-            if arg is not None:
-                info += f"{arg}"
-
-            infos.append(info)
-
+        infos = [arg for arg in args]
         return ' | '.join(infos)
 
     def __get_full_arg_spec(self, func):

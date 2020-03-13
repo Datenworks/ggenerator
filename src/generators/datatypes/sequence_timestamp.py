@@ -1,8 +1,7 @@
 import pytz
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import isoparse
-from datetime import timedelta
 
 
 class TimestampSequenceType:
@@ -62,8 +61,8 @@ class TimestampSequenceType:
         delta = end - start
         int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
         random_second = randrange(int_delta)
-        date = (start + timedelta(seconds=random_second))
-        date2 = (start + timedelta(seconds=random_second + 1))
+        date = (start + timedelta(seconds=random_second)).isoformat()
+        date2 = (start + timedelta(seconds=random_second + 1)).isoformat()
         return [date, date2]
 
     def generate_records(self, num_of_records) -> list:
