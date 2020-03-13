@@ -107,14 +107,19 @@ class ConfigurationFormat(object):
         self.format = format
 
     def is_valid(self):
-        jsonArray_type = self.format.get("type")
-        if jsonArray_type == "json-array":
-            indent = self.format.get("indent")
-            if indent is not ("pretty", "minify"):  # NEEDS TO CATCH JUST THE TWO
-                raise ValueError(
-                                "json-array suports only 'pretty' and 'minify'")
         if self.format is None:
             return False
+
+        if 'type' not in self.format:
+            return False
+        jsonArray_type = self.format.get("type")
+
+        if jsonArray_type == "json-array":
+            if 'options' in self.format:
+                indent = self.format.get('options').get("indent")
+                is_valid = self.indent_type_jsonArray(indent)
+                return is_valid
+            return True
         else:
             format_type = self.format.get("type")
             has_format_type = format_type is not None and \
@@ -122,6 +127,23 @@ class ConfigurationFormat(object):
                 format_type in formatters
             is_valid = has_format_type
             return is_valid
+
+    def indent_type_jsonArray(self, indent):
+        rules = [
+            "pretty",
+            "minify",
+            "",
+            None
+        ]
+        if indent in rules:
+            format_type = self.format.get("type")
+            has_format_type = format_type is not None and \
+                isinstance(format_type, str) and \
+                format_type in formatters
+            is_valid = has_format_type
+            return is_valid
+        raise ValueError(
+                        "json-array suports only 'pretty' and 'minify'")
 
 
 class ConfigurationFields(object):

@@ -43,7 +43,8 @@ class TestGcsWriter:
         mock = mocker.patch.object(gcsfs, 'GCSFileSystem')
         mock.return_value.open.return_value = buffer
 
-        json_formatter = formatters['json']({"options": {"orient": "records"}})
+        json_formatter = formatters['json-array'](
+            {"options": {"orient": "records"}})
         gcs = GCSRemoteWriter(formatter=json_formatter,
                               specification=specification_gcs)
         gcs.write(pandas_dataframe_with_data)

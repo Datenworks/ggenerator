@@ -1,4 +1,5 @@
 from src.lib.config.validator import ConfigurationFormat
+import pytest
 
 
 class TestConfigurationFormat(object):
@@ -38,3 +39,26 @@ class TestConfigurationFormat(object):
         validator = ConfigurationFormat(format_sample)
         is_valid = validator.is_valid()
         assert is_valid is True
+
+    def test_valid_jsonArray_minify(self):
+        format_sample = {
+            "type": "json-array",
+            "options": {
+                "indent": "minify"
+                }
+            }
+        validator = ConfigurationFormat(format_sample)
+        is_valid = validator.is_valid()
+        assert is_valid is True
+
+    def test_invalid_jsonArray_minify(self):
+        format_sample = {
+            "type": "json-array",
+            "options": {
+                "indent": "DATENWORKS"
+                }
+            }
+        validator = ConfigurationFormat(format_sample)
+        with pytest.raises(ValueError):
+            is_valid = validator.is_valid()
+            is_valid
