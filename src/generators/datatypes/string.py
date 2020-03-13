@@ -12,7 +12,7 @@ class StringType:
     @staticmethod
     def rules():
         def validate(value):
-            if value >= 0:
+            if value <= 0:
                 raise ValueError("String `length` cannot be less than 0")
 
         return {'required': {'generator.length': {

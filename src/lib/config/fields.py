@@ -11,6 +11,6 @@ class FieldsConfiguration(object):
         if type_ not in generators:
             raise ValueError(f"Field type `{type_}` not found")
 
-        type_class = generators.get(type_)
+        type_class = generators[type_]['type']
 
         return type_class.rules()

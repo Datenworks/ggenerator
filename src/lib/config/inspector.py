@@ -32,8 +32,9 @@ class ConfigurationInpector(object):
             raise ValueError(f"JSON Key `{key}` must be "
                              f"of type `{type(expected['type'])}`")
 
-        if len(expected.get('customs', [])) > 0:
-            for custom in expected.get('customs', []):
+        custom_rules = expected.get('custom', [])
+        if len(custom_rules) > 0:
+            for custom in custom_rules:
                 custom(value)
 
     def inspect_rule(self,
@@ -41,8 +42,6 @@ class ConfigurationInpector(object):
                      rule: str,
                      expected: dict,
                      optional: bool = False):
-        print(f"Rule: {rule}")
-        print(f"Configuration: {configuration}")
         current_key = rule.split('.')[0]
         partial_rule = rule.replace(f'{current_key}.', "")
 
@@ -54,6 +53,8 @@ class ConfigurationInpector(object):
                                                  expected=expected,
                                                  rule=partial_rule,
                                                  optional=optional)
+                    raise ValueError(f"Key '{current_key}' has "
+                                     "no valid values")
                 else:  # Dict
                     for key in configuration.keys():
                         return self.inspect_rule(
@@ -84,7 +85,8 @@ class ConfigurationInpector(object):
                         rule=rule,
                         expected=expected,
                         optional=optional)
-        if '.' not in rule:
+        if '.' not in rule or \
+           (current_key not in configuration and optional is True):
             return
         return self.inspect_rule(configuration=configuration[current_key],
                                  expected=expected,
@@ -93,9 +95,7 @@ class ConfigurationInpector(object):
 
     def inspect_rules(self, rules, configuration, optional=False):
         for rule_key in rules.keys():
-            print(f"MotherRule: {rule_key}")
             self.inspect_rule(rule=rule_key,
                               expected=rules[rule_key],
                               configuration=configuration,
                               optional=optional)
-            print("\n\n")
