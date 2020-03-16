@@ -3,7 +3,8 @@ from random import randint
 
 class IntegerType:
     key = 'integer'
-    namespace = 'BasicType'
+    namespace = 'basic_type'
+    optional_arguments = True
 
     def __init__(self, start_at: int = 0, end_at: int = 100,
                  *args, **kwargs):

@@ -3,7 +3,8 @@ from src.generators.datatypes.char import CharacterType
 
 class StringType:
     key = 'string'
-    namespace = 'BasicType'
+    namespace = 'basic_type'
+    optional_arguments = True
 
     def __init__(self, length: int = 40, *args, **kwargs):
         self.length = length
