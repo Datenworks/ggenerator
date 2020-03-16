@@ -13,9 +13,13 @@ class GCSRemoteWriter(object):
     def write(self, dataframe: DataFrame) -> None:
         options = self.specification['options']
         key = f'gs://{options["bucket"]}/{options["key"]}'
-        file_buffer = self.gcstorage_fs.open(key, 'w')
-        self.formatter.format(dataframe=dataframe,
-                              path_or_buffer=file_buffer)
+
+        try:
+            file_buffer = self.gcstorage_fs.open(key, 'w')
+            self.formatter.format(dataframe=dataframe,
+                                  path_or_buffer=file_buffer)
+        except gcsfs.utils.HttpError as e:
+            raise Exception("Without permission", e)
         return key
 
     @staticmethod
