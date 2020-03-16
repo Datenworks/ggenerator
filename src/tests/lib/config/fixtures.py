@@ -214,7 +214,7 @@ def csv_format_sample():
 
 @fixture
 def json_format_sample():
-    return {'type': 'json'}
+    return {'type': 'json-array'}
 
 
 @fixture

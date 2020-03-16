@@ -1,4 +1,4 @@
-from src.generators.datatypes import get_generators_map
+from src.generators.datatypes import Metadata
 
 
 class FieldsConfiguration(object):
@@ -6,7 +6,8 @@ class FieldsConfiguration(object):
     @staticmethod
     def get_rules(field):
         type_ = field.get('type')
-        generators = get_generators_map()
+        metadata = Metadata('pt-BR')
+        generators = metadata.get_generators_map()
 
         if type_ not in generators:
             raise ValueError(f"Field type `{type_}` not found")
