@@ -30,7 +30,8 @@ class JsonFormatter(object):
         options['indent'] = 2 if options.get("indent") == "pretty" else 0
         parameters.update(options)
         if dataframe.shape[0] > 0:
-            dataframe.to_json(path_or_buf=path_or_buffer, **parameters)
+            dataframe.to_json(
+                path_or_buf=path_or_buffer, force_ascii=False, **parameters)
 
     @staticmethod
     def check(options):
