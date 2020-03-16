@@ -10,8 +10,8 @@ class BooleanType:
 
     @staticmethod
     def rules():
-        return {'required': {'generator': {'none': False, 'type': bool}},
-                'optional': {}}
+        return {'required': {},
+                'optional': {'generator.value': {'none': False, 'type': bool}}}
 
     @staticmethod
     def sample():

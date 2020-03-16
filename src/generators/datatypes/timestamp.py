@@ -48,22 +48,6 @@ class TimestampType:
                 'optional': {}}
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-        end_at = generator.get("end_at")
-
-        if start_at is None or end_at is None:
-            return False
-
-        try:
-            start_at = isoparse(start_at)
-            end_at = isoparse(end_at)
-
-            return start_at < end_at
-        except ValueError:
-            return False
-
-    @staticmethod
     def sample():
         start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
         end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
