@@ -16,15 +16,6 @@ class SequenceType:
             start_at > -2147483648 and \
             start_at < 2147483648
 
-    @staticmethod
-    def sample():
-        start_at = 0
-        step = 1
-        num_of_rows = 8
-        return [x for x in range(start_at,
-                                 start_at + num_of_rows * step,
-                                 step)]
-
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)
 

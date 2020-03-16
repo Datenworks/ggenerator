@@ -34,15 +34,6 @@ class TimestampType:
         except ValueError:
             return False
 
-    @staticmethod
-    def sample():
-        start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        delta = end - start
-        int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
-        random_second = randrange(int_delta)
-        return (start + timedelta(seconds=random_second))
-
     def generate(self) -> datetime:
         dt_start_at = self.__parse_to_datetime(self.start_date)
         dt_end_at = self.__parse_to_datetime(self.end_date)

@@ -39,6 +39,14 @@ class TimestampSequenceType:
         seconds = self.datepart_in_seconds[self.datepart]
         return timedelta(seconds=seconds * delta)
 
+    def generate(self, num_of_records=5):
+        return [self.__generate_next(delta)
+                for delta in range(0, num_of_records)]
+
+    def generate_records(self, num_of_records) -> list:
+        return [self.__generate_next(delta)
+                for delta in range(0, num_of_records)]
+
     @staticmethod
     def check(generator):
         start_at = generator.get("start_at")
@@ -51,20 +59,3 @@ class TimestampSequenceType:
         except ValueError:
             return False
         return True
-
-    @staticmethod
-    def sample():
-        from random import randrange
-
-        start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        delta = end - start
-        int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
-        random_second = randrange(int_delta)
-        date = (start + timedelta(seconds=random_second)).isoformat()
-        date2 = (start + timedelta(seconds=random_second + 1)).isoformat()
-        return [date, date2]
-
-    def generate_records(self, num_of_records) -> list:
-        return [self.__generate_next(delta)
-                for delta in range(0, num_of_records)]

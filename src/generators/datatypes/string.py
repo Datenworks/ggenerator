@@ -15,10 +15,6 @@ class StringType:
         length = generator.get("length")
         return length > 0
 
-    @staticmethod
-    def sample():
-        return "".join(CharacterType().generate_records(40))
-
     def generate(self) -> str:
         return "".join(self.character().generate_records(self.length))
 

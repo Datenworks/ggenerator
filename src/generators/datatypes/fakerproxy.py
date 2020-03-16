@@ -5,7 +5,7 @@ import inspect
 class FakerProxy(object):
     def __init__(self, locale: str):
         self.faker = Faker(locale=locale)
-        self.blacklist_namespaces = ['generic', 'python']
+        self.blacklist_namespaces = ['generic']
         self.list_of_generators = self.__get_generators_types()
         self.__infer_types()
 
@@ -69,6 +69,3 @@ class FakerType(object):
     @staticmethod
     def check(generator):
         return True
-
-    def sample(self):
-        return self.__parse_data(self.generator_type())

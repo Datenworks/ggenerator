@@ -23,13 +23,31 @@ class Metadata(object):
     def info(self) -> DataFrame:
         return self.__dataframe_info()
 
-    def sample(self, datatype):
+    def sample(self, datatype, *args, **kwargs):
+        try:
+            return self.__sample(datatype, *args, **kwargs)
+        except Exception as err:
+            raise Exception(err)
+
+    def __sample(self, datatype, *args, **kwargs):
         generators_map = self.get_generators_map()
-        return generators_map[datatype]['type'].sample() \
-            if datatype in generators_map \
-            else "Type not found\n"\
-                 "Check the specification to use a valid one\n"\
-                 "List all the types using the command list-generators"
+        try:
+            sample = generators_map[datatype]['type'](**kwargs).generate()
+            return sample
+        except KeyError:
+            raise TypeError("Type not found\n"
+                            "Check the specification to use a valid one\n"
+                            "List all the types using "
+                            "the command list-generators")
+        except TypeError:
+            raise TypeError(
+                "Invalid parameter, "
+                "please check the spec to correct name and value type")
+
+        except Exception:
+            raise ValueError(
+                "Invalid parameter, "
+                "please check the spec to correct name and value type")
 
     def __dataframe_info(self):
         df = DataFrame(columns=['type', 'namespace', 'parameters'])
@@ -76,13 +94,21 @@ class Metadata(object):
         return generators_map
 
     def __get_args_info(self, func):
-        argspec = self.__get_full_arg_spec(func)
-        args = argspec.args or []
-        if 'self' in args:
-            args.remove('self')
+        params = self.__get_parameters(func)
+        infos = []
+        for arg_name, arg_info in params.items():
+            info = f"{arg_name}"
+            info += f" | default: {arg_info.default}" \
+                if arg_info.default is not inspect._empty\
+                else ''
 
-        infos = [arg for arg in args]
-        return ' | '.join(infos)
+            info += f" | type: {arg_info.annotation.__name__ }"\
+                if arg_info.annotation is not inspect._empty\
+                else ''
 
-    def __get_full_arg_spec(self, func):
-        return inspect.getfullargspec(func)
+            infos.append(info)
+
+        return '\n'.join(infos)
+
+    def __get_parameters(self, func):
+        return inspect.signature(func).parameters
