@@ -29,8 +29,11 @@ class ConfigurationInpector(object):
 
         value = configuration.get(key)
         if self.__validate_type(value=value, expected=expected):
+            expected_type = expected['type']
+            if expected_type == dict:
+                expected_type = type(expected_type)
             raise ValueError(f"JSON Key `{key}` must be "
-                             f"of type `{type(expected['type'])}`")
+                             f"of type `{expected_type}`")
 
         custom_rules = expected.get('custom', [])
         if len(custom_rules) > 0:
