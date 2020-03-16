@@ -105,14 +105,20 @@ class ConfigurationFormat(object):
 
     def is_valid(self):
         if self.format is None:
-            return False
-        else:
-            format_type = self.format.get("type")
-            has_format_type = format_type is not None and \
-                isinstance(format_type, str) and \
-                format_type in formatters
-            is_valid = has_format_type
-            return is_valid
+            raise ValueError("No Format, you must specify a"
+                             " format property on specification")
+
+        if 'type' not in self.format:
+            raise ValueError("You must specify a type in specification")
+        format_type = self.format.get("type")
+
+        if format_type not in formatters:
+            raise ValueError("Wrong format type, please use a valid type")
+
+        if 'options' in self.format:
+            formatters[format_type].check(self.format['options'])
+
+        return True
 
 
 class ConfigurationFields(object):
