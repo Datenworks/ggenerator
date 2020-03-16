@@ -11,10 +11,11 @@ class TestFieldsConfiguration(object):
     def test_valid_csv_specification(self, valid_csv_specification):
         inspector = ConfigurationInpector()
 
-        fields = valid_csv_specification['datasets']['valid']['fields']
+        dataset = valid_csv_specification['datasets']['valid']
+        fields = dataset['fields']
 
         for field in fields:
-            rules = FieldsConfiguration.get_rules(field)
+            rules = FieldsConfiguration.get_rules(field, dataset['locale'])
             required = rules['required']
             inspect = inspector. \
                 inspect_rules(rules=required,
@@ -23,11 +24,12 @@ class TestFieldsConfiguration(object):
 
     def test_invalid_csv_configuration(self, invalid_csv_specification):
         inspector = ConfigurationInpector()
-        fields = invalid_csv_specification['datasets']['invalid']['fields']
+        dataset = invalid_csv_specification['datasets']['invalid']
+        fields = dataset['fields']
 
         for field in fields:
             with raises(ValueError):
-                rules = FieldsConfiguration.get_rules(field)
+                rules = FieldsConfiguration.get_rules(field, dataset['locale'])
                 required = rules['required']
 
                 inspector. \

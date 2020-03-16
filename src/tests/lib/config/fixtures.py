@@ -137,6 +137,7 @@ def invalid_specfication(format_type):
                 'format': {
                     'type': format_type
                 },
+                'locale': 'pt_BR',
                 'serializers': {
                     'to': []
                 },

@@ -4,9 +4,9 @@ from src.generators.datatypes import Metadata
 class FieldsConfiguration(object):
 
     @staticmethod
-    def get_rules(field):
+    def get_rules(field, locale):
         type_ = field.get('type')
-        metadata = Metadata('pt-BR')
+        metadata = Metadata(locale)
         generators = metadata.get_generators_map()
 
         if type_ not in generators:

@@ -14,9 +14,9 @@ class BaseHandler(object):
     def __init__(self):
         self.inspector = ConfigurationInpector()
 
-    def __validate(self, clazz, iterable):
+    def __validate(self, clazz, iterable, **kwargs):
         for item in iterable:
-            rules = clazz.get_rules(item)
+            rules = clazz.get_rules(item, **kwargs)
             self.inspector.inspect_rules(rules=rules['required'],
                                          configuration=item)
             self.inspector.inspect_rules(rules=rules['optional'],
@@ -26,7 +26,8 @@ class BaseHandler(object):
     def __validate_fields(self, dataset):
         fields = dataset['fields']
         self.__validate(clazz=FieldsConfiguration,
-                        iterable=fields)
+                        iterable=fields,
+                        locale=dataset['locale'])
 
     def __validate_format(self, dataset):
         self.__validate(clazz=FormattersConfiguration,
