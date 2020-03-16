@@ -3,7 +3,8 @@ from random import uniform
 
 class FloatType:
     key = 'float'
-    namespace = 'BasicType'
+    namespace = 'basic_type'
+    optional_arguments = True
 
     def __init__(self, start_at: float = 0, end_at: float = 100,
                  decimal_floor: int = 3, *args, **kwargs):

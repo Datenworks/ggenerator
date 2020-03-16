@@ -4,7 +4,8 @@ import string
 
 class CharacterType:
     key = 'char'
-    namespace = 'PrimitiveType'
+    namespace = 'primitive_type'
+    optional_arguments = True
 
     def __init__(self, *args, **kwargs):
         pass

@@ -250,3 +250,27 @@ def gcs_url_writer_sample():
 @fixture
 def unknown_writer_sample():
     return {'type': 'unknown'}
+
+
+@fixture
+def invalid_s3_bucket():
+    return {
+        "to": [{
+            "type": "s3",
+            "options": {
+                "key": "key"
+            }}
+        ]
+    }
+
+
+@fixture
+def invalid_s3_key():
+    return {
+        "to": [{
+            "type": "s3",
+            "options": {
+                "bucket": "bucket"
+            }}
+        ]
+    }

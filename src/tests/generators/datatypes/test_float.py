@@ -16,6 +16,16 @@ class TestFloatGenerator:
                            decimal_floor=3)
         assert len(records) == TEST_NUM_OF_RECORDS
 
+    def test_sample_records_int(self, generate, sample):
+        records = generate(FloatType,
+                           TEST_NUM_OF_RECORDS,
+                           start_at=0,
+                           end_at=10,
+                           decimal_floor=3)
+        sample_record = sample(FloatType)
+        for record in records:
+            assert type(record) == type(sample_record)
+
     def test_all_records_float(self, generate):
         records = generate(FloatType,
                            TEST_NUM_OF_RECORDS,

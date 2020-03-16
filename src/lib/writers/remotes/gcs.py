@@ -23,3 +23,11 @@ class GCSRemoteWriter(object):
         return {'required': {'options.bucket': {'none': False, 'type': str},
                              'options.key': {'none': False, 'type': str}},
                 'optional': {}}
+
+    def is_valid_destination(**kwargs):
+        options = kwargs.get('options')
+        if options is None:
+            raise EnvironmentError("Serializer GCS options not found.")
+        if 'bucket' in options and 'key' in options and options is not None:
+            return True
+        return False

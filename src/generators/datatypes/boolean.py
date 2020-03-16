@@ -3,7 +3,8 @@ import random
 
 class BooleanType:
     key = 'bool'
-    namespace = 'PrimitiveType'
+    namespace = 'primitive_type'
+    optional_arguments = True
 
     def __init__(self, value=None, *args, **kwargs):
         self.value = value

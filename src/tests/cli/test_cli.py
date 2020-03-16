@@ -5,6 +5,7 @@ from click.testing import CliRunner
 
 from src.cli.commands import execute
 from src.generators.handler import GeneratorsHandler
+from src.generators.datatypes import Metadata
 from src.tests.cli.cli_fixture import *  # noqa: F403, F401
 
 
@@ -53,3 +54,13 @@ class TestCliExecutor:
                                              '--spec',
                                              'hello.json'])
             assert result.exit_code != 0
+
+    def test_list_generators(self, mocker, generators_map):
+        runner = CliRunner()
+        mock = mocker.patch.object(Metadata, 'get_generators_map')
+        mock.return_value = generators_map
+
+        with runner.isolated_filesystem():
+            result = runner.invoke(execute, ['list-generators'])
+            print(result)
+            assert result.exit_code == 0

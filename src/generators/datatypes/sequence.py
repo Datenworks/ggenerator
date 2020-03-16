@@ -1,6 +1,7 @@
 class SequenceType:
     key = 'integer:sequence'
-    namespace = 'BasicType'
+    namespace = 'basic_type'
+    optional_arguments = True
 
     def __init__(self, start_at=0, step=1, *args, **kwargs):
         self.start_at = start_at

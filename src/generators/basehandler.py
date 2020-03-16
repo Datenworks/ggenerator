@@ -2,12 +2,12 @@ import json
 
 from pandas import DataFrame, Series
 
-from src.generators.datatypes import get_generators_map
 from src.lib.config import general_rules
 from src.lib.config.fields import FieldsConfiguration
 from src.lib.config.formatters import FormattersConfiguration
 from src.lib.config.inspector import ConfigurationInpector
 from src.lib.config.serializers import SerializersConfiguration
+from src.generators.datatypes import Metadata
 
 
 class BaseHandler(object):
@@ -59,7 +59,7 @@ class BaseHandler(object):
         size = size
         fields = specification['fields']
         locale = specification['locale']
-        generators_map = get_generators_map(locale)
+        generators_map = Metadata(locale=locale).get_generators_map()
 
         dataframe = DataFrame()
         for field in fields:
@@ -75,10 +75,3 @@ class BaseHandler(object):
             dataframe[field_name] = series.values
 
         return dataframe
-
-
-if __name__ == "__main__":
-    import sys
-
-    handler = BaseHandler()
-    handler.valid_specification(file_path=sys.argv[1])
