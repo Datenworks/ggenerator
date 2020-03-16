@@ -14,8 +14,8 @@ class FloatType:
     @staticmethod
     def rules():
         def validate(value):
-            min_ = -2250738585072014e-308
-            max_ = 7976931348623157e+308
+            min_ = -1.7976931348623157e+308
+            max_ = 1.7976931348623157e+308
             if value < min_ or value > max_:
                 raise ValueError("Float generator must be "
                                  f"greater than or equals {min_} and "

@@ -34,6 +34,6 @@ class GCSPresignedUrlRemoteWriter(object):
         return f"gs://{urlparse(resp.url).path}"
 
     @staticmethod
-    def check():
+    def rules():
         return {'required': {'uri': {'none': False, 'type': str}},
                 'optional': {}}

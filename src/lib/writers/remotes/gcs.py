@@ -19,7 +19,7 @@ class GCSRemoteWriter(object):
         return key
 
     @staticmethod
-    def check():
+    def rules():
         return {'required': {'options.bucket': {'none': False, 'type': str},
                              'options.key': {'none': False, 'type': str}},
                 'optional': {}}

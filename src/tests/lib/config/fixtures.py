@@ -67,26 +67,72 @@ def invalid_specfication(format_type):
                 'fields': [
                     {'name': 'id',
                      'type': 'integer:sequence'},
+                    {'name': 'reference_id',
+                     'type': 'integer:sequence',
+                     'generator': {
+                         'start_at': 2147483649,
+                         'end_at': -2147483649
+                     }},
+                    {'name': 'level',
+                     'type': 'integer',
+                     'generator': {
+                         'start_at': 2147483649,
+                         'end_at': -2147483649
+                     }},
+                    {'name': 'rank',
+                     'type': 'integer',
+                     'generator': {
+                         'start_at': 5,
+                         'end_at': 4
+                     }},
                     {'name': 'name',
                      'type': 'string'},
+                    {'name': 'last_name',
+                     'type': 'string',
+                     'generator': {
+                         'length': -1
+                     }},
                     {'name': 'age',
                      'type': 'integer',
                      'generator': {}},
                     {'name': 'weight',
                      'type': 'float',
                      'generator': {}},
+                    {'name': 'money',
+                     'type': 'float',
+                     'generator': {
+                         'start_at': -2350738585072014e-308,
+                         'end_at': 7976931348623157e+309
+                     }},
+                    {'name': 'taxes',
+                     'type': 'float',
+                     'generator': {
+                         'start_at': 8.0,
+                         'end_at': -1.0
+                     }},
                     {'name': 'sex',
-                     'type': 'char'},
+                     'type': None},
                     {'name': 'birth',
                      'type': 'timestamp'},
-                    {'name': 'opa',
+                    {'name': 'created_at',
                      'type': 'timestamp',
                      'generator': {
                          'start_at': 'heuheuhe',
                          'end_at': 'uheuhehu'
                      }},
+                    {'name': 'updated_at',
+                     'type': 'timestamp',
+                     'generator': {
+                         'start_at': '2020-01-01 00:00:00',
+                         'end_at': '2010-01-01 00:00:00'
+                     }},
                     {'name': 'hiring_at',
                      'type': 'timestamp:sequence'},
+                    {'name': 'fired_at',
+                     'type': 'timestamp:sequence',
+                     'generator': {
+                         'start_at': '20:11:02 20201102'
+                     }},
                 ],
                 'format': {
                     'type': format_type
@@ -159,3 +205,48 @@ def dictionary_sample():
             'third': {'age': '15'}
         }
     }
+
+
+@fixture
+def csv_format_sample():
+    return {'type': 'csv'}
+
+
+@fixture
+def json_format_sample():
+    return {'type': 'json'}
+
+
+@fixture
+def unknown_format_sample():
+    return {'type': 'unknown'}
+
+
+@fixture
+def file_writer_sample():
+    return {'type': 'file'}
+
+
+@fixture
+def s3_writer_sample():
+    return {'type': 's3'}
+
+
+@fixture
+def s3_url_writer_sample():
+    return {'type': 's3-url'}
+
+
+@fixture
+def gcs_writer_sample():
+    return {'type': 'gcs'}
+
+
+@fixture
+def gcs_url_writer_sample():
+    return {'type': 'gcs-url'}
+
+
+@fixture
+def unknown_writer_sample():
+    return {'type': 'unknown'}

@@ -16,7 +16,6 @@ class TestFieldsConfiguration(object):
         for field in fields:
             rules = FieldsConfiguration.get_rules(field)
             required = rules['required']
-            optional = rules['optional']
             inspect = inspector. \
                 inspect_rules(rules=required,
                               configuration=field)
@@ -26,14 +25,11 @@ class TestFieldsConfiguration(object):
         inspector = ConfigurationInpector()
         fields = invalid_csv_specification['datasets']['invalid']['fields']
 
-        try:
-            for field in fields:
+        for field in fields:
+            with raises(ValueError):
                 rules = FieldsConfiguration.get_rules(field)
                 required = rules['required']
-                optional = rules['optional']
 
                 inspector. \
                     inspect_rules(rules=required,
                                   configuration=field)
-        except ValueError:
-            pass

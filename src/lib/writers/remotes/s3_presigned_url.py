@@ -47,6 +47,6 @@ class S3PresignedUrlRemoteWriter(object):
         return signed_url
 
     @staticmethod
-    def check():
+    def rules():
         return {'required': {},
                 'optional': {'options.path': {'none': False, 'type': str}}}
