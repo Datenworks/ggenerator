@@ -13,5 +13,5 @@ def is_evaluable(value):
     try:
         eval(value)
         return True
-    except:
+    except Exception:
         return False
