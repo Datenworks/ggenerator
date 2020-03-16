@@ -18,7 +18,7 @@ class TestSerializersConfiguration(object):
 
         assert rules is not None
         assert isinstance(rules, dict) is True
-    
+
     def test_s3_url(self, s3_url_writer_sample):
         rules = SerializersConfiguration.get_rules(s3_url_writer_sample)
 
@@ -30,7 +30,7 @@ class TestSerializersConfiguration(object):
 
         assert rules is not None
         assert isinstance(rules, dict) is True
-    
+
     def test_gcs_url(self, gcs_url_writer_sample):
         rules = SerializersConfiguration.get_rules(gcs_url_writer_sample)
 
