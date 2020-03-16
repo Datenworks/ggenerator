@@ -1,10 +1,12 @@
+import json
+import pytest
+
+from mock import mock_open, patch
+from os import remove
 from pandas import DataFrame
 
 from src.generators.handler import BaseHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
-import json
-import pytest
-from os import remove
 
 
 class TestBaseHundler(object):
@@ -57,18 +59,19 @@ class TestBaseHundler(object):
             assert dataframe[field['name']].dtype.name == field['expected']
 
     def test_bool_dataframe(self, mocker, bool_specification):
-        mock = mocker.patch \
-                     .object(BaseHandler, 'valid_specification')
-        mock.return_value = bool_specification
-        handler = BaseHandler()
-        specification = handler.valid_specification()
-        dataframe = handler.generate_dataframe(specification,
-                                               bool_specification['size'])
+        with patch('builtins.open',
+                   mock_open(read_data=json.dumps(bool_specification))):
+            dataset = bool_specification['datasets']['sample']
+            expected_size = dataset['size']
+            expected_fields = dataset['fields']
 
-        assert isinstance(dataframe, DataFrame) is True
-        assert dataframe.shape[0] == bool_specification['size']
-        for field in bool_specification['fields']:
-            assert dataframe[field['name']].dtype.name == field['expected']
+            handler = BaseHandler()
+            dataframe = handler.generate_dataframe(dataset, dataset['size'])
+
+            assert isinstance(dataframe, DataFrame) is True
+            assert dataframe.shape[0] == expected_size
+            for field in expected_fields:
+                assert dataframe[field['name']].dtype.name == field['expected']
 
     def test_char_dataframe(self, mocker, char_specification):
         mock = mocker.patch \

@@ -14,34 +14,27 @@ from src.lib.writers import writers
 class TestGeneratorsHandler(object):
     """Unit-test of GeneratorsHandler class"""
 
-    # def test_valid_specification(self, mocker, valid_specification):
-    #     mock = mocker.patch \
-    #                  .object(ConfigurationValidator, 'get_config')
-    #     mock.return_value = valid_specification
+    def test_valid_specification(self, mocker, valid_specification):
+        data = json.dumps(valid_specification)
+        with patch('builtins.open', mock_open(read_data=data)) as mock:
+            GeneratorsHandler(arguments={'config_file': None})
 
-    #     GeneratorsHandler(arguments={'config_file': None})
+            mock.assert_called()
 
-    #     mock.assert_called()
+    def test_without_dataset(self, mocker, no_datasets_specification):
+        data = json.dumps(no_datasets_specification)
+        with patch('builtins.open', mock_open(read_data=data)) as mock:
 
-    # def test_without_dataset(self, mocker, no_datasets_specification):
-    #     mock = mocker.patch \
-    #                  .object(ConfigurationValidator, 'get_config')
-    #     mock.return_value = no_datasets_specification
+            with raises(ValueError):
+                GeneratorsHandler(arguments={'config_file': None})
+            mock.assert_called()
 
-    #     with raises(ValueError):
-    #         GeneratorsHandler(arguments={'config_file': None})
-
-    #         mock.assert_called()
-
-    # def test_invalid_dataset(self, mocker, invalid_dataset_specification):
-    #     mock = mocker.patch \
-    #                  .object(ConfigurationValidator, 'get_config')
-    #     mock.return_value = invalid_dataset_specification
-
-    #     with raises(ValueError):
-    #         GeneratorsHandler(arguments={'config_file': None})
-
-    #         mock.assert_called()
+    def test_invalid_dataset(self, mocker, invalid_dataset_specification):
+        data = json.dumps(invalid_dataset_specification)
+        with patch('builtins.open', mock_open(read_data=data)) as mock:
+            with raises(ValueError):
+                GeneratorsHandler(arguments={'config_file': None})
+            mock.assert_called()
 
     def test_generate(self, mocker, valid_specification):
         mock_write = mocker.patch \
@@ -132,13 +125,16 @@ class TestGeneratorsHandler(object):
     def test_bool_dataframe(self, mocker, bool_specification):
         with patch('builtins.open',
                    mock_open(read_data=json.dumps(bool_specification))):
+            dataset = bool_specification['datasets']['sample']
+            expected_size = dataset['size']
+            expected_fields = dataset['fields']
+
             handler = GeneratorsHandler({"config_file": None})
-            specification = handler.valid_specification_dataset()
-            dataframe = handler.generate_dataframe(specification)
+            dataframe = handler.generate_dataframe(dataset)
 
             assert isinstance(dataframe, DataFrame) is True
-            assert dataframe.shape[0] == bool_specification['size']
-            for field in bool_specification['fields']:
+            assert dataframe.shape[0] == expected_size
+            for field in expected_fields:
                 assert dataframe[field['name']].dtype.name == field['expected']
 
     def test_name_dataframe(self, mocker, name_specification):
