@@ -8,18 +8,16 @@ class GCSRemoteWriter(object):
     def __init__(self, formatter, specification):
         self.formatter = formatter
         self.specification = specification
-        self.gcstorage_fs = gcsfs.GCSFileSystem()
+        self.gcstorage_fs = gcsfs.GCSFileSystem(token='google_default')
 
     def write(self, dataframe: DataFrame) -> None:
+        if self.gcstorage_fs.token is None:
+            raise Exception("Without permission, please login")
         options = self.specification['options']
         key = f'gs://{options["bucket"]}/{options["key"]}'
-
-        try:
-            file_buffer = self.gcstorage_fs.open(key, 'w')
-            self.formatter.format(dataframe=dataframe,
-                                  path_or_buffer=file_buffer)
-        except gcsfs.utils.HttpError as e:
-            raise Exception("Without permission", e)
+        file_buffer = self.gcstorage_fs.open(key, 'w')
+        self.formatter.format(dataframe=dataframe,
+                              path_or_buffer=file_buffer)
         return key
 
     @staticmethod
