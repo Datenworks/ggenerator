@@ -57,10 +57,10 @@ class TimestampSequenceType:
                 raise ValueError(f"Timestamp field `{value}` "
                                  "has a wrong format")
         return {'required': {'generator.start_at': {
-                                'none': False,
-                                'type': str,
-                                'custom': [validate]}},
-                'optional': {}}
+            'none': False,
+            'type': str,
+            'custom': [validate]}},
+            'optional': {}}
 
     @staticmethod
     def sample():
@@ -74,7 +74,3 @@ class TimestampSequenceType:
         date = (start + timedelta(seconds=random_second))
         date2 = (start + timedelta(seconds=random_second + 1))
         return [date, date2]
-
-    def generate_records(self, num_of_records) -> list:
-        return [self.__generate_next(delta)
-                for delta in range(0, num_of_records)]
