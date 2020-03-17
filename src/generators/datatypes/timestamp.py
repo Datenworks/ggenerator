@@ -19,20 +19,34 @@ class TimestampType:
         self.end_date = end_at
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-        end_at = generator.get("end_at")
+    def rules():
+        def validate(value):
+            try:
+                isoparse(value)
+            except Exception:
+                raise ValueError(f"Timestamp field `{value}` "
+                                 "has a wrong format")
 
-        if start_at is None or end_at is None:
-            return False
+        def validate_range(value):
+            start_at = isoparse(value['start_at'])
+            end_at = isoparse(value['end_at'])
+            if start_at > end_at:
+                raise ValueError(f"Timestamp 'start_at' field `{start_at}` "
+                                 f"is higher than 'end_at' field `{end_at}`")
 
-        try:
-            start_at = isoparse(start_at)
-            end_at = isoparse(end_at)
-
-            return start_at < end_at
-        except ValueError:
-            return False
+        return {'required': {'generator.start_at': {
+                                'none': False,
+                                'type': str,
+                                'custom': [validate]},
+                             'generator.end_at': {
+                                'none': False,
+                                'type': str,
+                                'custom': [validate]},
+                             'generator': {
+                                'none': False,
+                                'type': dict,
+                                'custom': [validate_range]}},
+                'optional': {}}
 
     def generate(self) -> datetime:
         dt_start_at = self.__parse_to_datetime(self.start_date)

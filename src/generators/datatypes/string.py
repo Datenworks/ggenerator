@@ -11,9 +11,16 @@ class StringType:
         self.character = CharacterType
 
     @staticmethod
-    def check(generator):
-        length = generator.get("length")
-        return length > 0
+    def rules():
+        def validate(value):
+            if value <= 0:
+                raise ValueError("String `length` cannot be less than 0")
+
+        return {'required': {'generator.length': {
+                                'none': False,
+                                'type': int,
+                                'custom': [validate]}},
+                'optional': {}}
 
     def generate(self) -> str:
         return "".join(self.character().generate_records(self.length))

@@ -34,5 +34,6 @@ class GCSPresignedUrlRemoteWriter(object):
         return f"gs://{urlparse(resp.url).path}"
 
     @staticmethod
-    def is_valid_destination(**kwargs):
-        return kwargs['uri'][:8] == 'https://'
+    def rules():
+        return {'required': {'uri': {'none': False, 'type': str}},
+                'optional': {}}

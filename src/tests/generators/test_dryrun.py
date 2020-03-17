@@ -1,11 +1,13 @@
+import json
+import pytest
+
+from mock import mock_open, patch
+from os import remove
 from pandas import DataFrame
 
 from src.generators.basehandler import BaseHandler
 from src.generators.dryrunhandler import DryRunHandler
 from src.tests.generators.handler_fixtures import *  # noqa: F403, F401
-import pytest
-import json
-from os import remove
 
 
 class TestDryRunHandler(object):
@@ -55,17 +57,19 @@ class TestDryRunHandler(object):
             assert dataframe[field['name']].dtype.name == field['expected']
 
     def test_bool_dataframe(self, mocker, bool_specification):
-        mock = mocker.patch \
-                     .object(DryRunHandler, 'valid_specification_dryrun')
-        mock.return_value = bool_specification
-        handler = DryRunHandler({'config_file': None})
-        specification = handler.valid_specification_dryrun()
-        dataframe = handler.generate_dryrun(specification)
+        with patch('builtins.open',
+                   mock_open(read_data=json.dumps(bool_specification))):
+            dataset = bool_specification['datasets']['sample']
+            expected_size = 10
+            expected_fields = dataset['fields']
 
-        assert isinstance(dataframe, DataFrame) is True
-        assert dataframe.shape[0] == 10
-        for field in bool_specification['fields']:
-            assert dataframe[field['name']].dtype.name == field['expected']
+            handler = DryRunHandler({"config_file": None})
+            dataframe = handler.generate_dryrun(dataset)
+
+            assert isinstance(dataframe, DataFrame) is True
+            assert dataframe.shape[0] == expected_size
+            for field in expected_fields:
+                assert dataframe[field['name']].dtype.name == field['expected']
 
     def test_char_dataframe(self, mocker, char_specification):
         mock = mocker.patch \

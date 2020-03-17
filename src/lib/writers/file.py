@@ -23,5 +23,6 @@ class FileWriter(object):
         return file_path
 
     @staticmethod
-    def is_valid_destination(**kwargs):
-        return 'uri' in kwargs
+    def rules():
+        return {'required': {'uri': {'none': False, 'type': str}},
+                'optional': {}}

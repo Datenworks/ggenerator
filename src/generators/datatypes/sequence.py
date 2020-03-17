@@ -8,13 +8,19 @@ class SequenceType:
         self.step = step
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-        if not isinstance(start_at, int):
-            return False
-        return start_at is not None and \
-            start_at > -2147483648 and \
-            start_at < 2147483648
+    def rules():
+        def validate(value):
+            min_ = -2147483648
+            max_ = 2147483648
+            if value < min_ or value > max_:
+                raise ValueError("Sequence `start_at` generator must be "
+                                 f"greater than or equals {min_} and "
+                                 f"less than or equals {max_}")
+        return {'required': {'generator.start_at': {
+                                'none': False,
+                                'type': int,
+                                'custom': [validate]}},
+                'optional': {}}
 
     def generate(self):
         return self.generate_records(num_of_rows=5)

@@ -11,6 +11,14 @@ class JsonFormatter(object):
         self.default = {'orient': 'records'}
         self.specification = specification
 
+    @staticmethod
+    def rules():
+        return {'required': {},
+                'optional': {
+                    'options.orient': {'none': False, 'type': str},
+                    'options.index': {'none': False, 'type': bool}
+                }}
+
     def format(self, dataframe: DataFrame, path_or_buffer) -> None:
         """Format dataframe to json.
 

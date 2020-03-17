@@ -75,5 +75,9 @@ class FakerType(object):
         return data.replace('\n', ' ')
 
     @staticmethod
-    def check(generator):
-        return True
+    def rules():
+        return {'required': {},
+                'optional': {}}
+
+    def sample(self):
+        return self.__parse_data(self.generator_type())

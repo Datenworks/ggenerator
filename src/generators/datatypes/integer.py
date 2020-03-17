@@ -18,13 +18,45 @@ class IntegerType:
                 for x in range(0, num_of_records)]
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-        end_at = generator.get("end_at")
-        return start_at is not None and \
-            start_at > -2147483648 and \
-            start_at < 2147483648 and \
-            end_at is not None and \
-            end_at > -2147483648 and \
-            end_at < 2147483648 and \
-            start_at < end_at
+    def rules():
+        def validate(value):
+            min_ = -2147483648
+            max_ = 2147483648
+            if value < min_ or value > max_:
+                raise ValueError("Integer generator must be "
+                                 f"greater than or equals {min_} and "
+                                 f"less than or equals {max_}")
+
+        def validate_range(value):
+            start_at = value['start_at']
+            end_at = value['end_at']
+            if start_at > end_at:
+                raise ValueError(f"Integer 'start_at' field `{start_at}` "
+                                 f"is higher than 'end_at' field `{end_at}`")
+        return {'required': {'generator.start_at': {
+                                'none': False,
+                                'type': int,
+                                'custom': [validate]},
+                             'generator.end_at': {
+                                'none': False,
+                                'type': int,
+                                'custom': [validate]},
+                             'generator': {
+                                 'none': False,
+                                 'type': dict,
+                                 'custom': [validate_range]
+                             }},
+                'optional': {}}
+
+    @staticmethod
+    def sample():
+        start_at = 0
+        end_at = 100
+        return randint(start_at, end_at)
+
+    def generate(self) -> int:
+        return randint(self.start_at, self.end_at)
+
+    def generate_records(self, num_of_records) -> list:
+        return [self.generate()
+                for x in range(0, num_of_records)]
