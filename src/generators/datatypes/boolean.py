@@ -9,6 +9,15 @@ class BooleanType:
     def __init__(self, value=None, *args, **kwargs):
         self.value = value
 
+    @staticmethod
+    def rules():
+        return {'required': {},
+                'optional': {'generator.value': {'none': False, 'type': bool}}}
+
+    @staticmethod
+    def sample():
+        return bool(random.getrandbits(1))
+
     def __generate_random(self):
         return bool(random.getrandbits(1))
 

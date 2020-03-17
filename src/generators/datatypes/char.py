@@ -10,6 +10,15 @@ class CharacterType:
     def __init__(self, *args, **kwargs):
         pass
 
+    @staticmethod
+    def rules():
+        return {'required': {},
+                'optional': {}}
+
+    @staticmethod
+    def sample():
+        return random.choice(string.ascii_letters)
+
     def generate(self) -> str:
         return random.choice(string.ascii_letters)
 
