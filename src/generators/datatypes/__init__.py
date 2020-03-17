@@ -44,10 +44,10 @@ class Metadata(object):
                 "Invalid parameter, "
                 "please check the spec to correct name and value type")
 
-        except Exception:
+        except Exception as e:
             raise ValueError(
                 "Invalid parameter, "
-                "please check the spec to correct name and value type")
+                "please check the spec to correct name and value type", e)
 
     def __dataframe_info(self):
         df = DataFrame(columns=['type', 'namespace', 'parameters'])
