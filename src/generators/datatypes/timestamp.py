@@ -39,10 +39,10 @@ class TimestampType:
         dt_end_at = self.__parse_to_datetime(self.end_date)
         return self.__generate_random_date(dt_start_at,
                                            dt_end_at)\
-                   .replace(tzinfo=self.time_zone)
+                   .astimezone(tz=self.time_zone)
 
     def __parse_to_datetime(self, iso_format_date) -> datetime:
-        return isoparse(iso_format_date).replace(tzinfo=self.time_zone)
+        return isoparse(iso_format_date).astimezone(tz=self.time_zone)
 
     def __generate_random_date(self, start, end) -> datetime:
         """

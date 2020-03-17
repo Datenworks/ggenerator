@@ -16,6 +16,9 @@ class SequenceType:
             start_at > -2147483648 and \
             start_at < 2147483648
 
+    def generate(self):
+        return self.generate_records(num_of_rows=5)
+
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)
 

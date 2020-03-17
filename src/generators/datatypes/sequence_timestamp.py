@@ -34,14 +34,15 @@ class TimestampSequenceType:
 
     def __generate_next(self, delta) -> datetime:
         return (self.start_date + self.__delta_step(delta))\
-            .replace(tzinfo=self.time_zone)
+            .astimezone(tz=self.time_zone)
 
     def __delta_step(self, delta):
         seconds = self.datepart_in_seconds[self.datepart]
         return timedelta(seconds=seconds * delta * self.step)
 
     def generate(self):
-        return self.generate_records(num_of_records=5)
+        return [dt.isoformat()
+                for dt in self.generate_records(num_of_records=5)]
 
     def generate_records(self, num_of_records) -> list:
         return [self.__generate_next(delta)
