@@ -41,17 +41,18 @@ class TimestampSequenceType:
         return timedelta(seconds=seconds * delta)
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-
-        if start_at is None:
-            return False
-
-        try:
-            isoparse(start_at)
-        except ValueError:
-            return False
-        return True
+    def rules():
+        def validate(value):
+            try:
+                isoparse(value)
+            except ValueError:
+                raise ValueError(f"Timestamp field `{value}` "
+                                 "has a wrong format")
+        return {'required': {'generator.start_at': {
+                                'none': False,
+                                'type': str,
+                                'custom': [validate]}},
+                'optional': {}}
 
     @staticmethod
     def sample():

@@ -11,8 +11,9 @@ class CharacterType:
         pass
 
     @staticmethod
-    def check(generator):
-        return True
+    def rules():
+        return {'required': {},
+                'optional': {}}
 
     @staticmethod
     def sample():

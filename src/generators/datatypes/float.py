@@ -13,22 +13,35 @@ class FloatType:
         self.decimal_floor = decimal_floor
 
     @staticmethod
-    def check(generator):
-        start_at = generator.get("start_at")
-        end_at = generator.get("end_at")
-        min_value = -2250738585072014e-308
-        max_value = 7976931348623157e+308
+    def rules():
+        def validate(value):
+            min_ = -1.7976931348623157e+308
+            max_ = 1.7976931348623157e+308
+            if value < min_ or value > max_:
+                raise ValueError("Float generator must be "
+                                 f"greater than or equals {min_} and "
+                                 f"less than or equals {max_}")
 
-        is_start_valid = start_at is not None and \
-            start_at > min_value and \
-            start_at < max_value
-        is_end_valid = end_at is not None and \
-            end_at > min_value and \
-            end_at < max_value
-
-        return is_start_valid and \
-            is_end_valid and \
-            start_at < end_at
+        def validate_range(value):
+            start_at = value['start_at']
+            end_at = value['end_at']
+            if start_at > end_at:
+                raise ValueError(f"Float 'start_at' field `{start_at}` "
+                                 f"is higher than 'end_at' field `{end_at}`")
+        return {'required': {'generator.start_at': {
+                                'none': False,
+                                'type': float,
+                                'custom': [validate]},
+                             'generator.end_at': {
+                                'none': False,
+                                'type': float,
+                                'custom': [validate]},
+                             'generator': {
+                                 'none': False,
+                                 'type': dict,
+                                 'custom': [validate_range]
+                             }},
+                'optional': {}}
 
     @staticmethod
     def sample():

@@ -40,6 +40,34 @@ def sample(type, expected):
                         'expected': expected}]}
 
 
+def dataframe_sample(type, expected):
+    return {
+        'datasets': {
+            'sample': {
+                'size': 200,
+                'locale': 'pt_BR',
+                'fields': [
+                    {
+                        'name': 'boolean_field',
+                        'type': 'bool',
+                        'generator': {},
+                        'expected': expected
+                    }
+                ],
+                'format': {'type': 'csv'},
+                'serializers': {
+                    'to': [
+                        {
+                            'type': 'file',
+                            'uri': ''
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+
 def sample_timestamp(type, expected):
     return {'size': 200,
             'locale': 'pt_BR',
@@ -70,7 +98,7 @@ def integer_specification():
 
 @fixture
 def bool_specification():
-    return sample('bool', 'bool')
+    return dataframe_sample('bool', 'bool')
 
 
 @fixture
@@ -110,17 +138,34 @@ def timestamp_specification():
 
 @fixture
 def valid_specification():
-    return {"datasets": {
-        "teste3": {
-            "fields": [{"type": "integer:sequence",
-                                "name": "id",
-                                "generator": {"start_at": 1}}],
-            "size": 100,
-            "locale": "pt_BR",
-            "format": {"type": "csv"},
-            "serializers": {
-                "to": [{"type": "file",
-                                "uri": "/tmp/teste.csv"}]}}}}
+    return {
+        "datasets": {
+            "teste3": {
+                "fields": [
+                    {
+                        "type": "integer:sequence",
+                        "name": "id",
+                        "generator": {
+                            "start_at": 1
+                        }
+                    }
+                ],
+                "size": 100,
+                "locale": "pt_BR",
+                "format": {
+                    "type": "csv"
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "/tmp/teste.csv"
+                        }
+                    ]
+                }
+            }
+        }
+    }
 
 
 @fixture

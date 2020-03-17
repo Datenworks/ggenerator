@@ -10,13 +10,9 @@ class BooleanType:
         self.value = value
 
     @staticmethod
-    def check(generator):
-        value = generator.get("value")
-
-        if value is not None:
-            return value is True or value is False
-
-        return True
+    def rules():
+        return {'required': {},
+                'optional': {'generator.value': {'none': False, 'type': bool}}}
 
     @staticmethod
     def sample():
