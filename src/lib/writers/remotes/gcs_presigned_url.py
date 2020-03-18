@@ -1,5 +1,4 @@
 import requests
-import os
 
 from io import StringIO
 from pandas import DataFrame
