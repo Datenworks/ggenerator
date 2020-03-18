@@ -13,7 +13,10 @@ class GCSPresignedUrlRemoteWriter(object):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
-        signed_url = self.specification['uri']
+        signed_url = self.specification.get('uri')
+
+        if not signed_url:
+            signed_url = input("Enter the signed url: ")
 
         buffer = StringIO()
 
