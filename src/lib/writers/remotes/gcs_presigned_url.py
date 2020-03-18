@@ -36,4 +36,4 @@ class GCSPresignedUrlRemoteWriter(object):
     @staticmethod
     def rules():
         return {'required': {},
-                'optional': {'uri': {'none': False, 'type': str}}
+                'optional': {'uri': {'none': False, 'type': str}}}
