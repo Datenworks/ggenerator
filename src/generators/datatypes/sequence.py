@@ -22,14 +22,8 @@ class SequenceType:
                                 'custom': [validate]}},
                 'optional': {}}
 
-    @staticmethod
-    def sample():
-        start_at = 0
-        step = 1
-        num_of_rows = 8
-        return [x for x in range(start_at,
-                                 start_at + num_of_rows * step,
-                                 step)]
+    def generate(self):
+        return self.generate_records(num_of_rows=5)
 
     def generate_records(self, num_of_rows) -> list:
         return self.__generate_sequence(num_of_rows, self.step)

@@ -22,14 +22,6 @@ class TestStringGenerator:
         for record in records:
             assert isinstance(record, str)
 
-    def test_sample_records_string(self, generate, sample):
-        records = generate(StringType,
-                           TEST_NUM_OF_RECORDS,
-                           length=TEST_LENGTH_OF_STRING)
-        sample_record = sample(StringType)
-        for record in records:
-            assert type(record) == type(sample_record)
-
     def test_length_strings(self, generate):
         records = generate(StringType,
                            TEST_NUM_OF_RECORDS,

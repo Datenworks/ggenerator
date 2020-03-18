@@ -25,3 +25,7 @@ class CharacterType:
     def generate_records(self, num_of_records) -> list:
         return [self.generate()
                 for _ in range(num_of_records)]
+
+    @staticmethod
+    def check(generator):
+        return True

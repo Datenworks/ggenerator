@@ -62,5 +62,22 @@ class TestCliExecutor:
 
         with runner.isolated_filesystem():
             result = runner.invoke(execute, ['list-generators'])
-            print(result)
             assert result.exit_code == 0
+
+    def test_sample_generators(self):
+        runner = CliRunner()
+
+        with runner.isolated_filesystem():
+            result = runner.invoke(execute, ['generate-sample',
+                                             '--type',
+                                             'integer'])
+            assert result.exit_code == 0
+
+    def test_sample_generators_invalid_type(self):
+        runner = CliRunner()
+
+        with runner.isolated_filesystem():
+            result = runner.invoke(execute, ['generate-sample',
+                                             '--type',
+                                             'abcdfg'])
+            assert "Type not found" in result.stdout

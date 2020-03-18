@@ -1,8 +1,7 @@
 import pytz
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import isoparse
-from datetime import timedelta
 
 
 class TimestampSequenceType:
@@ -11,8 +10,7 @@ class TimestampSequenceType:
     optional_arguments = False
 
     def __init__(self, start_at: str,
-                 datepart: str = "second", tz: str = "UTC",
-                 *args, **kwargs):
+                 datepart: str = "second", tz: str = "UTC", step: int = 1):
         """
         step must be
         second | minute | hour | day | month | year
@@ -20,6 +18,7 @@ class TimestampSequenceType:
         """
         self.start_date = self.__parse_to_datetime(start_at)
         self.datepart = datepart
+        self.step = step
         self.datepart_in_seconds = {
             "year": 365.25*24*60*60,
             "month": 365.25/12*24*60*60,
@@ -34,11 +33,20 @@ class TimestampSequenceType:
         return isoparse(iso_format_date)
 
     def __generate_next(self, delta) -> datetime:
-        return self.start_date + self.__delta_step(delta)
+        return (self.start_date + self.__delta_step(delta))\
+            .astimezone(tz=self.time_zone)
 
     def __delta_step(self, delta):
         seconds = self.datepart_in_seconds[self.datepart]
-        return timedelta(seconds=seconds * delta)
+        return timedelta(seconds=seconds * delta * self.step)
+
+    def generate(self):
+        return [dt.isoformat()
+                for dt in self.generate_records(num_of_records=5)]
+
+    def generate_records(self, num_of_records) -> list:
+        return [self.__generate_next(delta)
+                for delta in range(0, num_of_records)]
 
     @staticmethod
     def rules():
@@ -49,10 +57,10 @@ class TimestampSequenceType:
                 raise ValueError(f"Timestamp field `{value}` "
                                  "has a wrong format")
         return {'required': {'generator.start_at': {
-                                'none': False,
-                                'type': str,
-                                'custom': [validate]}},
-                'optional': {}}
+            'none': False,
+            'type': str,
+            'custom': [validate]}},
+            'optional': {}}
 
     @staticmethod
     def sample():
@@ -66,7 +74,3 @@ class TimestampSequenceType:
         date = (start + timedelta(seconds=random_second))
         date2 = (start + timedelta(seconds=random_second + 1))
         return [date, date2]
-
-    def generate_records(self, num_of_records) -> list:
-        return [self.__generate_next(delta)
-                for delta in range(0, num_of_records)]

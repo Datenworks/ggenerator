@@ -25,6 +25,13 @@ ggenerator generate --spec /file/path/example.json
 
 If you dont, [click here]() and learn how to create a specification.
 
+
+### MAC OS X Users
+If you use MAC OS X, you need to setup two environment variables, for GGENERATOR be able to get your default language system
+```bash
+export LC_ALL=en_US.UTF-8
+export LANG=en_US.UTF-8 
+```
 ## How to build it
 
 You want to use the develop version or something like that?

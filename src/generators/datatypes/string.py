@@ -22,10 +22,6 @@ class StringType:
                                 'custom': [validate]}},
                 'optional': {}}
 
-    @staticmethod
-    def sample():
-        return "".join(CharacterType().generate_records(40))
-
     def generate(self) -> str:
         return "".join(self.character().generate_records(self.length))
 

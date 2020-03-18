@@ -43,13 +43,6 @@ class FloatType:
                              }},
                 'optional': {}}
 
-    @staticmethod
-    def sample():
-        start_at = 0
-        end_at = 100
-        decimal_floor = 3
-        return round(uniform(start_at, end_at), decimal_floor)
-
     def generate(self) -> float:
         return round(uniform(self.start_at, self.end_at), self.decimal_floor)
 

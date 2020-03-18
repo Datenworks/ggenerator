@@ -5,16 +5,24 @@ import inspect
 class FakerProxy(object):
     def __init__(self, locale: str):
         self.faker = Faker(locale=locale)
-        self.blacklist_namespaces = ['generic', 'python']
-        self.list_of_generators = self.__get_generators_types()
+        self.blacklist_namespaces = ['generic']
+        self.blacklist_generator = ['time_series']
+        self.list_of_generators = self.__generators_types()
         self.__infer_types()
 
-    def __get_generators_types(self) -> list:
+    def __generators_types(self) -> list:
+        def is_not_namespace_blacklist(generator):
+            namespace = self.__get_namespace(generator)
+            return namespace not in self.blacklist_namespaces
+
+        def is_not_generator_blacklist(generator):
+            return generator.__name__ not in self.blacklist_generator
+
         return [generator for _, generator
                 in self.faker.factories[0].__dict__.items()
                 if callable(generator) and
-                self.__get_namespace(generator) not in
-                self.blacklist_namespaces]
+                is_not_generator_blacklist(generator) and
+                is_not_namespace_blacklist(generator)]
 
     def __infer_types(self) -> None:
         for generator_type in self.list_of_generators:

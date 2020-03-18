@@ -17,12 +17,6 @@ class TestCharGenerator:
         for record in records:
             assert isinstance(record, str)
 
-    def test_sample_records_int(self, generate, sample):
-        records = generate(CharacterType, TEST_NUM_OF_RECORDS)
-        sample_record = sample(CharacterType)
-        for record in records:
-            assert type(record) == type(sample_record)
-
     def test_length_chars(self, generate):
         records = generate(CharacterType, TEST_NUM_OF_RECORDS)
         for record in records:

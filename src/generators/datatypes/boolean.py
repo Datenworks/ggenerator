@@ -29,3 +29,12 @@ class BooleanType:
 
     def generate_records(self, num_of_records) -> list:
         return [self.generate() for _ in range(num_of_records)]
+
+    @staticmethod
+    def check(generator):
+        value = generator.get("value")
+
+        if value is not None:
+            return value is True or value is False
+
+        return True
