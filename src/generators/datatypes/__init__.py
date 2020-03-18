@@ -1,12 +1,6 @@
 import inspect
-from src.generators.datatypes.boolean import BooleanType
-from src.generators.datatypes.char import CharacterType
-from src.generators.datatypes.float import FloatType
-from src.generators.datatypes.integer import IntegerType
 from src.generators.datatypes.sequence_timestamp import TimestampSequenceType
 from src.generators.datatypes.sequence import SequenceType
-from src.generators.datatypes.string import StringType
-from src.generators.datatypes.timestamp import TimestampType
 from src.generators.datatypes.fakerproxy import FakerProxy
 from pandas import DataFrame, Series
 
@@ -14,10 +8,7 @@ from pandas import DataFrame, Series
 class Metadata(object):
     def __init__(self, locale):
         self.locale = locale
-        self.generators = (BooleanType, CharacterType,
-                           FloatType, IntegerType,
-                           TimestampType, TimestampSequenceType,
-                           StringType, SequenceType)
+        self.generators = (TimestampSequenceType, SequenceType)
         self.faker = FakerProxy(locale=self.locale)
 
     def info(self) -> DataFrame:

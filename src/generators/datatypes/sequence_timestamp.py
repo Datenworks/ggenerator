@@ -61,16 +61,3 @@ class TimestampSequenceType:
             'type': str,
             'custom': [validate]}},
             'optional': {}}
-
-    @staticmethod
-    def sample():
-        from random import randrange
-
-        start = isoparse("1970-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        end = isoparse("2019-01-01T00:00:00Z").replace(tzinfo=pytz.UTC)
-        delta = end - start
-        int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
-        random_second = randrange(int_delta)
-        date = (start + timedelta(seconds=random_second))
-        date2 = (start + timedelta(seconds=random_second + 1))
-        return [date, date2]

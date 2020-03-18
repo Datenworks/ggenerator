@@ -10,7 +10,7 @@ def simple_specification():
                         'generator': {},
                         'expected': 'int64'},
                        {'name': 'text',
-                        'type': 'string',
+                        'type': 'pystr',
                         'generator': {},
                         'expected': 'object'}]}
 
@@ -25,9 +25,9 @@ def argumented_specification():
                                       'step': 2},
                         'expected': 'int64'},
                        {'name': 'date',
-                        'type': 'timestamp',
-                        'generator': {'start_at': "2000-01-01T00:00:00Z",
-                                      'end_at':  '2019-12-31T01:00:00Z'},
+                        'type': 'date_time_between',
+                        'generator': {'start_date': "-10d",
+                                      'end_date':  '+1y'},
                         'expected': 'datetime64[ns]'}]}
 
 
@@ -48,8 +48,8 @@ def dataframe_sample(type, expected):
                 'locale': 'pt_BR',
                 'fields': [
                     {
-                        'name': 'boolean_field',
-                        'type': 'bool',
+                        'name': 'id',
+                        'type': type,
                         'generator': {},
                         'expected': expected
                     }
@@ -74,8 +74,8 @@ def sample_timestamp(type, expected):
             'fields': [{'name': 'id',
                         'type': type,
                         'generator': {
-                            'start_at': '2019-01-01T01:00:00Z',
-                            'end_at':  '2019-12-31T01:00:00Z'
+                            'start_date': '-1d',
+                            'end_date':  '+1d'
                         },
                         'expected': expected}]}
 
@@ -93,17 +93,17 @@ def sample_timestamp_sequence(type, expected):
 
 @fixture
 def integer_specification():
-    return sample('integer', 'int64')
+    return sample('pyint', 'int64')
 
 
 @fixture
 def bool_specification():
-    return dataframe_sample('bool', 'bool')
+    return dataframe_sample('boolean', 'bool')
 
 
 @fixture
 def char_specification():
-    return sample('char', 'object')
+    return sample('pystr', 'object')
 
 
 @fixture
@@ -113,7 +113,7 @@ def name_specification():
 
 @fixture
 def float_specification():
-    return sample('float', 'float64')
+    return sample('pyfloat', 'float64')
 
 
 @fixture
@@ -128,12 +128,12 @@ def integer_sequence_specification():
 
 @fixture
 def string_specification():
-    return sample('string', 'object')
+    return sample('pystr', 'object')
 
 
 @fixture
 def timestamp_specification():
-    return sample_timestamp('timestamp', 'datetime64[ns]')
+    return sample_timestamp('date_time_between', 'datetime64[ns]')
 
 
 @fixture

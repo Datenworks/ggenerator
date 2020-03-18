@@ -12,29 +12,27 @@ def valid_specfication(format_type):
                          'start_at': 0
                      }},
                     {'name': 'name',
-                     'type': 'string',
+                     'type': 'pystr',
                      'generator': {
                          'length': 10
                      }},
                     {'name': 'age',
-                     'type': 'integer',
+                     'type': 'pyint',
                      'generator': {
                          'start_at': 0,
                          'end_at': 120
                      }},
                     {'name': 'weight',
-                     'type': 'float',
+                     'type': 'pyfloat',
                      'generator': {
                          'start_at': 0.0,
                          'end_at': 500.0
                      }},
-                    {'name': 'sex',
-                     'type': 'char'},
                     {'name': 'birth',
-                     'type': 'timestamp',
+                     'type': 'date_between',
                      'generator': {
-                         'start_at': '1980-01-01 00:00:00',
-                         'end_at': '2020-01-01 00:00:00'
+                         'start_date': '1980-01-01 00:00:00',
+                         'end_date': '2020-01-01 00:00:00'
                      }},
                     {'name': 'hiring_at',
                      'type': 'timestamp:sequence',
