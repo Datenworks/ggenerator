@@ -23,15 +23,3 @@ class S3RemoteWriter(object):
         return {'required': {'options.bucket': {'none': False, 'type': str},
                              'options.key': {'none': False, 'type': str}},
                 'optional': {}}
-
-    def is_valid_destination(**kwargs):
-        options = kwargs.get('options')
-        if options is None:
-            raise ValueError(
-                            "Options not in specifications, please add it")
-        elif 'bucket' not in options or options['bucket'] == "":
-            raise ValueError("Please, add your bucket name")
-        elif 'key' not in options or options['key'] == "":
-            raise ValueError("Please, add your key/path")
-        elif options and 'bucket' in options and 'key' in options:
-            return True
