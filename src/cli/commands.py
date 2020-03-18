@@ -51,8 +51,11 @@ def generate_datasets(spec_path):
 
 
 def generate_dryrun(spec_path):
-    dryrun = DryRunHandler(arguments={'config_file': spec_path})
-    dryrun.generate()
+    try:
+        dryrun = DryRunHandler(arguments={'config_file': spec_path})
+        dryrun.generate()
+    except Exception as err:
+        click.echo(f"Error: {err}")
 
 
 @execute.command()
