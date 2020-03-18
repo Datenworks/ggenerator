@@ -24,9 +24,14 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Click',
-        'pandas',
-        'python-dateutil',
+        "python-dateutil>=2.8.1",
+        "pandas>=1.0.1",
+        "click>=7.1.1",
+        "tabulate>=0.8.6",
+        "requests>=2.23.0",
+        "gcsfs>=0.6.0",
+        "s3fs>=0.4.0",
+        "faker>=4.0.1",
     ],
     entry_points="""
         [console_scripts]
