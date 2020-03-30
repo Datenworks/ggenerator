@@ -1,6 +1,9 @@
 import os
+from os import getenv
 
 from setuptools import setup, find_packages
+
+VERSION = getenv("TRAVIS_TAG", "0.1")
 
 
 def read(fname):
@@ -20,7 +23,7 @@ setup(
     },
     py_modules=['main'],
     long_description=read("README.md"),
-    version="0.1",
+    version=VERSION,
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
