@@ -5,6 +5,10 @@
 
 **GGenerator** is a command line interface that generates randomic data for tests purposes. It aims to be a easy client for programmers, data scientists, data analysts and data engineers to create a huge amount of data with a variety of complex data using JSON specification and a few commands on terminal.
 
+## Requirements
+
+You need Python 3.7 or later and [pip](https://github.com/pypa/pip) to install and run **ggenerator** as a command line tool.
+
 ## How to install
 
 A easy way to install **ggenerator** cli is to use [pip](https://github.com/pypa/pip):
@@ -23,7 +27,7 @@ If you do have a specification file, you just follow the next steps:
 ggenerator generate --spec /file/path/example.json
 ```
 
-If you dont, [click here]() and learn how to create a specification.
+If you dont, [click here](https://github.com/datenworks/ggenerator/wiki) and learn how to create a specification.
 
 
 ### MAC OS X Users
