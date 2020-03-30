@@ -23,7 +23,7 @@ jobs:
         password: $PIPY_TOKEN
         on:
           tags: true
-          condition: "$TRAVIS_TAG =~ ^dev[0-9].[0-9].[0-9]$"
+          # condition: "$TRAVIS_TAG =~ ^dev[0-9].[0-9].[0-9] && TRAVIS_TAG =~ $TRAVIS_BRANCH$"
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
