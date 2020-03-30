@@ -3,9 +3,7 @@ branches:
   only:
   - master
   - develop
-  - ^v[0-9]+.[0-9]+.[0-9]+
-  - ^dev[0-9]+.[0-9]+.[0-9]+
-
+  - /^dev-.*$/
 python:
   - "3.7"
 
@@ -31,21 +29,21 @@ jobs:
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
 
-    - stage: PyPI Release Production
-      script: skip
-      deploy: &pipy
-        provider: pypi
-        user: "__token__"
-        distributions: "sdist bdist_wheel"
-        password: $PIPY_TOKEN
-        on:
-          tags: true
-          condition: "$TRAVIS_TAG =~ ^v[0-9]+.[0-9]+.[0-9]+$"
-      after_deploy:
-        - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
-        - chmod +x send.sh
-        - ./send.sh success $WEBHOOK_URL
-      if: type = push
+    # - stage: PyPI Release Production
+    #   script: skip
+    #   deploy: &pipy
+    #     provider: pypi
+    #     user: "__token__"
+    #     distributions: "sdist bdist_wheel"
+    #     password: $PIPY_TOKEN
+    #     on:
+    #       tags: true
+    #       condition: "$TRAVIS_TAG =~ ^v[0-9]+.[0-9]+.[0-9]+$"
+    #   after_deploy:
+    #     - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
+    #     - chmod +x send.sh
+    #     - ./send.sh success $WEBHOOK_URL
+    #   if: type = push
 
     - stage: Tests, Lint and Coverage
       name: "Environment Setup"
@@ -53,4 +51,3 @@ jobs:
         - pipenv run flake8
         - pipenv run python -m pytest --cov
       if: type = pull_request
-
