@@ -27,7 +27,6 @@ jobs:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-      if: type = push
 
     - stage: PyPI Release Production
       script: skip
