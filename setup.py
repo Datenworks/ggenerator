@@ -3,7 +3,15 @@ from os import getenv
 
 from setuptools import setup, find_packages
 
-VERSION = getenv("TRAVIS_TAG", "0.1")
+VERSION = getenv("TRAVIS_TAG")
+
+
+def get_version(version):
+    if version[0] == 'v':
+        return version[1:]
+    if version[:4] == 'dev-':
+        return version[4:]
+    raise ValueError("Malformed tag version")
 
 
 def read(fname):
@@ -23,7 +31,7 @@ setup(
     },
     py_modules=['main'],
     long_description=read("README.md"),
-    version=VERSION,
+    version=get_version(VERSION),
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
