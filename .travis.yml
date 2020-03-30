@@ -23,12 +23,10 @@ jobs:
         password: $PIPY_TOKEN
         on:
           tags: true
-          condition: "$TRAVIS_TAG =~ ^dev[0-9]+.[0-9]+.[0-9]+$"
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
         - ./send.sh success $WEBHOOK_URL
-      if: type = push
 
     - stage: PyPI Release Production
       script: skip
@@ -39,8 +37,7 @@ jobs:
         password: $PIPY_TOKEN
         on:
           tags: true
-          condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9].[0-9]$"
-          branch: master
+          condition: "$TRAVIS_TAG =~ ^v[0-9]+.[0-9]+.[0-9]+$"
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
