@@ -4,7 +4,7 @@ branches:
   - master
   - develop
   - /^v.*$/
-  - /^d-.*$/
+  - /^d.*$/
 python:
   - "3.7"
 cache: pipenv
