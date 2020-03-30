@@ -3,8 +3,7 @@ branches:
   only:
   - master
   - develop
-  - /^v.*$/
-  - /^d.*$/
+  - /^[0-9]\.[0-9].{0,2}$/
 python:
   - "3.7"
 cache: pipenv
@@ -26,7 +25,7 @@ jobs:
         password: $PIPY_TOKEN
         on:
           tags: true
-          condition: "$TRAVIS_TAG =~ ^d.*$"
+          condition: "$TRAVIS_TAG =~ ^[0-9].[0-9]d.{0,1}$"
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
@@ -42,7 +41,7 @@ jobs:
         password: $PIPY_TOKEN
         on:
           tags: true
-          condition: "$TRAVIS_TAG =~ ^v.*$"
+          condition: "$TRAVIS_TAG =~ ^[0-9].[0-9]$"
       after_deploy:
         - wget https://raw.githubusercontent.com/DiscordHooks/travis-ci-discord-webhook/master/send.sh
         - chmod +x send.sh
