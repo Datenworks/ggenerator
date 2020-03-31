@@ -1,5 +1,5 @@
 # GGenerator
-[![Travis Build Status](https://travis-ci.org/Datenworks/ggenerator.svg?branch=master)](https://travis-ci.org/Datenworks/ggenerator)
+[![Travis Build Status](https://travis-ci.com/Datenworks/ggenerator.svg?branch=master)](https://travis-ci.com/Datenworks/ggenerator)
 
 ## What is it? 
 
