@@ -3,7 +3,7 @@ from os import getenv
 
 from setuptools import setup, find_packages
 
-VERSION = getenv("TRAVIS_TAG")
+VERSION = getenv("TRAVIS_TAG", 'v0.0')
 
 
 def get_version(version):
