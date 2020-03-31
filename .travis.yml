@@ -38,9 +38,10 @@ jobs:
       deploy: &pipy
         skip_cleanup: true
         provider: pypi
-        user: "__token__"
         distributions: "sdist bdist_wheel"
-        password: $PIPY_TOKEN
+        user: "__token__"
+        password:
+          secure: "OMMjlGm7akYhf/Ndd+VKu3W9NziJ8u2iWbcpOywbmGhVw4rdSk4EBl/xIK9kFZ1828qQDOaOeY12ngGiRRGr3ZmYhO7agWoNPLbz+/mU3h0B5uCIPsD4w0jO1cS4HMF1xetecJQSuPetuNEeiCzJaLiCI0VJNpPgp3zv7vTofIxLauHFvoUSIwUnpc5TI0qvG5UhRMkdSqJkeLnhnQmzRBzkgHHHtYnTT6Uxp3tRiWVed8Pqt5zyY87F27OSuASRJuh7KnnT33ZHmoh4m9uWaFfhdUrlE7BkwXgAODQ7kzUt8zIttIIfNTAFYgGEhqIKQR3b6r16xhzyWLWcfyuycBcfICA3Ez1GNleykToHh+1HaLqdqCZEGmo6zEAKZX1pc/wSBusQhrl2mYKr6pP56HfeToIGmhXZVqk34qwP8ZMumLWaBrWZMxTjJxz049Ho044k6GZ+ANphldA7gdMMhMHpQLMBRyJoD/Cact0ufBBA4r4MiDvbhY+++omd8KNI9XkeTt7XEokUQo5CQAq3nXK2ce78ZzjDSccGTio14o1/7nI/PwUFsElMMnjE8qJCfADnTa2T0FL4FkxZ1PsCStvGjON6ruwLeen3J9fLIH3t5Y0NvcohNn469KFUlQDybuLf6FYoRpGw8z2qqAG0WnieGwha9MMtKH1z7dKnRlo="
         on:
           tags: true
           condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9]$"
