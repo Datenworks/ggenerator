@@ -1,0 +1,11 @@
+[run]
+omit = src/tests/*
+source = src/cli
+         src/generators
+         src/lib
+         src/__init__.py
+         main.py
+
+[report]
+fail_under = 90
+omit = src/tests/*
