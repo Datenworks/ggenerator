@@ -12,7 +12,8 @@ class S3RemoteWriter(object):
     def write(self, dataframe: DataFrame) -> None:
         s3 = S3FileSystem(anon=False)
         options = self.specification['options']
-        key = f's3://{options["bucket"]}/{options["key"]}'
+        content_type = "--content-type='text/csv'"
+        key = f's3://{options["bucket"]}/{options["key"] + content_type}'
         self.formatter.format(dataframe=dataframe,
                               path_or_buffer=s3.open(key, mode='w'))
 
