@@ -68,7 +68,8 @@ class SQLFormatter(object):
         if options.get("mode") == "append":
             return self.append(options, dataframe)
         if options.get("mode") == "replace":
-            return self.truncate(options, dataframe)
+            self.replace(options, dataframe)
+            return self.append(options, dataframe)
 
     def append(self, options: dict, dataframe: DataFrame) -> str:
         table_name = options.get("table_name")
