@@ -5,12 +5,13 @@ class SQLFormatter(object):
     """Class that receive pandas dataframe
     and write it down in CSV format
     """
-    key = 'csv'
+    key = 'sql'
 
     def __init__(self, specification):
         self.default = {
             'mode': 'append',
-            'batch_size': 50
+            'batch_size': 50,
+            'index': False
         }
         self.specification = specification
 
@@ -18,7 +19,7 @@ class SQLFormatter(object):
     def rules():
         return {
             'required': {
-                'options.tablename': {'none': False, 'type': str}
+                'options.table_name': {'none': False, 'type': str}
             },
             'optional': {
                 'options.sep': {'none': False, 'type': str},
