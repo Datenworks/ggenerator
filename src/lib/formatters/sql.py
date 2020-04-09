@@ -3,7 +3,7 @@ from pandas import DataFrame
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
-    and write it down in sql format
+    and write it down in .sql format
     """
     key = 'sql'
 
@@ -15,24 +15,27 @@ class SQLFormatter(object):
     def rules():
         return {
             'required': {
-                'options.tablename': {'none': False, 'type': str},
+                'options.table_name': {'none': False, 'type': str},
                 'options.mode': {'none': False, 'type': str}
             },
             'optional': {
-                'options.sep': {'none': False, 'type': str},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str}
             }
         }
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
-        """Format dataframe to csv.
+        """Format dataframe to .sql.
 
         Parameters:
          - dataframe - pandas.DataFrame: dataframe containing the records.
         """
         parameters = self.default
-        options = self.specification.get('options', {})
+        options = self.specification.get(
+            'datasets', {}).get(
+                'sample', {}).get(
+                    'format', {}).get(
+                        'options', {})
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
@@ -50,13 +53,16 @@ class SQLFormatter(object):
         table_name = options.get('table_name')
         fields = "("
         columns = dataframe.columns
+        cont = 0
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
             if schema[new_field].get('quoted') is True:
-                fields += columns[new_field] + " " + "'" + sql_type + "'" + ","
+                fields += columns[cont] + " " + "'" + sql_type + "'" + ","
+                cont += 1
             else:
-                fields += columns[new_field] + " " + sql_type + ","
-
+                fields += columns[cont] + " " + sql_type + ","
+                cont += 1
+        fields += ");"
         return f"DROP TABLE IF EXISTS {table_name} \n"\
                f"CREATE TABLE {table_name}" \
             f"{fields}"
@@ -94,6 +100,7 @@ class SQLFormatter(object):
     def __parse_row(self, row, columns, schema: dict = {}):
         row_value_sql = "("
         first_column = True
+        cont = 0
         for column in columns:
             if not first_column:
                 row_value_sql += ", "
@@ -101,8 +108,10 @@ class SQLFormatter(object):
             if column in schema \
                     and schema.get(column).get('quoted'):
                 row_value_sql += "'" + row[column] + "'"
+                cont += 1
             else:
                 row_value_sql += row[column]
+                cont += 1
         row_value_sql += ")"
         return row_value_sql
 
