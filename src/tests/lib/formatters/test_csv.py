@@ -1,5 +1,4 @@
 from io import StringIO
-from datetime import datetime
 
 from src.lib.formatters.csv import CsvFormatter
 from src.tests.lib.formatters.fixtures import *  # noqa: F403, F401
