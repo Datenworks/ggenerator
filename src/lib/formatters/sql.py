@@ -10,8 +10,6 @@ class SQLFormatter(object):
     def __init__(self, specification):
         self.default = {
             'mode': 'append',
-            'index': True,
-            'index_label':
             'myindexcolumn',
             'batch_size': 50
         }
