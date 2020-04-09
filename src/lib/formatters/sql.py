@@ -3,9 +3,9 @@ from pandas import DataFrame
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
-    and write it down in CSV format
+    and write it down in sql format
     """
-    key = 'csv'
+    key = 'sql'
 
     def __init__(self, specification):
         self.default = {'mode': 'append', 'index': False, 'batch_size': 50}
@@ -15,7 +15,8 @@ class SQLFormatter(object):
     def rules():
         return {
             'required': {
-                'options.tablename': {'none': False, 'type': str}
+                'options.tablename': {'none': False, 'type': str},
+                'options.mode': {'none': False, 'type': str}
             },
             'optional': {
                 'options.sep': {'none': False, 'type': str},
@@ -44,8 +45,21 @@ class SQLFormatter(object):
             else:
                 path_or_buffer.write(data)
 
-    def replace(self, options: dict):
-        pass
+    def replace(self, options: dict, dataframe: DataFrame):
+        schema = options.get('schema')
+        table_name = options.get('table_name')
+        fields = "("
+        columns = dataframe.columns
+        for new_field in schema:
+            sql_type = schema[new_field].get('sqltype')
+            if schema[new_field].get('quoted') is True:
+                fields += columns[new_field] + " " + "'" + sql_type + "'" + ","
+            else:
+                fields += columns[new_field] + " " + sql_type + ","
+
+        return f"DROP TABLE IF EXISTS {table_name} \n"\
+               f"CREATE TABLE {table_name}" \
+            f"{fields}"
 
     def truncate(self, options: dict):
         pass
@@ -53,6 +67,8 @@ class SQLFormatter(object):
     def __format(self, options, dataframe):
         if options.get("mode") == "append":
             return self.append(options, dataframe)
+        if options.get("mode") == "replace":
+            return self.truncate(options, dataframe)
 
     def append(self, options: dict, dataframe: DataFrame) -> str:
         table_name = options.get("table_name")
