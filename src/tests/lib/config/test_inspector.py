@@ -62,3 +62,19 @@ class TestConfigurationInspector(object):
         with raises(ValueError):
             inspector.inspect_rules(rules=fixed_key_rule,
                                     configuration=dictionary_sample)
+
+    def test_expected_values_rule(self,
+                                  expected_values_rule,
+                                  dictionary_sample):
+        inspector = ConfigurationInpector()
+
+        with raises(ValueError):
+            inspector.inspect_rules(rules=expected_values_rule,
+                                    configuration=dictionary_sample)
+
+    def test_custom_rule(self, custom_rule, dictionary_sample):
+        inspector = ConfigurationInpector()
+
+        with raises(ValueError):
+            inspector.inspect_rules(rules=custom_rule,
+                                    configuration=dictionary_sample)

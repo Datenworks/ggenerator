@@ -241,3 +241,49 @@ def valid_dryrun():
                 "generator": {"start_at": 10}
             }]
             }
+
+
+@fixture
+def invalid_dateformat():
+    return {"datasets": {
+        "teste3": {
+            "fields": [{"type": "integer:sequence",
+                                "name": "id",
+                                "generator": {"start_at": 1}},
+                       {"type": "date_time",
+                                "name": "created_at",
+                                "generator": {}}],
+            "size": 1000,
+            "locale": "pt_BR",
+            "format": {"type": "csv",
+                       "options": {
+                           "header": True,
+                           "sep": ","
+                       }},
+            "serializers": {
+                "to": [{"type": "file",
+                        "uri": "/tmp/teste.csv"}]}}}}
+
+
+@fixture
+def malformed_json():
+    return "[]]"
+
+
+@fixture
+def unknown_type_spec():
+    return {"datasets": {
+        "teste3": {
+            "fields": [{"type": "timestamp",
+                        "name": "created_at",
+                        "generator": {}}],
+            "size": 1000,
+            "locale": "pt_BR",
+            "format": {"type": "csv",
+                       "options": {
+                           "header": True,
+                           "sep": ","
+                       }},
+            "serializers": {
+                "to": [{"type": "file",
+                        "uri": "/tmp/teste.csv"}]}}}}

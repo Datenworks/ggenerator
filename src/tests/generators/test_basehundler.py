@@ -210,3 +210,26 @@ class TestBaseHundler(object):
         with pytest.raises(ValueError):
             handler.valid_specification('invalid_spec.json')
         remove('invalid_spec.json')
+
+    def test_date_format_invalid_specification(self,
+                                               mocker,
+                                               invalid_dateformat):
+        with patch('builtins.open',
+                   mock_open(read_data=json.dumps(invalid_dateformat))):
+            handler = BaseHandler()
+            with pytest.raises(ValueError):
+                handler.valid_specification('')
+
+    def test_malformed_json(self, mocker, malformed_json):
+        with patch('builtins.open',
+                   mock_open(read_data=malformed_json)):
+            handler = BaseHandler()
+            with pytest.raises(ValueError):
+                handler.valid_specification('')
+
+    def test_unknown_type(self, mocker, unknown_type_spec):
+        with patch('builtins.open',
+                   mock_open(read_data=json.dumps(unknown_type_spec))):
+            handler = BaseHandler()
+            with pytest.raises(ValueError):
+                handler.valid_specification('')

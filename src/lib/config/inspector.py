@@ -40,14 +40,12 @@ class ConfigurationInpector(object):
             raise ValueError(f"JSON Key `{trace}` must be "
                              f"of type `{expected_type}`")
 
-        if 'values' not in expected:
-            return
-
-        expected_values = expected.get('values', None)
-        if self.__validate_values(value=value,
-                                  expected_values=expected_values):
-            raise ValueError(f"JSON Key `{trace}` is invalid, these are "
-                             f"the possible options: `{expected_values}`")
+        if 'values' in expected:
+            expected_values = expected.get('values', None)
+            if self.__validate_values(value=value,
+                                      expected_values=expected_values):
+                raise ValueError(f"JSON Key `{trace}` is invalid, these are "
+                                 f"the possible options: `{expected_values}`")
 
         custom_rules = expected.get('custom', [])
         if len(custom_rules) > 0:
@@ -65,10 +63,10 @@ class ConfigurationInpector(object):
 
         if match(r'[{\[].*[}\]]', current_key):
             if current_key[1] == '*':  # Iterable
+                if len(configuration) <= 0:
+                    raise ValueError(f"Key '{trace}{current_key}' has "
+                                     "no valid values")
                 if current_key[0] == '[':  # List
-                    if len(configuration) <= 0:
-                        raise ValueError(f"Key '{trace}{current_key}' has "
-                                         "no valid values")
                     for index in range(0, len(configuration)):
                         item = configuration[index]
                         key_trace = f"{trace}{index}."
