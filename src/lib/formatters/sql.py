@@ -8,7 +8,7 @@ class SQLFormatter(object):
     key = 'csv'
 
     def __init__(self, specification):
-        self.default = {'mode': 'append', 'index': False, 'batch_size': 50}
+        self.default = {'mode': 'append', 'index': True, 'index_label': 'myindexcolumn', 'batch_size': 50}
         self.specification = specification
 
     @staticmethod
@@ -33,6 +33,9 @@ class SQLFormatter(object):
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
+
+        if parameters['index']:
+            dataframe[parameters.get('index_label')] = dataframe.index
 
         if dataframe.shape[0] > 0:
             data = self.__format(options=parameters, dataframe=dataframe)
@@ -64,7 +67,7 @@ class SQLFormatter(object):
                 self.insert_statement(dataframe[index:index+batch_size],
                                       table_name,
                                       schema)
-            query += "\n\n"
+            query += ";\n\n"
         return query
 
     def __parse_rows(self, dataframe: DataFrame, schema: dict = {}) -> list:
@@ -83,9 +86,9 @@ class SQLFormatter(object):
             first_column = False
             if column in schema \
                     and schema.get(column).get('quoted'):
-                row_value_sql += "'" + row[column] + "'"
+                row_value_sql += "'" + str(row[column]) + "'"
             else:
-                row_value_sql += row[column]
+                row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
 
@@ -95,7 +98,7 @@ class SQLFormatter(object):
         values = self.__parse_rows(dataframe, schema)
         return f"INSERT INTO {table_name} " \
                f"({', '.join(columns)}) \n"\
-               "VALUES\n" + ',\n'.join(values)
+               "VALUES\n" + ",\n".join(values)
 
     @staticmethod
     def check(*args, **kwargs):
