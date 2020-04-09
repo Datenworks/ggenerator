@@ -23,13 +23,6 @@ class CsvFormatter(object):
                     'options.index': {'none': False, 'type': bool}
                 }}
 
-    def __date_format(self, parameters):
-        date_format = parameters.get('date_format')
-        if date_format == 'iso':
-            pass
-        else:
-            return ''
-
     def format(self, dataframe: DataFrame, path_or_buffer) -> None:
         """Format dataframe to csv.
 
@@ -55,7 +48,3 @@ class CsvFormatter(object):
         if dataframe.shape[0] > 0:
             return dataframe.to_csv(path_or_buf=path_or_buffer,
                                     quoting=csv.QUOTE_NONNUMERIC, **parameters)
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True
