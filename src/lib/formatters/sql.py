@@ -5,7 +5,7 @@ class SQLFormatter(object):
     """Class that receive pandas dataframe
     and write it down in CSV format
     """
-    key = 'csv'
+    key = 'sql'
 
     def __init__(self, specification):
         self.default = {'mode': 'append', 'index': False, 'batch_size': 50}
@@ -15,7 +15,7 @@ class SQLFormatter(object):
     def rules():
         return {
             'required': {
-                'options.tablename': {'none': False, 'type': str}
+                'options.table_name': {'none': False, 'type': str}
             },
             'optional': {
                 'options.sep': {'none': False, 'type': str},
@@ -83,9 +83,9 @@ class SQLFormatter(object):
             first_column = False
             if column in schema \
                     and schema.get(column).get('quoted'):
-                row_value_sql += "'" + row[column] + "'"
+                row_value_sql += "'" + str(row[column]) + "'"
             else:
-                row_value_sql += row[column]
+                row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
 
