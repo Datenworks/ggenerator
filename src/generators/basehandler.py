@@ -2,7 +2,7 @@ import json
 
 from pandas import DataFrame, Series
 
-from src.lib.config import general_rules
+from src.lib.config import general_rules, datetime_rules
 from src.lib.config.fields import FieldsConfiguration
 from src.lib.config.formatters import FormattersConfiguration
 from src.lib.config.inspector import ConfigurationInpector
@@ -64,6 +64,19 @@ class BaseHandler(object):
             self.__validate_fields(dataset, trace)
             self.__validate_format(dataset, trace)
             self.__validate_serializers(dataset, trace)
+
+        for dataset_key in configuration['datasets']:
+            has_datetime = False
+            dataset = configuration['datasets'][dataset_key]
+            for field in dataset['fields']:
+                if field.get('type') == 'date_time':
+                    has_datetime = True
+                    break
+            if has_datetime:
+                self.inspector \
+                    .inspect_rules(rules=datetime_rules,
+                                   configuration=dataset)
+
         return configuration
 
     def generate_dataframe(self, specification: dict, size) -> DataFrame:
