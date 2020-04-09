@@ -14,29 +14,38 @@ class BaseHandler(object):
     def __init__(self):
         self.inspector = ConfigurationInpector()
 
-    def __validate(self, clazz, iterable, **kwargs):
+    def __validate(self, clazz, iterable, trace, **kwargs):
         for item in iterable:
-            rules = clazz.get_rules(item, **kwargs)
+            try:
+                rules = clazz.get_rules(item, **kwargs)
+            except ValueError as err:
+                type_ = item.get('type', '')
+                name = item.get('name', type_)
+                message = (f"Key {trace}{name} ({err})")
+                raise ValueError(message)
             self.inspector.inspect_rules(rules=rules['required'],
                                          configuration=item)
             self.inspector.inspect_rules(rules=rules['optional'],
                                          configuration=item,
                                          optional=True)
 
-    def __validate_fields(self, dataset):
+    def __validate_fields(self, dataset, trace):
         fields = dataset['fields']
         self.__validate(clazz=FieldsConfiguration,
                         iterable=fields,
-                        locale=dataset['locale'])
+                        locale=dataset['locale'],
+                        trace=f"{trace}fields.")
 
-    def __validate_format(self, dataset):
+    def __validate_format(self, dataset, trace):
         self.__validate(clazz=FormattersConfiguration,
-                        iterable=[dataset['format']])
+                        iterable=[dataset['format']],
+                        trace=f"{trace}format.")
 
-    def __validate_serializers(self, dataset):
+    def __validate_serializers(self, dataset, trace):
         serializers = dataset['serializers']['to']
         self.__validate(clazz=SerializersConfiguration,
-                        iterable=serializers)
+                        iterable=serializers,
+                        trace=f"{trace}serializers.to.")
 
     def valid_specification(self, file_path):
         with open(file_path, 'r') as file:
@@ -51,9 +60,10 @@ class BaseHandler(object):
         for dataset_key in configuration['datasets']:
             dataset = configuration['datasets'][dataset_key]
 
-            self.__validate_fields(dataset)
-            self.__validate_format(dataset)
-            self.__validate_serializers(dataset)
+            trace = f"datasets.{dataset_key}."
+            self.__validate_fields(dataset, trace)
+            self.__validate_format(dataset, trace)
+            self.__validate_serializers(dataset, trace)
         return configuration
 
     def generate_dataframe(self, specification: dict, size) -> DataFrame:
