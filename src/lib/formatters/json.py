@@ -8,7 +8,8 @@ class JsonFormatter(object):
     key = 'json-array'
 
     def __init__(self, specification={}):
-        self.default = {'orient': 'records'}
+        self.default = {'orient': 'records',
+                        'date_unit': 's'}
         self.specification = specification
 
     @staticmethod
