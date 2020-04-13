@@ -11,12 +11,12 @@ def pandas_dataframe(data):
 
 @fixture
 def pandas_dataframe_with_data():
-    data = [{"Column": "Value_1", "Column2": "Value_12"},
-            {"Column": "Value_2", "Column2": "Value_12"},
-            {"Column": "Value_3", "Column2": "Value_12"},
-            {"Column": "Value_4", "Column2": "Value_12"},
-            {"Column": "Value_5", "Column2": "Value_12"},
-            {"Column": "Value_6", "Column2": "Value_12"}]
+    data = [{"Column1": "Value_1", "Column2": "Value_12"},
+            {"Column1": "Value_2", "Column2": "Value_12"},
+            {"Column1": "Value_3", "Column2": "Value_12"},
+            {"Column1": "Value_4", "Column2": "Value_12"},
+            {"Column1": "Value_5", "Column2": "Value_12"},
+            {"Column1": "Value_6", "Column2": "Value_12"}]
     return pandas_dataframe(data=data)
 
 
@@ -25,16 +25,13 @@ def pandas_dataframe_without_data():
     return pandas_dataframe(data=[])
 
 
-@fixture
-def schema_quoted_error():
-    quoted = {"schema": {
-                "field": {"quoted": "oi"}}}
-    return quoted
+def dataframe_with_datetime():
+    from dateutil.parser import isoparse
 
+    data = [{"Column": "Value_1", "at": "2020-10-01 00:00:00"},
+            {"Column": "Value_2", "at": "2020-10-01 00:00:00"},
+            {"Column": "Value_3", "at": "2020-10-01 00:00:00"}]
+    df = pandas_dataframe(data=data)
+    df['at'] = df['at'].apply(lambda x: isoparse(x))
 
-@fixture
-def schema_sqltype_error():
-    sqltype = {"mode": "replace",
-               "schema": {
-                "field": {"sqltype": 23, "quoted": True}}}
-    return sqltype
+    return df

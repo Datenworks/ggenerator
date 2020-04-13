@@ -1,5 +1,6 @@
 import csv
 
+from datetime import datetime
 from pandas import DataFrame
 
 
@@ -31,6 +32,18 @@ class CsvFormatter(object):
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
+
+        date_format = options.get('date_format')
+        if date_format == 'epoch':
+            parameters.pop('date_format')
+            epoch = datetime(1970, 1, 1)
+            for column in dataframe.columns:
+                if dataframe[column].dtype == 'datetime64[ns]':
+                    dataframe[column] = \
+                        dataframe[column].apply(lambda x: int((x - epoch)
+                                                .total_seconds()))
+        elif date_format == 'iso':
+            parameters.update({'date_format': '%Y-%m-%dT%H:%M:%SZ'})
 
         if dataframe.shape[0] > 0:
             return dataframe.to_csv(path_or_buf=path_or_buffer,

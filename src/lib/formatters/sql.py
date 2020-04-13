@@ -81,6 +81,10 @@ class SQLFormatter(object):
         pass
 
     def __format(self, parameters, dataframe):
+        if parameters.get('index'):
+            dataframe.index.name = parameters.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
+
         if parameters.get("mode") == "append":
             return self.append(parameters=parameters, dataframe=dataframe)
 
