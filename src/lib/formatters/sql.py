@@ -29,6 +29,28 @@ class SQLFormatter(object):
             }
         }
 
+    def to_sql(self, dataframe: DataFrame, schema: str, conn) -> str:
+        parameters = self.default
+        options = self.specification.get('options', {})
+        parameters.update(options)
+
+        table_name = parameters.get("table_name")
+        index_flag = parameters.get("index")
+        index_label = parameters.get("index_label", None)
+        batch_size = parameters.get("batch_size")
+        mode = parameters.get("mode")
+
+        try:
+            dataframe.to_sql(con=conn,
+                             name=table_name,
+                             schema=schema,
+                             if_exists=mode,
+                             index=index_flag,
+                             index_label=index_label,
+                             chunksize=batch_size)
+        except Exception as err:
+            Exception(err)
+
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
         """Format dataframe to sql script.
 
