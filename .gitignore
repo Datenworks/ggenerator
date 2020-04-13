@@ -17,6 +17,7 @@ env/
 htmlcov/
 jspm_packages/
 node_modules/
+*.sql
 
 build/
 dist/
