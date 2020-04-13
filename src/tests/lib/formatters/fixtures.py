@@ -20,3 +20,18 @@ def pandas_dataframe_with_data():
 @fixture
 def pandas_dataframe_without_data():
     return pandas_dataframe(data=[])
+
+
+@fixture
+def schema_quoted_error():
+    quoted = {"schema": {
+                "field": {"quoted": "oi"}}}
+    return quoted
+
+
+@fixture
+def schema_sqltype_error():
+    sqltype = {"mode": "replace",
+               "schema": {
+                "field": {"sqltype": 23, "quoted": True}}}
+    return sqltype

@@ -13,22 +13,30 @@ class SqlFormatter(object):
     @staticmethod
     def rules():
         def replace_rule(options):
-            mode = options.get("mode")
-            fields = options.get("schema")
-            types_fields = options.get(fields)
-            mode = options.get("mode")
-            if mode not in ["append", "replace", "truncate", "", None]:
-                raise ValueError(
-                                "SQL suports only 'append', \
-                                'replace' and 'truncate' ")
-            if mode == "replace" and types_fields not in ["sqltype", "quoted"]:
-                raise ValueError(
-                        "Schema fields suports only 'sqltype' and 'quoted'")
+            schema = options.get("schema")
+            for key in schema.keys():
+                field = schema.get(key)
+                mode = options.get("mode")
+                if mode == "replace":
+                    if not isinstance(field.get("sqltype", None), str):
+                        raise ValueError(
+                            "The Mode replace needs'sqltype' in Schema fields")
+
+        def quoted_rule(schema):
+            for key in schema.keys():
+                field = schema.get(key)
+                if not isinstance(field.get("quoted", None), bool):
+                    raise ValueError(" Schema fields required 'quoted'")
+
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str},
-                'options.mode': {'none': False, 'type': str},
-                'options.schema': {'none': False, 'type': dict},
+                'options.mode': {'none': False,
+                                 'type': str,
+                                 'values': ["append", "replace", "truncate"]},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]},
                 'options': {'none': False,
                             'type': dict,
                             'custom': [replace_rule]}
@@ -39,14 +47,3 @@ class SqlFormatter(object):
                 'options.index_label': {'none': False, 'type': str},
             }
         }
-
-    @staticmethod
-    def check(options):
-        
-        mode = options.get("mode")
-        if mode in ["append", "replace", "truncate", "", None]:
-            pass
-        else:
-            raise ValueError(
-                            "SQL suports only 'append', \
-                            'replace' and 'truncate' ")
