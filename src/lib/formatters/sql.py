@@ -3,12 +3,16 @@ from pandas import DataFrame
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
-    and write it down in CSV format
+    and write it down in SQL format
     """
     key = 'sql'
 
     def __init__(self, specification):
-        self.default = {'mode': 'append', 'index': False, 'batch_size': 50}
+        self.default = {
+            'mode': 'append',
+            'batch_size': 50,
+            'index': False
+        }
         self.specification = specification
 
     @staticmethod
@@ -25,7 +29,7 @@ class SQLFormatter(object):
         }
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
-        """Format dataframe to csv.
+        """Format dataframe to SQL.
 
         Parameters:
          - dataframe - pandas.DataFrame: dataframe containing the records.
@@ -64,7 +68,7 @@ class SQLFormatter(object):
                 self.insert_statement(dataframe[index:index+batch_size],
                                       table_name,
                                       schema)
-            query += "\n\n"
+            query += ";\n\n"
         return query
 
     def __parse_rows(self, dataframe: DataFrame, schema: dict = {}) -> list:
@@ -95,7 +99,7 @@ class SQLFormatter(object):
         values = self.__parse_rows(dataframe, schema)
         return f"INSERT INTO {table_name} " \
                f"({', '.join(columns)}) \n"\
-               "VALUES\n" + ',\n'.join(values)
+               "VALUES\n" + ",\n".join(values)
 
     @staticmethod
     def check(*args, **kwargs):
