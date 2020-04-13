@@ -110,7 +110,3 @@ class SQLFormatter(object):
         return f"INSERT INTO {table_name} " \
                f"({', '.join(columns)}) \n"\
                "VALUES\n" + ',\n'.join(values)
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True
