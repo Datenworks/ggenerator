@@ -35,6 +35,24 @@ class GeneratorsHandler(object):
         dataframe = self.base.generate_dataframe(specification, size)
         return dataframe
 
+    def __before_format(self, formatter):
+        '''
+           Supposed to checks if a method called 'before_format'
+        exists and if it does, call it.
+        '''
+        pass
+
+    def __before_write(self, writer):
+        '''
+           Checks if a method called 'before_write'
+        exists and if it does, call it.
+        '''
+        method = 'before_write'
+
+        if hasattr(writer, method) and \
+           callable(getattr(writer, method)):
+            writer.before_write()
+
     def write_dataframe(self,
                         dataframe: DataFrame,
                         destination: dict,
@@ -42,9 +60,11 @@ class GeneratorsHandler(object):
         file_format = format_['type']
         formatter_class = formatters[file_format]
         formatter = formatter_class(specification=format_)
+        self.__before_format(formatter)
 
         destination_type = destination['type']
         writer_class = writers[destination_type]
         writer = writer_class(formatter=formatter, specification=destination)
+        self.__before_write(writer)
 
         return writer.write(dataframe=dataframe)
