@@ -19,6 +19,7 @@ class SQLFormatter(object):
                 'options.mode': {'none': False, 'type': str}
             },
             'optional': {
+                'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str}
             }
@@ -31,15 +32,11 @@ class SQLFormatter(object):
          - dataframe - pandas.DataFrame: dataframe containing the records.
         """
         parameters = self.default
-        options = self.specification.get(
-            'datasets', {}).get(
-                'sample', {}).get(
-                    'format', {}).get(
-                        'options', {})
+        options = self.specification.get('options', {})
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
-            data = self.__format(options=parameters, dataframe=dataframe)
+            data = self.__format(parameters=parameters, dataframe=dataframe)
             if isinstance(path_or_buffer, str):
                 with open(path_or_buffer, 'w') as f:
                     f.write(data)
@@ -57,30 +54,38 @@ class SQLFormatter(object):
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
             if schema[new_field].get('quoted') is True:
-                fields += columns[cont] + " " + "'" + sql_type + "'" + ","
+                fields += columns[cont] + " " + "'" + sql_type + "'"
                 cont += 1
             else:
-                fields += columns[cont] + " " + sql_type + ","
+                fields += columns[cont] + " " + sql_type
                 cont += 1
+            if cont < len(schema):
+                fields += ", "
         fields += ");"
-        return f"DROP TABLE IF EXISTS {table_name} \n"\
+        return f"DROP TABLE IF EXISTS {table_name};\n"\
                f"CREATE TABLE {table_name}" \
-            f"{fields}"
+               f"{fields}"
 
     def truncate(self, options: dict):
         pass
 
-    def __format(self, options, dataframe):
-        if options.get("mode") == "append":
-            return self.append(options, dataframe)
-        if options.get("mode") == "replace":
-            self.replace(options, dataframe)
-            return self.append(options, dataframe)
+    def __format(self, parameters, dataframe):
+        if parameters.get('index'):
+            dataframe.index.name = parameters.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
 
-    def append(self, options: dict, dataframe: DataFrame) -> str:
-        table_name = options.get("table_name")
-        schema = options.get("schema", {})
-        batch_size = options['batch_size']
+        if parameters.get("mode") == "append":
+            return self.append(parameters, dataframe)
+        if parameters.get("mode") == "replace":
+            replace = self.replace(parameters, dataframe)
+            append = self.append(parameters, dataframe)
+            return f"{replace} \n"\
+                   f"{append}"
+
+    def append(self, parameters: dict, dataframe: DataFrame) -> str:
+        table_name = parameters.get("table_name")
+        schema = parameters.get("schema", {})
+        batch_size = parameters['batch_size']
         query = ""
         for index in range(0, dataframe.shape[0], batch_size):
             query += \
@@ -100,18 +105,15 @@ class SQLFormatter(object):
     def __parse_row(self, row, columns, schema: dict = {}):
         row_value_sql = "("
         first_column = True
-        cont = 0
         for column in columns:
             if not first_column:
                 row_value_sql += ", "
             first_column = False
             if column in schema \
                     and schema.get(column).get('quoted'):
-                row_value_sql += "'" + row[column] + "'"
-                cont += 1
+                row_value_sql += "'" + str(row[column]) + "'"
             else:
-                row_value_sql += row[column]
-                cont += 1
+                row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
 

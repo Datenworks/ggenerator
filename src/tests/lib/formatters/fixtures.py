@@ -74,10 +74,10 @@ def fixture_spec_default():
                 ],
                 "format": {
                     "type": "sql",
-                    "table_name": "My_table",
-                    "mode": "append",
                     "options": {
-                        "index": 'false'
+                        "index": 'false',
+                        "table_name": "My_table",
+                        "mode": "append"
                     }
                 },
                 "serializers": {
@@ -143,8 +143,8 @@ def fixture_spec_replace():
                     }
                 ],
                 "format": {
+                    "type": "sql",
                     "options": {
-                        "type": "sql",
                         "table_name": "My_table",
                         "mode": "replace",
                         "schema": {
