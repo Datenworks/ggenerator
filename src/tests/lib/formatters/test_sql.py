@@ -55,7 +55,11 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
+<<<<<<< HEAD
                     'Column1': {
+=======
+                    'Column': {
+>>>>>>> origin/develop
                         'quoted': True
                     }
                 }

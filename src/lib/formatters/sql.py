@@ -8,7 +8,11 @@ class SQLFormatter(object):
     key = 'sql'
 
     def __init__(self, specification):
-        self.default = {'mode': 'append', 'index': False, 'batch_size': 50}
+        self.default = {
+            'mode': 'append',
+            'batch_size': 50,
+            'index': False
+        }
         self.specification = specification
 
     @staticmethod
