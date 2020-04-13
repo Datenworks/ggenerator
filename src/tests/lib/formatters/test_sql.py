@@ -1,6 +1,5 @@
 from src.lib.formatters.sql import SQLFormatter
 from src.tests.lib.formatters.fixtures import *  # noqa: F403, F401
-import pytest
 from io import StringIO
 
 
