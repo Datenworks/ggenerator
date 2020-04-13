@@ -15,7 +15,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -36,7 +36,7 @@ class TestSqlFormatter(object):
                 'batch_size': 2,
                 'mode': 'append',
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -55,7 +55,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -75,7 +75,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -100,7 +100,7 @@ class TestSqlFormatter(object):
                 'index': index_flag,
                 'index_label': index_label,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }

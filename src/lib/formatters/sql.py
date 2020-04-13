@@ -70,7 +70,7 @@ class SQLFormatter(object):
                 self.insert_statement(dataframe[index:index+batch_size],
                                       table_name,
                                       schema)
-            query += "\n\n"
+            query += ";\n\n"
         return query
 
     def insert_statement(self, dataframe: DataFrame, table_name: str,
