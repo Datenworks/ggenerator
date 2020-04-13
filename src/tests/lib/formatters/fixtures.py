@@ -25,6 +25,7 @@ def pandas_dataframe_without_data():
     return pandas_dataframe(data=[])
 
 
+@fixture
 def dataframe_with_datetime():
     from dateutil.parser import isoparse
 
