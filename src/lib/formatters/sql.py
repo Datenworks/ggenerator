@@ -126,7 +126,3 @@ class SQLFormatter(object):
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True

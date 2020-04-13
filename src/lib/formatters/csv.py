@@ -35,7 +35,3 @@ class CsvFormatter(object):
         if dataframe.shape[0] > 0:
             return dataframe.to_csv(path_or_buf=path_or_buffer,
                                     quoting=csv.QUOTE_NONNUMERIC, **parameters)
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True
