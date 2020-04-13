@@ -58,7 +58,8 @@ class SQLFormatter(object):
         cont = 0
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
-            if schema[new_field].get('quoted') is True:
+            quoted = schema[new_field].get('quoted')
+            if quoted is True:
                 fields += columns[cont] + " " + "'" + sql_type + "'"
                 cont += 1
             else:

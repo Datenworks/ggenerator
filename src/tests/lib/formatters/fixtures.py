@@ -97,83 +97,27 @@ def fixture_spec_default():
 
 @fixture
 def fixture_spec_replace():
-    specification = {
-        "datasets": {
-            "sample": {
-                "size": 10,
-                "locale": "pt_BR",
-                "fields": [
-                    {
-                        "type": "integer:sequence",
-                        "name": "id",
-                        "generator": {
-                            "start_at": 1
-                        }
-                    },
-                    {
-                        "type": "name",
-                        "name": "nome",
-                        "generator": {}
-                    },
-                    {
-                        "type": "pyint",
-                        "name": "idade",
-                        "generator": {
-                            "max_value": 120
-                        }
-                    },
-                    {
-                        "type": "pyfloat",
-                        "name": "peso",
-                        "generator": {
-                            "positive": 'false',
-                            "min_value": 0,
-                            "max_value": 250
-                        }
-                    },
-                    {
-                        "type": "job",
-                        "name": "trabalho",
-                        "generator": {}
-                    },
-                    {
-                        "type": "future_datetime",
-                        "name": "data",
-                        "generator": {}
-                    }
-                ],
-                "format": {
-                    "type": "sql",
-                    "options": {
-                        "table_name": "My_table",
-                        "mode": "replace",
-                        "schema": {
-                            "id": {"sqltype": "INTEGER NOT NULL", "quoted":
-                                   'false'},
-                            "name": {"sqltype": "VARCHAR(50)", "quoted":
-                                     'true'},
-                            "age": {"sqltype": "INTEGER NOT NULL", "quoted":
-                                    'false'},
-                            "weight": {"sqltype": "INTEGER NOT NULL", "quoted":
-                                       'false'},
-                            "job": {"sqltype": "VARCHAR(50)", "quoted":
-                                    'true'},
-                            "datetime": {"sqltype": "DATETIME", "quoted":
-                                         'false'}
-                        }
-
-                    }
-                },
-                "serializers": {
-                    "to": [
-                        {
-                            "type": "file",
-                            "uri": "/home/tadeu/Desktop/dataset.sql"
-                        }
-                    ]
-                }
-            }
+    true = True
+    false = False
+    specification = {"options": {
+        "table_name": "My_table",
+        "mode": "replace",
+        "schema": {
+            "id": {"sqltype": "INTEGER NOT NULL", "quoted":
+                   false},
+            "name": {"sqltype": "VARCHAR(50)", "quoted":
+                     false},
+            "age": {"sqltype": "INTEGER NOT NULL", "quoted":
+                    false},
+            "weight": {"sqltype": "INTEGER NOT NULL", "quoted":
+                       true},
+            "job": {"sqltype": "VARCHAR(50)", "quoted":
+                    false},
+            "datetime": {"sqltype": "DATETIME", "quoted":
+                         false}
         }
+
+    }
     }
 
     return specification

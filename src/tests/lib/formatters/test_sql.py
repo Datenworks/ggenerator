@@ -140,8 +140,9 @@ class TestSqlFormatter(object):
                                     replace_dataframe,
                                     fixture_spec_replace):
         buffer = StringIO()
-        sql_writer = SQLFormatter(fixture_spec_replace)
+        sql_writer = SQLFormatter(specification=fixture_spec_replace)
         sql_writer.format(replace_dataframe, buffer)
 
         assert isinstance(buffer.getvalue(), str) is True
+        assert "DROP TABLE IF EXISTS".lower() in buffer.getvalue().lower()
         #  assert len(buffer.getvalue()) == 0
