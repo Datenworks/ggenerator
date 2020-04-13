@@ -19,27 +19,29 @@ class SQLFormatter(object):
     def rules():
         return {
             'required': {
-                'options.table_name': {'none': False, 'type': str}
+                'options.table_name': {'none': False, 'type': str},
+                'options.batch_size': {'none': False, 'type': int},
             },
             'optional': {
-                'options.sep': {'none': False, 'type': str},
+                'options.mode': {'none': False, 'type': str},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str}
             }
         }
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
-        """Format dataframe to SQL.
+        """Format dataframe to sql script.
 
         Parameters:
          - dataframe - pandas.DataFrame: dataframe containing the records.
+         - path_or_buffer: path-like string or a File handler
         """
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
-            data = self.__format(options=parameters, dataframe=dataframe)
+            data = self.__format(parameters=parameters, dataframe=dataframe)
             if isinstance(path_or_buffer, str):
                 with open(path_or_buffer, 'w') as f:
                     f.write(data)
@@ -54,14 +56,14 @@ class SQLFormatter(object):
     def truncate(self, options: dict):
         pass
 
-    def __format(self, options, dataframe):
-        if options.get("mode") == "append":
-            return self.append(options, dataframe)
+    def __format(self, parameters, dataframe):
+        if parameters.get("mode") == "append":
+            return self.append(parameters=parameters, dataframe=dataframe)
 
-    def append(self, options: dict, dataframe: DataFrame) -> str:
-        table_name = options.get("table_name")
-        schema = options.get("schema", {})
-        batch_size = options['batch_size']
+    def append(self, parameters: dict, dataframe: DataFrame) -> str:
+        table_name = parameters.get("table_name")
+        schema = parameters.get("schema", {})
+        batch_size = parameters['batch_size']
         query = ""
         for index in range(0, dataframe.shape[0], batch_size):
             query += \
@@ -70,6 +72,14 @@ class SQLFormatter(object):
                                       schema)
             query += ";\n\n"
         return query
+
+    def insert_statement(self, dataframe: DataFrame, table_name: str,
+                         schema: dict):
+        columns = dataframe.columns
+        values = self.__parse_rows(dataframe, schema)
+        return f"INSERT INTO {table_name} " \
+               f"({', '.join(columns)}) \n"\
+               "VALUES\n" + ',\n'.join(values)
 
     def __parse_rows(self, dataframe: DataFrame, schema: dict = {}) -> list:
         columns = dataframe.columns
@@ -92,14 +102,6 @@ class SQLFormatter(object):
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
-
-    def insert_statement(self, dataframe: DataFrame, table_name: str,
-                         schema: dict):
-        columns = dataframe.columns
-        values = self.__parse_rows(dataframe, schema)
-        return f"INSERT INTO {table_name} " \
-               f"({', '.join(columns)}) \n"\
-               "VALUES\n" + ",\n".join(values)
 
     @staticmethod
     def check(*args, **kwargs):
