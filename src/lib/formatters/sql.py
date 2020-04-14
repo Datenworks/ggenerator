@@ -54,17 +54,11 @@ class SQLFormatter(object):
         schema = options.get('schema')
         table_name = options.get('table_name')
         fields = "("
-        columns = dataframe.columns
         cont = 0
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
-            quoted = schema[new_field].get('quoted')
-            if quoted is True:
-                fields += columns[cont] + " " + "'" + sql_type + "'"
-                cont += 1
-            else:
-                fields += columns[cont] + " " + sql_type
-                cont += 1
+            fields += new_field + " " + sql_type
+            cont += 1
             if cont < len(schema):
                 fields += ", "
         fields += ");"
@@ -124,7 +118,7 @@ class SQLFormatter(object):
                 row_value_sql += ", "
             first_column = False
             if column in schema \
-                    and schema.get(column).get('quoted'):
+                    and schema.get(column).get('quoted') is True:
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])

@@ -106,13 +106,13 @@ def fixture_spec_replace():
             "id": {"sqltype": "INTEGER NOT NULL", "quoted":
                    false},
             "name": {"sqltype": "VARCHAR(50)", "quoted":
-                     false},
+                     true},
             "age": {"sqltype": "INTEGER NOT NULL", "quoted":
                     false},
             "weight": {"sqltype": "INTEGER NOT NULL", "quoted":
-                       true},
+                       false},
             "job": {"sqltype": "VARCHAR(50)", "quoted":
-                    false},
+                    true},
             "datetime": {"sqltype": "DATETIME", "quoted":
                          false}
         }
@@ -128,43 +128,43 @@ def replace_dataframe():
     data = [
         {
             "id": 1,
-            "nome": "Sophie Silveira",
-            "idade": 65,
-            "peso": 194.16350529,
-            "trabalho": "Fisioterapeuta",
-            "data": 1587241737000
+            "name": "Sophie Silveira",
+            "age": 65,
+            "weight": 194.16350529,
+            "job": "Fisioterapeuta",
+            "datetime": 1587241737000
         },
         {
             "id": 2,
-            "nome": "Davi Lucca Duarte",
-            "idade": 105,
-            "peso": 19.41,
-            "trabalho": "Cabo",
-            "data": 1588771828000
+            "name": "Davi Lucca Duarte",
+            "age": 105,
+            "weight": 19.41,
+            "job": "Cabo",
+            "datetime": 1588771828000
         },
         {
             "id": 3,
-            "nome": "Luna da Rosa",
-            "idade": 56,
-            "peso": 104.987,
-            "trabalho": "Faxineiro",
-            "data": 1588995002000
+            "name": "Luna da Rosa",
+            "age": 56,
+            "weight": 104.987,
+            "job": "Faxineiro",
+            "datetime": 1588995002000
         },
         {
             "id": 4,
-            "nome": "Vitor Melo",
-            "idade": 74,
-            "peso": 170.79,
-            "trabalho": "Sociólogo",
-            "data": 1587715890000
+            "name": "Vitor Melo",
+            "age": 74,
+            "weight": 170.79,
+            "job": "Sociólogo",
+            "datetime": 1587715890000
         },
         {
             "id": 5,
-            "nome": "Catarina Correia",
-            "idade": 6,
-            "peso": 178.9275,
-            "trabalho": "Médico geneticista",
-            "data": 1588948730000
+            "name": "Catarina Correia",
+            "age": 6,
+            "weight": 178.9275,
+            "job": "Médico geneticista",
+            "datetime": 1588948730000
         }
     ]
     return pandas_dataframe(data=data)
