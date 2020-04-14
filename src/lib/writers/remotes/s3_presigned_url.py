@@ -8,22 +8,23 @@ from pandas import DataFrame
 
 class S3PresignedUrlRemoteWriter(object):
     key = 's3-url'
+    file_path = None
 
     def __init__(self, formatter, specification):
         self.formatter = formatter
         self.specification = specification
 
-    def write(self, dataframe: DataFrame):
+    def before_write(self):
         options = self.specification.get('options')
 
-        if options is not None:
-            file_path = options['path']
-        else:
+        if options is None:
             file_path = input("Enter the signed url json file path: ")
             if os.path.isfile(file_path) is False:
                 raise ValueError('File not found')
+            self.file_path = file_path
 
-        with open(file_path, 'r') as file:
+    def write(self, dataframe: DataFrame):
+        with open(self.file_path, 'r') as file:
             singed_post = json.loads(file.read())
 
         signed_url = singed_post.get('url')

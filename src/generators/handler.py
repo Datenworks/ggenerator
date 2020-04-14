@@ -3,6 +3,7 @@ from pandas import DataFrame
 from src.lib.formatters import formatters
 from src.lib.writers import writers
 from src.generators.basehandler import BaseHandler
+from src.lib.config.serializers import SerializersConfiguration
 
 
 class GeneratorsHandler(object):
@@ -50,7 +51,7 @@ class GeneratorsHandler(object):
         method = 'before_write'
 
         if hasattr(writer, method) and \
-           callable(getattr(writer, method)):
+           callable(writer.before_write):
             writer.before_write()
 
     def write_dataframe(self,
@@ -63,8 +64,12 @@ class GeneratorsHandler(object):
         self.__before_format(formatter)
 
         destination_type = destination['type']
+
+        if destination_type not in writers:
+            destination_type = \
+                SerializersConfiguration.get_database_type(destination)
+
         writer_class = writers[destination_type]
         writer = writer_class(formatter=formatter, specification=destination)
         self.__before_write(writer)
-
         return writer.write(dataframe=dataframe)
