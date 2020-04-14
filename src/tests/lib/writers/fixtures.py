@@ -11,12 +11,12 @@ def pandas_dataframe(data):
 
 @fixture
 def pandas_dataframe_with_data():
-    data = [{"Column1": "Value_1", "Column2": "Value_12"},
-            {"Column1": "Value_2", "Column2": "Value_12"},
+    data = [{"Column1": "Value_1", "Column2": "Value_10"},
+            {"Column1": "Value_2", "Column2": "Value_11"},
             {"Column1": "Value_3", "Column2": "Value_12"},
-            {"Column1": "Value_4", "Column2": "Value_12"},
-            {"Column1": "Value_5", "Column2": "Value_12"},
-            {"Column1": "Value_6", "Column2": "Value_12"}]
+            {"Column1": "Value_4", "Column2": "Value_13"},
+            {"Column1": "Value_5", "Column2": "Value_14"},
+            {"Column1": "Value_6", "Column2": "Value_15"}]
     return pandas_dataframe(data=data)
 
 
@@ -62,7 +62,7 @@ def sql_specification_writer():
         'options': {
             'engine': 'mysql',
             'method': 'direct',
-            'host': 'dbhost',
+            'host': '172.17.0.2',
             'port': 3306,
             'database': 'mydb',
             'username': 'root'

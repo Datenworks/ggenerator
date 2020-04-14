@@ -74,7 +74,7 @@ class SQLFormatter(object):
                              index_label=index_label,
                              chunksize=batch_size)
         except Exception as err:
-            Exception(err)
+            raise Exception(err)
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
         """Format dataframe to sql script.
