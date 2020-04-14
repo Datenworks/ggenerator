@@ -1,4 +1,5 @@
 from pandas import DataFrame
+from sqlalchemy.exc import DatabaseError
 
 
 class SQLFormatter(object):
@@ -74,7 +75,12 @@ class SQLFormatter(object):
                              index_label=index_label,
                              chunksize=batch_size)
         except Exception as err:
-            raise Exception(err)
+            raise ValueError("Error: Check your credentials "
+                             "(username, "
+                             "password, "
+                             "host, "
+                             "port, "
+                             "database)\n", err)
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
         """Format dataframe to sql script.
