@@ -227,6 +227,15 @@ def file_writer_sample():
 
 
 @fixture
+def sql_writer_sample():
+    return {'type': 'sql',
+            'options': {
+                'method': 'cli',
+                'engine': 'mysql'
+            }}
+
+
+@fixture
 def s3_writer_sample():
     return {'type': 's3'}
 
