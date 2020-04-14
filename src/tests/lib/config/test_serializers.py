@@ -37,6 +37,12 @@ class TestSerializersConfiguration(object):
         assert rules is not None
         assert isinstance(rules, dict) is True
 
+    def test_sql(self, sql_writer_sample):
+        rules = SerializersConfiguration.get_rules(sql_writer_sample)
+
+        assert rules is not None
+        assert isinstance(rules, dict) is True
+
     def test_unknown(self, unknown_writer_sample):
         with raises(ValueError):
             SerializersConfiguration.get_rules(unknown_writer_sample)
