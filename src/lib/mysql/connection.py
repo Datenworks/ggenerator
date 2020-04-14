@@ -3,24 +3,23 @@ from MySQLdb import Connect
 
 class MysqlConnection(object):
 
-    def __init__(self, host, user, password, port, database):
+    def __init__(self, host, username, password, port, database, **kwargs):
         self.connection = Connect(host=host,
-                                  user=user,
+                                  user=username,
                                   passwd=password,
                                   port=port,
                                   db=database)
 
-    def __exit__(self, type, value, traceback):
-        self.close()
+    def __enter__(self):
+        return self
 
-    def __del__(self):
+    def __exit__(self, type, value, traceback):
         self.close()
 
     def execute_query(self, query, *args):
         with self.connection \
                  .cursor() as cursor:
-            cursor.execute(query, *args)
-            query_result = cursor.info()
+            query_result = cursor.execute(query, *args)
 
         self.connection.commit()
         return query_result
