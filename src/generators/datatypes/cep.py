@@ -1,4 +1,4 @@
-from faker.providers import BaseProvider, address
+from faker.providers import BaseProvider
 from faker import Faker
 
 
@@ -7,7 +7,6 @@ class CepProvider(BaseProvider):
 
     def __init__(self, locale='pt_BR'):
         self.locale = locale
-        self.generator = address
 
     def cep(self, mask=False):
         self.mask = mask
