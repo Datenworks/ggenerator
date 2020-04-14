@@ -8,7 +8,6 @@ class TestCep:
         assert isinstance(cep, str)
         assert cep[5] == '-'
         assert len(cep) == 9
-        assert cepProvider().locale == 'pt_BR'
 
     def test_cep_without_mask(self):
         cepProvider = CepProvider()
@@ -16,4 +15,3 @@ class TestCep:
         assert isinstance(cep, str)
         assert cep[5] != '-'
         assert len(cep) == 8
-        assert cepProvider().locale == 'pt_BR'
