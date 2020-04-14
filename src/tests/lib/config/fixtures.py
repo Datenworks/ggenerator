@@ -212,6 +212,11 @@ def json_format_sample():
 
 
 @fixture
+def sql_format_sample():
+    return {'type': 'sql'}
+
+
+@fixture
 def unknown_format_sample():
     return {'type': 'unknown'}
 

@@ -50,19 +50,34 @@ class SQLFormatter(object):
             else:
                 path_or_buffer.write(data)
 
-    def replace(self, options: dict):
-        pass
+    def replace(self, options: dict, dataframe):
+        table_name = options.get("table_name")
+        query = f"DROP TABLE IF EXISTS {table_name};\n\n"
+        query += self.append(options, dataframe)
+        return query
 
-    def truncate(self, options: dict):
-        pass
+    def truncate(self, options: dict, dataframe):
+        table_name = options.get("table_name")
+        query = f"TRUNCATE {table_name};\n\n"
+        query += self.append(options, dataframe)
+        return query
 
     def __format(self, parameters, dataframe):
+        mode = parameters.get("mode")
+
         if parameters.get('index'):
             dataframe.index.name = parameters.get('index_label')
             dataframe = dataframe.reset_index(level=0)
 
-        if parameters.get("mode") == "append":
+        if mode == "append":
             return self.append(parameters=parameters, dataframe=dataframe)
+        elif mode == "replace":
+            return self.replace(parameters, dataframe)
+        elif mode == "truncate":
+            return self.truncate(parameters, dataframe)
+        else:
+            raise ValueError(f"Mode `{mode}` is invalid, expected:"
+                             " 'append', 'truncate' or 'replace'")
 
     def append(self, parameters: dict, dataframe: DataFrame) -> str:
         table_name = parameters.get("table_name")
@@ -77,7 +92,8 @@ class SQLFormatter(object):
             query += ";\n\n"
         return query
 
-    def insert_statement(self, dataframe: DataFrame, table_name: str,
+    def insert_statement(self, dataframe: DataFrame,
+                         table_name: str,
                          schema: dict):
         columns = dataframe.columns
         values = self.__parse_rows(dataframe, schema)
@@ -106,7 +122,3 @@ class SQLFormatter(object):
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True
