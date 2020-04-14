@@ -1,14 +1,11 @@
-from faker.providers.address.pt_BR import Provider
+from faker.providers.address import Provider as AddressProvider
 from faker import Faker
 
 
-class CepProvider(Provider):
+class CepProvider(AddressProvider):
     namespace = 'address'  # NAMESPACE SHOULD BE ADDRESS
 
-    def __init__(self, locale='pt_BR'):
-        self.locale = locale
-
-    def cep(self, mask=False):
+    def postcode(self, mask=False):
         self.mask = mask
         self.fake = Faker(locale='pt_BR')
         cep = self.fake.postcode()
