@@ -5,12 +5,14 @@ from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
 from src.lib.writers.remotes.sql import SQLWriter
+from src.lib.writers.remotes.azure import AzureBlobWriter
 
 writers = {
     's3-url': S3PresignedUrlRemoteWriter,
     's3': S3RemoteWriter,
     'gcs': GCSRemoteWriter,
-    'sql': SQLWriter
+    'sql': SQLWriter,
+    'azure-bs': AzureBlobWriter
 }
 
 uri_writers = {
