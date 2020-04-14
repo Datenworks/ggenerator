@@ -1,5 +1,4 @@
 from pandas import DataFrame
-from sqlalchemy.exc import DatabaseError
 
 
 class SQLFormatter(object):
