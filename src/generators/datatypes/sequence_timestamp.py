@@ -56,8 +56,13 @@ class TimestampSequenceType:
             except ValueError:
                 raise ValueError(f"Timestamp field `{value}` "
                                  "has a wrong format")
-        return {'required': {'generator.start_at': {
-            'none': False,
-            'type': str,
-            'custom': [validate]}},
-            'optional': {}}
+        return {
+            'required': {
+                'generator.start_at': {
+                    'none': False,
+                    'type': str,
+                    'custom': [validate]
+                }
+            },
+            'optional': {}
+        }

@@ -249,17 +249,12 @@ class TestGeneratorsHandler(object):
 
     def test_invalid_no_ids_spec_handler(self, mocker,
                                          invalid_no_ids_dataset):
-        from os.path import abspath
-        from uuid import uuid4
-
-        absolute_path = abspath(".")
-        file_name = uuid4()
-        with open(f"{absolute_path}/{file_name}", "w") as f:
-            json.dump(invalid_no_ids_dataset, f)
-
-        with pytest.raises(ValueError):
-            GeneratorsHandler({"config_file": f"{absolute_path}/{file_name}"})
-        remove(f"{absolute_path}/{file_name}")
+        with patch('builtins.open',
+                   mock_open(read_data=json
+                             .dumps(invalid_no_ids_dataset))) as mock:
+            with pytest.raises(ValueError):
+                GeneratorsHandler({"config_file": ""})
+            mock.assert_called()
 
     def test_invalid_no_dataset_spec_handler(self, mocker,
                                              no_datasets_specification):

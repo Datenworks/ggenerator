@@ -67,10 +67,7 @@ def invalid_specfication(format_type):
                      'type': 'integer:sequence'},
                     {'name': 'reference_id',
                      'type': 'integer:sequence',
-                     'generator': {
-                         'start_at': 2147483649,
-                         'end_at': -2147483649
-                     }},
+                     'generator': {}},
                     {'name': 'level',
                      'type': 'integer',
                      'generator': {
@@ -128,9 +125,7 @@ def invalid_specfication(format_type):
                      'type': 'timestamp:sequence'},
                     {'name': 'fired_at',
                      'type': 'timestamp:sequence',
-                     'generator': {
-                         'start_at': '20:11:02 20201102'
-                     }},
+                     'generator': {}},
                 ],
                 'format': {
                     'type': format_type
@@ -278,3 +273,22 @@ def invalid_s3_key():
             }}
         ]
     }
+
+
+@fixture
+def expected_values_rule():
+    return {'items.{*}.age': {'none': False,
+                              'type': str,
+                              'values': ['3', '9']}}
+
+
+def custom_rule_method(value):
+    if value != 3:
+        raise ValueError("Test value is different, expected: 3")
+
+
+@fixture
+def custom_rule():
+    return {'items.{*}.age': {'none': False,
+                              'type': str,
+                              'custom': [custom_rule_method]}}

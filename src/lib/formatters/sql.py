@@ -64,7 +64,12 @@ class SQLFormatter(object):
 
     def __format(self, parameters, dataframe):
         mode = parameters.get("mode")
-        if parameters.get("mode") == "append":
+
+        if parameters.get('index'):
+            dataframe.index.name = parameters.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
+
+        if mode == "append":
             return self.append(parameters=parameters, dataframe=dataframe)
         elif mode == "replace":
             return self.replace(parameters, dataframe)
