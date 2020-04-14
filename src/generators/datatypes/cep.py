@@ -1,13 +1,12 @@
-from faker.providers import BaseProvider, address
+from faker.providers.address.pt_BR import Provider
 from faker import Faker
 
 
-class CepProvider(BaseProvider):
-    namespace = address  # NAMESPACE SHOULD BE ADDRESS
+class CepProvider(Provider):
+    namespace = 'address'  # NAMESPACE SHOULD BE ADDRESS
 
     def __init__(self, locale='pt_BR'):
         self.locale = locale
-        self.generator = self.namespace
 
     def cep(self, mask=False):
         self.mask = mask
