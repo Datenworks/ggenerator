@@ -25,7 +25,8 @@ class SQLFormatter(object):
                 if mode == "replace":
                     if not isinstance(field.get("sqltype", None), str):
                         raise ValueError(
-                            "The Mode replace needs'sqltype' in Schema fields")
+                                "The Mode replace needs "
+                                "'sqltype' in Schema fields")
 
         def quoted_rule(schema):
             for key in schema.keys():
