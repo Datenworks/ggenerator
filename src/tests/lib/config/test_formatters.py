@@ -19,6 +19,12 @@ class TestFormattersConfiguration(object):
         assert rules is not None
         assert isinstance(rules, dict) is True
 
+    def test_sql(self, sql_format_sample):
+        rules = FormattersConfiguration.get_rules(sql_format_sample)
+
+        assert rules is not None
+        assert isinstance(rules, dict) is True
+
     def test_unknown(self, unknown_format_sample):
         with raises(ValueError):
             FormattersConfiguration.get_rules(unknown_format_sample)
