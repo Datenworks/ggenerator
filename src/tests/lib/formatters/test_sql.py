@@ -158,10 +158,9 @@ class TestSqlFormatter(object):
         assert len(text) > 0
         assert f'TRUNCATE {table_name}' in text
 
-    def test_replace_(
-                                    self,
-                                    replace_dataframe,
-                                    fixture_spec_replace):
+    def test_replace(self,
+                     replace_dataframe,
+                     fixture_spec_replace):
         buffer = StringIO()
         sql_writer = SQLFormatter(specification=fixture_spec_replace)
         sql_writer.format(replace_dataframe, buffer)
