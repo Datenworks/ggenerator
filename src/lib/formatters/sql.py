@@ -17,15 +17,40 @@ class SQLFormatter(object):
 
     @staticmethod
     def rules():
+        def replace_rule(options):
+            schema = options.get("schema")
+            for key in schema.keys():
+                field = schema.get(key)
+                mode = options.get("mode")
+                if mode == "replace":
+                    if not isinstance(field.get("sqltype", None), str):
+                        raise ValueError(
+                                "The Mode replace needs "
+                                "'sqltype' in Schema fields")
+
+        def quoted_rule(schema):
+            for key in schema.keys():
+                field = schema.get(key)
+                if not isinstance(field.get("quoted", None), bool):
+                    raise ValueError(" Schema fields required 'quoted'")
+
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str},
-                'options.mode': {'none': False, 'type': str}
+                'options.mode': {'none': False,
+                                 'type': str,
+                                 'values': ["append", "replace", "truncate"]},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]},
+                'options': {'none': False,
+                            'type': dict,
+                            'custom': [replace_rule]}
             },
             'optional': {
                 'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
-                'options.index_label': {'none': False, 'type': str}
+                'options.index_label': {'none': False, 'type': str},
             }
         }
 
@@ -66,21 +91,31 @@ class SQLFormatter(object):
                f"CREATE TABLE {table_name}" \
                f"{fields}"
 
-    def truncate(self, options: dict):
-        pass
+    def truncate(self, options: dict, dataframe):
+        table_name = options.get("table_name")
+        query = f"TRUNCATE {table_name};\n\n"
+        query += self.append(options, dataframe)
+        return query
 
     def __format(self, parameters, dataframe):
+        mode = parameters.get("mode")
+
         if parameters.get('index'):
             dataframe.index.name = parameters.get('index_label')
             dataframe = dataframe.reset_index(level=0)
 
-        if parameters.get("mode") == "append":
-            return self.append(parameters, dataframe)
-        if parameters.get("mode") == "replace":
+        if mode == "append":
+            return self.append(parameters=parameters, dataframe=dataframe)
+        elif mode == "replace":
             replace = self.replace(parameters, dataframe)
             append = self.append(parameters, dataframe)
             return f"{replace} \n"\
                    f"{append}"
+        elif mode == "truncate":
+            return self.truncate(parameters, dataframe)
+        else:
+            raise ValueError(f"Mode `{mode}` is invalid, expected:"
+                             " 'append', 'truncate' or 'replace'")
 
     def append(self, parameters: dict, dataframe: DataFrame) -> str:
         table_name = parameters.get("table_name")
@@ -95,7 +130,8 @@ class SQLFormatter(object):
             query += ";\n\n"
         return query
 
-    def insert_statement(self, dataframe: DataFrame, table_name: str,
+    def insert_statement(self, dataframe: DataFrame,
+                         table_name: str,
                          schema: dict):
         columns = dataframe.columns
         values = self.__parse_rows(dataframe, schema)
@@ -124,7 +160,3 @@ class SQLFormatter(object):
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True

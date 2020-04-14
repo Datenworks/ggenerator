@@ -1,7 +1,7 @@
-from io import StringIO
-
+from pytest import raises
 from src.lib.formatters.sql import SQLFormatter
 from src.tests.lib.formatters.fixtures import *  # noqa: F403, F401
+from io import StringIO
 
 
 class TestSqlFormatter(object):
@@ -15,7 +15,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -36,7 +36,7 @@ class TestSqlFormatter(object):
                 'batch_size': 2,
                 'mode': 'append',
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -55,7 +55,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -75,7 +75,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'schema': {
-                    'Column': {
+                    'Column1': {
                         'quoted': True
                     }
                 }
@@ -87,6 +87,33 @@ class TestSqlFormatter(object):
         for index, row in pandas_dataframe_with_data.iterrows():
             for column in pandas_dataframe_with_data.columns:
                 assert row[column].lower() in buffer.getvalue().lower()
+
+    def test_sql_script_contain_rows_and_index(self,
+                                               pandas_dataframe_with_data):
+        buffer = StringIO()
+        index_flag = True
+        index_label = 'myindexlabel'
+        csv_writer = SQLFormatter(specification={
+            'options': {
+                'table_name': 'mytable',
+                'batch_size': 2,
+                'index': index_flag,
+                'index_label': index_label,
+                'schema': {
+                    'Column1': {
+                        'quoted': True
+                    }
+                }
+            }
+        })
+        csv_writer.format(dataframe=pandas_dataframe_with_data,
+                          path_or_buffer=buffer)
+
+        assert index_label in buffer.getvalue().lower()
+        for index, row in pandas_dataframe_with_data.iterrows():
+            for column in pandas_dataframe_with_data.columns:
+                assert row[column].lower() in buffer.getvalue().lower()
+                assert str(index) in buffer.getvalue().lower()
 
     def test_writting_dataframe_without_records(self,
                                                 pandas_dataframe_without_data):
@@ -108,17 +135,14 @@ class TestSqlFormatter(object):
         assert isinstance(buffer.getvalue(), str) is True
         assert len(buffer.getvalue()) == 0
 
-    def test_sql_script_contain_rows_and_index(self,
-                                               pandas_dataframe_with_data):
+    def test_truncate(self, pandas_dataframe_with_data):
         buffer = StringIO()
-        index_flag = True
-        index_label = 'myindexlabel'
-        csv_writer = SQLFormatter(specification={
+        table_name = 'mytable'
+        sql_writer = SQLFormatter(specification={
             'options': {
-                'table_name': 'mytable',
+                'mode': 'truncate',
+                'table_name': table_name,
                 'batch_size': 2,
-                'index': index_flag,
-                'index_label': index_label,
                 'schema': {
                     'Column': {
                         'quoted': True
@@ -126,16 +150,15 @@ class TestSqlFormatter(object):
                 }
             }
         })
-        csv_writer.format(dataframe=pandas_dataframe_with_data,
+        sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
-        assert index_label in buffer.getvalue().lower()
-        for index, row in pandas_dataframe_with_data.iterrows():
-            for column in pandas_dataframe_with_data.columns:
-                assert row[column].lower() in buffer.getvalue().lower()
-                assert str(index) in buffer.getvalue().lower()
+        text = buffer.getvalue()
+        assert isinstance(text, str) is True
+        assert len(text) > 0
+        assert f'TRUNCATE {table_name}' in text
 
-    def test_writing_sql_replace_mode(
+    def test_replace_(
                                     self,
                                     replace_dataframe,
                                     fixture_spec_replace):
@@ -143,6 +166,28 @@ class TestSqlFormatter(object):
         sql_writer = SQLFormatter(specification=fixture_spec_replace)
         sql_writer.format(replace_dataframe, buffer)
 
-        assert isinstance(buffer.getvalue(), str) is True
-        assert "DROP TABLE IF EXISTS".lower() in buffer.getvalue().lower()
-        #  assert len(buffer.getvalue()) == 0
+        table_name = 'My_table'
+        text = buffer.getvalue()
+        assert isinstance(text, str) is True
+        assert len(text) > 0
+        assert f'DROP TABLE IF EXISTS {table_name};' in text
+
+    def test_invalid_mode(self, pandas_dataframe_with_data):
+        buffer = StringIO()
+        table_name = 'mytable'
+        sql_writer = SQLFormatter(specification={
+            'options': {
+                'mode': 'invalid',
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column': {
+                        'quoted': True
+                    }
+                }
+            }
+        })
+
+        with raises(ValueError):
+            sql_writer.format(dataframe=pandas_dataframe_with_data,
+                              path_or_buffer=buffer)
