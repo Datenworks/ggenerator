@@ -1,8 +1,7 @@
-from io import StringIO
 from pytest import raises
-
 from src.lib.formatters.sql import SQLFormatter
 from src.tests.lib.formatters.fixtures import *  # noqa: F403, F401
+from io import StringIO
 
 
 class TestSqlFormatter(object):
