@@ -217,6 +217,11 @@ def json_format_sample():
 
 
 @fixture
+def sql_format_sample():
+    return {'type': 'sql'}
+
+
+@fixture
 def unknown_format_sample():
     return {'type': 'unknown'}
 
@@ -249,11 +254,6 @@ def gcs_url_writer_sample():
 @fixture
 def sql_writer_sample():
     return {'type': 'sql'}
-
-
-@fixture
-def azure_writer_sample():
-    return {'type': 'azure-bs'}
 
 
 @fixture
