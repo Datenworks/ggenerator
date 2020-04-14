@@ -1,10 +1,13 @@
 from faker import Faker
 import inspect
+from src.generators.datatypes.\
+    faker_custom.pt_BR.documents import DocumentProvider
 
 
 class FakerProxy(object):
     def __init__(self, locale: str):
         self.faker = Faker(locale=locale)
+        self.faker.add_provider(DocumentProvider)
         self.blacklist_namespaces = ['generic']
         self.blacklist_generator = ['time_series']
         self.list_of_generators = self.__generators_types()
