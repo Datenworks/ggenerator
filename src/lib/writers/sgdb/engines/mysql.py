@@ -15,6 +15,3 @@ class MySQLEngine(object):
                              f'{self.host}:'
                              f'{self.port}/'
                              f'{database}')
-
-    def cli(self):
-        pass

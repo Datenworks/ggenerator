@@ -34,3 +34,37 @@ def specification():
     file_name = uuid4()
 
     return {'uri': f"{absolute_path}/{file_name}"}
+
+
+@fixture
+def sql_specification_format():
+    def _spec(table_name, index=False, index_label=None):
+        return {
+            'options': {
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column1': {
+                        'quoted': True
+                    }
+                },
+                'mode': 'replace',
+                'index': index,
+                'index_label': index_label
+            }
+        }
+    return _spec
+
+
+@fixture
+def sql_specification_writer():
+    return {
+        'options': {
+            'engine': 'mysql',
+            'method': 'direct',
+            'host': 'dbhost',
+            'port': 3306,
+            'database': 'mydb',
+            'username': 'root'
+        }
+    }
