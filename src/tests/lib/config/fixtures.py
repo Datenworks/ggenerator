@@ -207,6 +207,11 @@ def csv_format_sample():
 
 
 @fixture
+def sql_format_sample():
+    return {'type': 'sql'}
+
+
+@fixture
 def json_format_sample():
     return {'type': 'json-array'}
 
@@ -239,6 +244,16 @@ def gcs_writer_sample():
 @fixture
 def gcs_url_writer_sample():
     return {'type': 'gcs-url'}
+
+
+@fixture
+def sql_writer_sample():
+    return {'type': 'sql'}
+
+
+@fixture
+def azure_writer_sample():
+    return {'type': 'azure-bs'}
 
 
 @fixture
