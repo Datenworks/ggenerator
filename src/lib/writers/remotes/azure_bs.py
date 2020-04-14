@@ -1,6 +1,7 @@
 from azure.storage.blob import BlobServiceClient
 from os import getenv
 from pandas import DataFrame
+from io import StringIO
 
 
 class AzureBlobStorage(object):
@@ -21,10 +22,18 @@ class AzureBlobStorage(object):
             .from_connection_string(conn_str=connection_string)
 
     def write(self, dataframe: DataFrame) -> None:
-        self.azure_bs.get_blob_client(container='<CONTAINER_NAME>',
-                                      blob='<BLOB_NAME>')\
-                     .upload_blob()
-        pass
+        buffer = StringIO()
+        self.formatter.format(dataframe, buffer)
+
+        options = self.specification['options']
+        container = options['container']
+        blob = options['blob']
+
+        self.azure_bs.get_blob_client(container=container,
+                                      blob=blob)\
+                     .upload_blob(buffer.getvalue(), overwrite=True)
+        
+        return f'{options["container"]}/{options["blob"]}'
 
     @staticmethod
     def rules():
