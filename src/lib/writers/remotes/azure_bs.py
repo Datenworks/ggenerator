@@ -32,7 +32,7 @@ class AzureBlobStorage(object):
         self.azure_bs.get_blob_client(container=container,
                                       blob=blob)\
                      .upload_blob(buffer.getvalue(), overwrite=True)
-        
+
         return f'{options["container"]}/{options["blob"]}'
 
     @staticmethod
