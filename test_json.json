@@ -1,0 +1,36 @@
+{
+    "datasets": {
+        "sample": {
+            "size": 5,
+            "locale": "pt_BR",
+            "fields": [
+		{
+                    "type": "job",
+                    "name": "trabalho",
+                    "generator": {}
+                },
+                {
+                    "type": "cep",
+                    "name": "CEP",
+                    "generator": {
+						
+			}
+                }
+            ],
+            "format": {
+                "type": "json-array",
+                "options": {
+                    "indent": "pretty"
+                }
+            },
+            "serializers": {
+                "to": [
+                    {
+                        "type": "file",
+                        "uri": "/home/tadeu/Desktop/dataset.json"
+                    }
+                ]
+            }
+        }
+    }
+}

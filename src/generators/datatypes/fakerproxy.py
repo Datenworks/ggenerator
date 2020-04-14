@@ -1,5 +1,6 @@
 from faker import Faker
 import inspect
+from src.generators.datatypes.cep import CepProvider
 
 
 class FakerProxy(object):
@@ -7,6 +8,7 @@ class FakerProxy(object):
         self.faker = Faker(locale=locale)
         self.blacklist_namespaces = ['generic']
         self.blacklist_generator = ['time_series']
+        self.faker.add_provider(CepProvider)
         self.list_of_generators = self.__generators_types()
         self.__infer_types()
 
