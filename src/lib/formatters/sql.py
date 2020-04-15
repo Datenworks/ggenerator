@@ -17,17 +17,69 @@ class SQLFormatter(object):
 
     @staticmethod
     def rules():
+        def replace_rule(options):
+            schema = options.get("schema")
+            for key in schema.keys():
+                field = schema.get(key)
+                mode = options.get("mode")
+                if mode == "replace":
+                    if not isinstance(field.get("sqltype", None), str):
+                        raise ValueError(
+                                "The Mode replace needs "
+                                "'sqltype' in Schema fields")
+
+        def quoted_rule(schema):
+            for key in schema.keys():
+                field = schema.get(key)
+                if not isinstance(field.get("quoted", None), bool):
+                    raise ValueError(" Schema fields required 'quoted'")
+
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str},
-                'options.batch_size': {'none': False, 'type': int},
+                'options.mode': {'none': False,
+                                 'type': str,
+                                 'values': ["append", "replace", "truncate"]},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]},
+                'options': {'none': False,
+                            'type': dict,
+                            'custom': [replace_rule]}
             },
             'optional': {
-                'options.mode': {'none': False, 'type': str},
+                'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
-                'options.index_label': {'none': False, 'type': str}
+                'options.index_label': {'none': False, 'type': str},
             }
         }
+
+    def to_sql(self, dataframe: DataFrame, schema: str, conn) -> str:
+        parameters = self.default
+        options = self.specification.get('options', {})
+        parameters.update(options)
+
+        table_name = parameters.get("table_name")
+        index_flag = parameters.get("index")
+        index_label = parameters.get("index_label", None)
+        batch_size = parameters.get("batch_size")
+        mode = parameters.get("mode")
+
+        try:
+            dataframe.to_sql(con=conn,
+                             name=table_name,
+                             schema=schema,
+                             if_exists=mode,
+                             index=index_flag,
+                             index_label=index_label,
+                             chunksize=batch_size)
+        except Exception as err:
+            raise ValueError("Error: Check your credentials "
+                             "(username, "
+                             "password, "
+                             "host, "
+                             "port, "
+                             "database)\n", err)
 
     def format(self, dataframe: DataFrame, path_or_buffer) -> str:
         """Format dataframe to sql script.
