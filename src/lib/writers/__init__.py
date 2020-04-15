@@ -4,14 +4,13 @@ from src.lib.writers.remotes.s3_presigned_url import S3PresignedUrlRemoteWriter
 from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
-from src.lib.writers.databases.mysql import MysqlDatabaseWriter
-from src.lib.writers.remotes.sql import SQLWriter
+from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
+    MysqlDirectDatabaseWriter
 
 writers = {
     's3-url': S3PresignedUrlRemoteWriter,
     's3': S3RemoteWriter,
-    'gcs': GCSRemoteWriter,
-    'sql': SQLWriter
+    'gcs': GCSRemoteWriter
 }
 
 uri_writers = {
@@ -20,7 +19,8 @@ uri_writers = {
 }
 
 database_writers = {
-    'mysql-cli': MysqlDatabaseWriter
+    'mysql-cli': MysqlClientDatabaseWriter,
+    'mysql-direct': MysqlDirectDatabaseWriter
 }
 
 writers.update(uri_writers)

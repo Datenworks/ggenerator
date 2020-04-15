@@ -1,18 +1,18 @@
 from src.lib.formatters.sql import SQLFormatter
-from src.lib.writers.databases.mysql import MysqlDatabaseWriter
+from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter
 from src.tests.lib.writers.fixtures import *  # noqa: F403, F401
 from src.tests.lib.writers.databases.fixtures import *  # noqa: F403, F401
 
 
-class TestMysqlDatabaseWriter(object):
+class TestMysqlClientDatabaseWriter(object):
     def test_before_write(self, mocker, sql_formatter, mysql_specification):
         expected = "123"
         mock = mocker.patch('getpass._raw_input')
         mock.return_value = expected
 
         formatter = SQLFormatter(specification=sql_formatter)
-        writer = MysqlDatabaseWriter(formatter=formatter,
-                                     specification={'options': {}})
+        writer = MysqlClientDatabaseWriter(formatter=formatter,
+                                           specification={'options': {}})
         writer.before_write()
 
         mock.assert_called()
@@ -27,8 +27,8 @@ class TestMysqlDatabaseWriter(object):
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification=sql_formatter)
-        writer = MysqlDatabaseWriter(formatter=formatter,
-                                     specification=mysql_specification)
+        writer = MysqlClientDatabaseWriter(formatter=formatter,
+                                           specification=mysql_specification)
         writer.write(dataframe=pandas_dataframe_with_data)
 
         mock_conn.assert_called()
@@ -42,8 +42,8 @@ class TestMysqlDatabaseWriter(object):
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification={})
-        writer = MysqlDatabaseWriter(formatter=formatter,
-                                     specification=mysql_specification)
+        writer = MysqlClientDatabaseWriter(formatter=formatter,
+                                           specification=mysql_specification)
         writer.write(dataframe=pandas_dataframe_without_data)
 
         mock_conn.assert_not_called()
