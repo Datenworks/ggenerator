@@ -23,7 +23,11 @@ class TestAzureBSWriter(object):
                                  pandas_dataframe_with_data,
                                  specification_azure_bs):
         mock = mocker.patch.object(BlobServiceClient, 'from_connection_string')
-        mock.return_value.open.return_value = None
+        mock.return_value = None
+
+        mock_credential = mocker.patch.object(
+            AzureBSRemoteWriter, 'get_credentials')
+        mock_credential.return_value = "MyCredential"
 
         buffer = StringIO()
         mock_buffer = mocker.patch.object(AzureBSRemoteWriter, 'open_buffer')
@@ -55,6 +59,10 @@ class TestAzureBSWriter(object):
                                   specification_azure_bs):
         mock = mocker.patch.object(BlobServiceClient, 'from_connection_string')
         mock.return_value.open.return_value = None
+
+        mock_credential = mocker.patch.object(
+            AzureBSRemoteWriter, 'get_credentials')
+        mock_credential.return_value = "MyCredential"
 
         buffer = StringIO()
         mock_buffer = mocker.patch.object(AzureBSRemoteWriter, 'open_buffer')
