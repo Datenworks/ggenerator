@@ -93,6 +93,7 @@ class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
 
         connection = self.engine(parameters)
 
-        self.formatter.to_sql(dataframe=dataframe,
-                              schema=parameters['schema'],
-                              conn=connection)
+        self.formatter.format(dataframe=dataframe,
+                              path_or_buffer=connection,
+                              method='direct',
+                              schema=parameters['schema'])
