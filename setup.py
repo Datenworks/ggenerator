@@ -43,6 +43,8 @@ setup(
         "gcsfs>=0.6.0",
         "s3fs>=0.4.0",
         "faker>=4.0.1",
+        "sqlalchemy =>1.3.16",
+        "mysql-connector-python =>8.0.19"
     ],
     entry_points="""
         [console_scripts]

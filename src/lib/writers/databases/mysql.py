@@ -79,7 +79,7 @@ class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
                              f"{params['password']}@"
                              f"{params['host']}:"
                              f"{params['port']}/"
-                             f"{params['database']}?charset=utf8mb4")
+                             f"{params['database']}?charset=latin1")
 
     def write(self, dataframe: DataFrame) -> None:
         """Write all dataframe on a DataBase Table.
