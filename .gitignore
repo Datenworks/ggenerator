@@ -17,10 +17,11 @@ env/
 htmlcov/
 jspm_packages/
 node_modules/
+*.sql
 
 build/
 dist/
 ggenerator.egg-info/
 
-test.json
+*.json
 requirements.txt

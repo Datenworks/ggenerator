@@ -9,3 +9,9 @@ class DocumentProvider(SsnProvider):
             return self.bothify('#### #### ####')
         else:
             return self.bothify('############')
+
+    def cnh(self, mask: bool = True):
+        if mask:
+            return self.bothify('### ### ### ##')
+        else:
+            return self.bothify('###########')

@@ -3,7 +3,7 @@ from pandas import DataFrame
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
-    and write it down in SQL format
+    and write it down in .sql format
     """
     key = 'sql'
 
@@ -17,15 +17,40 @@ class SQLFormatter(object):
 
     @staticmethod
     def rules():
+        def replace_rule(options):
+            schema = options.get("schema")
+            for key in schema.keys():
+                field = schema.get(key)
+                mode = options.get("mode")
+                if mode == "replace":
+                    if not isinstance(field.get("sqltype", None), str):
+                        raise ValueError(
+                                "The Mode replace needs "
+                                "'sqltype' in Schema fields")
+
+        def quoted_rule(schema):
+            for key in schema.keys():
+                field = schema.get(key)
+                if not isinstance(field.get("quoted", None), bool):
+                    raise ValueError(" Schema fields required 'quoted'")
+
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str},
-                'options.batch_size': {'none': False, 'type': int},
+                'options.mode': {'none': False,
+                                 'type': str,
+                                 'values': ["append", "replace", "truncate"]},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]},
+                'options': {'none': False,
+                            'type': dict,
+                            'custom': [replace_rule]}
             },
             'optional': {
-                'options.mode': {'none': False, 'type': str},
+                'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
-                'options.index_label': {'none': False, 'type': str}
+                'options.index_label': {'none': False, 'type': str},
             }
         }
 
@@ -50,15 +75,47 @@ class SQLFormatter(object):
             else:
                 path_or_buffer.write(data)
 
-    def replace(self, options: dict):
-        pass
+    def replace(self, options: dict, dataframe: DataFrame):
+        schema = options.get('schema')
+        table_name = options.get('table_name')
+        fields = "("
+        cont = 0
+        for new_field in schema:
+            sql_type = schema[new_field].get('sqltype')
+            fields += new_field + " " + sql_type
+            cont += 1
+            if cont < len(schema):
+                fields += ", "
+        fields += ");"
+        return f"DROP TABLE IF EXISTS {table_name};\n"\
+               f"CREATE TABLE {table_name}" \
+               f"{fields}"
 
-    def truncate(self, options: dict):
-        pass
+    def truncate(self, options: dict, dataframe):
+        table_name = options.get("table_name")
+        query = f"TRUNCATE {table_name};\n\n"
+        query += self.append(options, dataframe)
+        return query
 
     def __format(self, parameters, dataframe):
-        if parameters.get("mode") == "append":
+        mode = parameters.get("mode")
+
+        if parameters.get('index'):
+            dataframe.index.name = parameters.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
+
+        if mode == "append":
             return self.append(parameters=parameters, dataframe=dataframe)
+        elif mode == "replace":
+            replace = self.replace(parameters, dataframe)
+            append = self.append(parameters, dataframe)
+            return f"{replace} \n"\
+                   f"{append}"
+        elif mode == "truncate":
+            return self.truncate(parameters, dataframe)
+        else:
+            raise ValueError(f"Mode `{mode}` is invalid, expected:"
+                             " 'append', 'truncate' or 'replace'")
 
     def append(self, parameters: dict, dataframe: DataFrame) -> str:
         table_name = parameters.get("table_name")
@@ -73,7 +130,8 @@ class SQLFormatter(object):
             query += ";\n\n"
         return query
 
-    def insert_statement(self, dataframe: DataFrame, table_name: str,
+    def insert_statement(self, dataframe: DataFrame,
+                         table_name: str,
                          schema: dict):
         columns = dataframe.columns
         values = self.__parse_rows(dataframe, schema)
@@ -96,13 +154,9 @@ class SQLFormatter(object):
                 row_value_sql += ", "
             first_column = False
             if column in schema \
-                    and schema.get(column).get('quoted'):
+                    and schema.get(column).get('quoted') is True:
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
-
-    @staticmethod
-    def check(*args, **kwargs):
-        return True
