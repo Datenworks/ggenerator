@@ -24,10 +24,6 @@ class AzureBSRemoteWriter(object):
     def get_credentials(self):
         return getenv("AZURE_STORAGE_CONNECTION_STRING", "")
 
-    def open_buffer(self):
-        buffer = StringIO()
-        return buffer
-
     def write(self, dataframe: DataFrame) -> None:
         buffer = self.open_buffer()
         self.formatter.format(dataframe, buffer)
@@ -39,6 +35,10 @@ class AzureBSRemoteWriter(object):
         self.upload_blob(container=container, blob=blob, data=buffer)
 
         return f'{options["container"]}/{options["blob"]}'
+
+    def open_buffer(self):
+        buffer = StringIO()
+        return buffer
 
     def upload_blob(self, container, blob, data: StringIO):
         self.azure_bs.get_blob_client(container=container,
