@@ -18,6 +18,7 @@ htmlcov/
 jspm_packages/
 node_modules/
 *.sql
+*.json
 
 build/
 dist/
