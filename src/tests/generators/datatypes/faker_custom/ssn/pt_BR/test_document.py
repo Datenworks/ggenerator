@@ -25,3 +25,25 @@ class TestDocumentGenerator:
         for index in range(len(result)):
             if index != 3 and index != 7 and index != 11:
                 assert str.isnumeric(result[index])
+
+    def test_titulo_eleitor_without_mask(self, generate):
+        metadata = Metadata(locale='pt_BR')
+        cnh_generator = \
+            metadata.get_generators_map()['titulo_eleitoral']['type']
+
+        result = cnh_generator(mask=False).generate()
+        assert len(result) == 12
+        for elem in result:
+            assert str.isnumeric(elem)
+
+    def test_titulo_eleitor_with_mask(self, generate):
+        metadata = Metadata(locale='pt_BR')
+        cnh_generator = \
+            metadata.get_generators_map()['titulo_eleitoral']['type']
+
+        result = cnh_generator(mask=True).generate()
+        assert len(result) == 14
+        assert result[4] == " " and result[9] == " "
+        for index in range(len(result)):
+            if index != 4 and index != 9:
+                assert str.isnumeric(result[index])
