@@ -50,7 +50,7 @@ class SQLFormatter(object):
                 'options.index_label': {'none': False, 'type': str},
                 'options.mode': {'none': False,
                                  'type': str,
-                                 'values': ["append", "replace", "truncate"]},
+                                 'values': ["append", "replace", "truncate"]}
             }
         }
 
