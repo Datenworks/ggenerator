@@ -1,9 +1,14 @@
-from MySQLdb import Connect
-
-
 class MysqlConnection(object):
 
     def __init__(self, host, username, password, port, database, **kwargs):
+        try:
+            from MySQLdb import Connect
+        except ModuleNotFoundError:
+            msg = ("To use MySQL client method you need to "
+                   "install `mysqlclient` library: "
+                   "https://pypi.org/project/mysqlclient/")
+            raise Exception(msg)
+
         self.connection = Connect(host=host,
                                   user=username,
                                   passwd=password,
