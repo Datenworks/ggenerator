@@ -4,7 +4,7 @@ from pandas import DataFrame
 from io import StringIO
 
 
-class AzureBlobStorage(object):
+class AzureBSRemoteWriter(object):
     key = 'azure-bs'
 
     def __init__(self, formatter, specification):
@@ -13,27 +13,37 @@ class AzureBlobStorage(object):
         self.azure_bs = self.__azure_storage_client()
 
     def __azure_storage_client(self):
-        connection_string = getenv("AZURE_STORAGE_CONNECTION_STRING", "")
+        connection_string = self.get_credentials()
         if not connection_string:
-            raise Exception("AZURE_STORAGE_CONNECTION_STRING Not found."
-                            "Please set your environment variable."
+            raise Exception("AZURE_STORAGE_CONNECTION_STRING Not found. "
+                            "Please set your environment variable "
                             "with your connection string")
         return BlobServiceClient\
             .from_connection_string(conn_str=connection_string)
 
-    def write(self, dataframe: DataFrame) -> None:
+    def get_credentials(self):
+        return getenv("AZURE_STORAGE_CONNECTION_STRING", "")
+
+    def open_buffer(self):
         buffer = StringIO()
+        return buffer
+
+    def write(self, dataframe: DataFrame) -> None:
+        buffer = self.open_buffer()
         self.formatter.format(dataframe, buffer)
 
         options = self.specification['options']
         container = options['container']
         blob = options['blob']
 
-        self.azure_bs.get_blob_client(container=container,
-                                      blob=blob)\
-                     .upload_blob(buffer.getvalue(), overwrite=True)
+        self.upload_blob(container=container, blob=blob, data=buffer)
 
         return f'{options["container"]}/{options["blob"]}'
+
+    def upload_blob(self, container, blob, data: StringIO):
+        self.azure_bs.get_blob_client(container=container,
+                                      blob=blob)\
+            .upload_blob(data.getvalue(), overwrite=True)
 
     @staticmethod
     def rules():
