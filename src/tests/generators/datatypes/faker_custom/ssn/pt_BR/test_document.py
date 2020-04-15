@@ -25,7 +25,7 @@ class TestDocumentGenerator:
         for index in range(len(result)):
             if index != 3 and index != 7 and index != 11:
                 assert str.isnumeric(result[index])
-    
+
     def test_titulo_eleitor_without_mask(self, generate):
         metadata = Metadata(locale='pt_BR')
         cnh_generator = \
