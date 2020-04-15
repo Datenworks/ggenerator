@@ -1,19 +1,23 @@
 from faker import Faker
 import inspect
-from src.generators.datatypes.faker_custom import CustomProviders
+from src.generators.datatypes.faker_custom import custom_providers
 
 
 class FakerProxy(object):
     def __init__(self, locale: str):
-        self.faker = Faker(locale=locale)
-        new_providers_class = CustomProviders()
-        new_providers_list = new_providers_class.providers_list
-        for providers in new_providers_list:
-            self.faker.add_provider(providers)
+        self.locale = locale
+        self.faker = Faker(locale=self.locale)
+        self.add_custom_providers()
         self.blacklist_namespaces = ['generic']
         self.blacklist_generator = ['time_series']
         self.list_of_generators = self.__generators_types()
         self.__infer_types()
+
+    def add_custom_providers(self):
+        for custom_locale, providers in custom_providers.items():
+            if custom_locale == self.locale or custom_locale == 'global':
+                for provider in providers:
+                    self.faker.add_provider(provider)
 
     def __generators_types(self) -> list:
         def is_not_namespace_blacklist(generator):
@@ -45,7 +49,10 @@ class FakerProxy(object):
 
     def __get_namespace(self, obj) -> str:
         try:
-            return inspect.getmodule(obj).__name__.split('.')[2]
+            package = inspect.getmodule(obj).__name__.split('.')
+            if 'faker_custom' in package:
+                return package[-2]
+            return package[2]
         except IndexError:
             return "generic"
 
