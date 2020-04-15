@@ -8,7 +8,6 @@ class FakerProxy(object):
         self.locale = locale
         self.faker = Faker(locale=self.locale)
         self.add_custom_providers()
-
         self.blacklist_namespaces = ['generic']
         self.blacklist_generator = ['time_series']
         self.list_of_generators = self.__generators_types()
