@@ -5,7 +5,7 @@ from io import StringIO
 
 
 class TestSqlFormatter(object):
-    """Unit-test of CsvWriter class"""
+    """Unit-test of SQLWriter class"""
 
     def test_writting_dataframe_with_records(self,
                                              pandas_dataframe_with_data):
@@ -158,24 +158,14 @@ class TestSqlFormatter(object):
         assert len(text) > 0
         assert f'TRUNCATE {table_name}' in text
 
-    def test_replace(self, pandas_dataframe_with_data):
+    def test_replace(self,
+                     replace_dataframe,
+                     fixture_spec_replace):
         buffer = StringIO()
-        table_name = 'mytable'
-        sql_writer = SQLFormatter(specification={
-            'options': {
-                'mode': 'replace',
-                'table_name': table_name,
-                'batch_size': 2,
-                'schema': {
-                    'Column': {
-                        'quoted': True
-                    }
-                }
-            }
-        })
-        sql_writer.format(dataframe=pandas_dataframe_with_data,
-                          path_or_buffer=buffer)
+        sql_writer = SQLFormatter(specification=fixture_spec_replace)
+        sql_writer.format(replace_dataframe, buffer)
 
+        table_name = 'My_table'
         text = buffer.getvalue()
         assert isinstance(text, str) is True
         assert len(text) > 0

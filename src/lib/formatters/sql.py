@@ -3,7 +3,7 @@ from pandas import DataFrame
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
-    and write it down in SQL format
+    and write it down in .sql format
     """
     key = 'sql'
 
@@ -75,11 +75,21 @@ class SQLFormatter(object):
             else:
                 path_or_buffer.write(data)
 
-    def replace(self, options: dict, dataframe):
-        table_name = options.get("table_name")
-        query = f"DROP TABLE IF EXISTS {table_name};\n\n"
-        query += self.append(options, dataframe)
-        return query
+    def replace(self, options: dict, dataframe: DataFrame):
+        schema = options.get('schema')
+        table_name = options.get('table_name')
+        fields = "("
+        cont = 0
+        for new_field in schema:
+            sql_type = schema[new_field].get('sqltype')
+            fields += new_field + " " + sql_type
+            cont += 1
+            if cont < len(schema):
+                fields += ", "
+        fields += ");"
+        return f"DROP TABLE IF EXISTS {table_name};\n"\
+               f"CREATE TABLE {table_name}" \
+               f"{fields}"
 
     def truncate(self, options: dict, dataframe):
         table_name = options.get("table_name")
@@ -97,7 +107,10 @@ class SQLFormatter(object):
         if mode == "append":
             return self.append(parameters=parameters, dataframe=dataframe)
         elif mode == "replace":
-            return self.replace(parameters, dataframe)
+            replace = self.replace(parameters, dataframe)
+            append = self.append(parameters, dataframe)
+            return f"{replace} \n"\
+                   f"{append}"
         elif mode == "truncate":
             return self.truncate(parameters, dataframe)
         else:
@@ -141,7 +154,7 @@ class SQLFormatter(object):
                 row_value_sql += ", "
             first_column = False
             if column in schema \
-                    and schema.get(column).get('quoted'):
+                    and schema.get(column).get('quoted') is True:
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])
