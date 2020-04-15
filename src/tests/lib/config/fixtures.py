@@ -256,6 +256,11 @@ def gcs_url_writer_sample():
 
 
 @fixture
+def sql_writer_sample():
+    return {'type': 'sql'}
+
+
+@fixture
 def unknown_writer_sample():
     return {'type': 'unknown'}
 
