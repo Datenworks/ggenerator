@@ -1,0 +1,76 @@
+{
+    "datasets": {
+        "sample": {
+            "size": 100,
+            "locale": "pt_BR",
+            "fields": [
+		{
+                    "type": "integer:sequence",
+                    "name": "id",
+                    "generator": {
+                        "start_at": 1
+                    }
+                },
+                {
+                    "type": "name",
+                    "name": "nome",
+                    "generator": {}
+                },
+                {
+                    "type": "pyint",
+                    "name": "idade",
+                    "generator": {
+				"max_value":120
+			}
+                },
+                {
+                    "type": "pyfloat",
+                    "name": "peso",
+                    "generator": {
+				"positive":false,
+				"min_value": 0,
+				"max_value":250
+		}
+                },
+{
+                    "type": "job",
+                    "name": "trabalho",
+                    "generator": {}
+                },
+		{
+                    "type": "future_datetime",
+                    "name": "data",
+                    "generator": {}
+                }
+            ],
+            "format": {
+                "type": "sql",
+                "options": {
+                  "table_name": "dataset_usuarios",
+                  "mode": "replace",
+                  "index": true,
+                  "index_label": "myindexcolumns",
+                  "schema": {
+
+                  },
+                  "batch_size": 20
+                }
+              },
+            "serializers": {
+                "to": [
+                    {
+                        "type": "sql",
+                        "options": {
+                            "engine": "mysql",
+                            "method": "direct",
+                            "host": "172.17.0.2",
+                            "port": 3306,
+                            "database": "mydb",
+                            "username": "root"
+                          }
+                    }
+                ]
+            }
+        }
+    }
+}
