@@ -4,9 +4,8 @@ from src.lib.writers.remotes.s3_presigned_url import S3PresignedUrlRemoteWriter
 from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
-from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
-    MysqlDirectDatabaseWriter
-
+from src.lib.writers.databases.mysql import (MysqlClientDatabaseWriter,
+                                             MysqlDirectDatabaseWriter)
 from src.lib.writers.\
     databases.postgresql import (PostgresClientDatabaseWriter,
                                  PostgresDirectDatabaseWriter)
