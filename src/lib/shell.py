@@ -5,14 +5,14 @@ class Shell(object):
     def __init__(self):
         pass
 
-    def execute(self, command: list):
+    def execute(self, command):
         process = Popen(command, stdout=PIPE)
         output, error = process.communicate()
 
         if error:
             raise ShellError(error)
 
-        return output
+        return output.decode()
 
 
 class ShellError(Exception):

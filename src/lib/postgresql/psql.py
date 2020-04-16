@@ -2,12 +2,12 @@ from src.lib.shell import Shell
 
 
 class PostgresSqlPsql(object):
-    prefix = ('psql -h {host} -p {post} -U {user} '
-              '-W {password} -d {database}')
+    connection = ("host={host} port={port} user={user} "
+                  "password={password} dbname={database}")
 
     def __init__(self, host, port, database, user, password):
         self.shell = Shell()
-        self.base_command = self.prefix \
+        self.base_command = self.connection\
                                 .format(host=host,
                                         port=port,
                                         user=user,
@@ -15,8 +15,14 @@ class PostgresSqlPsql(object):
                                         database=database)
 
     def execute_query(self, query):
-        command = f"{self.base_command} -c {query}"
+        command = [
+            '/usr/bin/env',
+            'psql',
+            self.base_command,
+            '-c',
+            query
+        ]
         output = self.shell \
-                     .execute(command=command.split())
+                     .execute(command=command)
 
         return output

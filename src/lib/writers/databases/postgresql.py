@@ -40,7 +40,6 @@ class PostgreSqlClientDatabaseWriter(object):
         }
 
     def write(self, dataframe: DataFrame):
-        output = ''
         params = self.specification \
                      .get('options')
 
@@ -51,11 +50,11 @@ class PostgreSqlClientDatabaseWriter(object):
             psql = PostgresSqlPsql(host=params['host'],
                                    port=params.get('port', 5432),
                                    database=params['database'],
-                                   user=params['user'],
+                                   user=params['username'],
                                    password=params['password'])
             for query in sql.split(';'):
                 if len(query) < 6:
                     continue
-                output += psql.execute_query(query)
+                psql.execute_query(query)
 
-        return output
+        return "Inserted with success"
