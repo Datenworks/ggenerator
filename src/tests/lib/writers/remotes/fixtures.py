@@ -53,6 +53,21 @@ def specification_gcs():
 
 
 @fixture
+def specification_azure_bs():
+    from uuid import uuid4
+
+    file_name = uuid4().hex
+
+    return {
+        'type': 'azure-bs',
+        'options': {
+            'container': 'mycontainer',
+            'blob': file_name
+        }
+    }
+
+
+@fixture
 def specification_with_url():
     return {
         'type': 's3-url',
