@@ -4,7 +4,7 @@ from src.lib.postgres.connection import PostgresConnection
 class TestPostgresConnection(object):
 
     def test_execute(self, mocker):
-        mock_conn = mocker.patch('psycopg2.connections.Connection')
+        mock_conn = mocker.patch('psycopg2.connect')
         mock_conn.cursor.return_value = lambda x: 0
 
         with PostgresConnection(host='',

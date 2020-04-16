@@ -23,7 +23,7 @@ class TestPostgresDirectDatabaseWriter(object):
                                        pandas_dataframe_with_data,
                                        sql_formatter,
                                        postgres_specification):
-        mock_conn = mocker.patch('psycopg2.connections.Connection')
+        mock_conn = mocker.patch('psycopg2.connect')
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification=sql_formatter)
@@ -39,7 +39,7 @@ class TestPostgresDirectDatabaseWriter(object):
                                                 sql_formatter,
                                                 pandas_dataframe_without_data,
                                                 postgres_specification):
-        mock_conn = mocker.patch('psycopg2.connections.Connection')
+        mock_conn = mocker.patch('psycopg2.connect')
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification={})
