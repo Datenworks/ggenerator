@@ -43,6 +43,7 @@ setup(
         "gcsfs>=0.6.0",
         "s3fs>=0.4.0",
         "faker>=4.0.1",
+        "azure-storage-blob >=12.3.0"
     ],
     entry_points="""
         [console_scripts]
