@@ -3,10 +3,10 @@ import psycopg2
 
 class PostgresConnection(object):
 
-    def __init__(self, host_name, username, password, port, database_name,
+    def __init__(self, host, username, password, port, database_name,
                  **kwargs):
         #  sudo apt-get install libpq-dev
-        self.connection = psycopg2.connect(host=host_name,
+        self.connection = psycopg2.connect(host=host,
                                            user=username,
                                            password=password,
                                            port=port,

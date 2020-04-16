@@ -75,7 +75,7 @@ class PostgresDirectDatabaseWriter(PostgresDataBaseWritter):
 
     def engine(self, params):
         return create_engine('postgres://'
-                             f"{params['username']}"
+                             f"{params['username']}:"
                              f"{params['password']}@"
                              f"{params['host']}:"
                              f"{params['port']}/"
