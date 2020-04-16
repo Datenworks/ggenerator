@@ -16,8 +16,9 @@ class Sql(object):
             if not first_column:
                 row_value_sql += ", "
             first_column = False
-            if column in schema \
-                    and schema.get(column).get('quoted') is True:
+            if column in schema and \
+               schema.get(column, dict()) \
+                     .get('quoted', False) is True:
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])
