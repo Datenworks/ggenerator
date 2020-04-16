@@ -1,11 +1,10 @@
-from getpass import getpass
 from pandas import DataFrame
 from sqlalchemy import create_engine
-
+from src.lib.writers.databases import DatabaseWriter
 from src.lib.mysql.connection import MysqlConnection
 
 
-class MysqlDatabaseWriter(object):
+class MysqlDatabaseWriter(DatabaseWriter):
     @staticmethod
     def rules():
         return {
@@ -21,18 +20,6 @@ class MysqlDatabaseWriter(object):
                 'options.schema': {'none': False, 'type': str}
             }
         }
-
-    def before_write(self):
-        host = self.specification \
-                   .get('options') \
-                   .get('host')
-        user = self.specification \
-                   .get('options') \
-                   .get('username')
-        print(f"Database host: {host}")
-        print(f"Username: {user}")
-        self.specification['options']['password'] = \
-            getpass(f"Type {user} password: ")
 
 
 class MysqlClientDatabaseWriter(MysqlDatabaseWriter):

@@ -7,6 +7,10 @@ from src.lib.writers.\
 from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
     MysqlDirectDatabaseWriter
 
+from src.lib.writers.\
+    databases.postgresql import (PostgresClientDatabaseWriter,
+                                 PostgresDirectDatabaseWriter)
+
 writers = {
     's3-url': S3PresignedUrlRemoteWriter,
     's3': S3RemoteWriter,
@@ -20,7 +24,9 @@ uri_writers = {
 
 database_writers = {
     'mysql-cli': MysqlClientDatabaseWriter,
-    'mysql-direct': MysqlDirectDatabaseWriter
+    'mysql-direct': MysqlDirectDatabaseWriter,
+    'postgres-cli': PostgresClientDatabaseWriter,
+    'postgres-direct': PostgresDirectDatabaseWriter
 }
 
 writers.update(uri_writers)
