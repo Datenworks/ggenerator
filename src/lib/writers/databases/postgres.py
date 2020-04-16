@@ -54,7 +54,7 @@ class PostgresDirectDatabaseWriter(PostgresDataBaseWritter):
                              f"{params['port']}/"
                              f"{params['database']}")
 
-    def write(self, dataframe: Dataframe) -> None:
+    def write(self, dataframe: DataFrame) -> None:
         """Write all dataframe on a DataBase Table.
 
         Keyword arguments:
