@@ -20,7 +20,7 @@ class TestPostgresDirectDatabaseWriter(object):
 
     def test_writting_csv_with_records(self,
                                        mocker,
-                                       pandas_dataframe_with_data,
+                                       dataframe,
                                        sql_formatter,
                                        postgres_specification):
         mock_conn = mocker.patch('psycopg2.connect')
@@ -30,7 +30,7 @@ class TestPostgresDirectDatabaseWriter(object):
         writer = PostgresDirectDatabaseWriter(
             formatter=formatter,
             specification=postgres_specification)
-        writer.write(dataframe=pandas_dataframe_with_data)
+        writer.write(dataframe=dataframe)
 
         mock_conn.assert_called()
 
