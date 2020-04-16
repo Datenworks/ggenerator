@@ -91,6 +91,11 @@ def specification_without_url():
 
 
 @fixture
+def gcs_without_url():
+    return {'type': 's3-url'}
+
+
+@fixture
 def signed_post_file():
     return '{"url": "s3.url.com", "fields": {}}'
 

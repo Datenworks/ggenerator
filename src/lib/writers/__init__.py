@@ -5,6 +5,8 @@ from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.writers.remotes.azure_bs import AzureBSRemoteWriter
 from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
+from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
+    MysqlDirectDatabaseWriter
 
 writers = {
     S3PresignedUrlRemoteWriter.key: S3PresignedUrlRemoteWriter,
@@ -18,4 +20,10 @@ uri_writers = {
     GCSPresignedUrlRemoteWriter.key: GCSPresignedUrlRemoteWriter
 }
 
+database_writers = {
+    'mysql-cli': MysqlClientDatabaseWriter,
+    'mysql-direct': MysqlDirectDatabaseWriter
+}
+
 writers.update(uri_writers)
+writers.update(database_writers)

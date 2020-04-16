@@ -46,7 +46,7 @@ def generate_datasets(spec_path):
             click.echo("| Finished!\n"
                        f"| Dataset name: {dset_name}\n"
                        f"| Dataset format: {dset_format}\n"
-                       f"| Dataset path: {dset_path}\n")
+                       f"| Dataset: {dset_path}\n")
     except Exception as err:
         click.echo(f"Error: {err}")
 
