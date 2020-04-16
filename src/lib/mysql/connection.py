@@ -1,6 +1,7 @@
 class MysqlConnection(object):
 
     def __init__(self, host, username, password, port, database, **kwargs):
+        #  sudo apt-get install libmariadb-dev
         try:
             from MySQLdb import Connect
         except ModuleNotFoundError:
