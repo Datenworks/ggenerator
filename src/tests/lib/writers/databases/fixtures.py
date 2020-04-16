@@ -1,4 +1,5 @@
 from pytest import fixture
+from src.tests.lib.formatters.fixtures import pandas_dataframe
 
 
 @fixture
@@ -51,51 +52,46 @@ def sql_formatter():
 
 @fixture
 def dataframe():
-    dt = {[
+    data = [
         {
             "id": 1,
-            "nome": "Heloísa Silva",
-            "titulo_eleitoral": "475543834826",
-            "idade": 1,
-            "peso": 200.3713,
-            "trabalho": "Bartender",
-            "data": 1588165835
+            "name": "Sophie Silveira",
+            "age": 65,
+            "weight": 194.16350529,
+            "job": "Fisioterapeuta",
+            "datetime": 1587241737000
         },
         {
             "id": 2,
-            "nome": "Clara Jesus",
-            "titulo_eleitoral": "999946747776",
-            "idade": 110,
-            "peso": 225.8265369163,
-            "trabalho": "Espeleologista",
-            "data": 1588778349
+            "name": "Davi Lucca Duarte",
+            "age": 105,
+            "weight": 19.41,
+            "job": "Cabo",
+            "datetime": 1588771828000
         },
         {
             "id": 3,
-            "nome": "Júlia da Rosa",
-            "titulo_eleitoral": "418677955948",
-            "idade": 12,
-            "peso": 125.9,
-            "trabalho": "Mensageiro",
-            "data": 1589157184
+            "name": "Luna da Rosa",
+            "age": 56,
+            "weight": 104.987,
+            "job": "Faxineiro",
+            "datetime": 1588995002000
         },
         {
             "id": 4,
-            "nome": "Stephany das Neves",
-            "titulo_eleitoral": "366536047757",
-            "idade": 110,
-            "peso": 0.79,
-            "trabalho": "Psicomotricista",
-            "data": 1588607518
+            "name": "Vitor Melo",
+            "age": 74,
+            "weight": 170.79,
+            "job": "Sociólogo",
+            "datetime": 1587715890000
         },
         {
             "id": 5,
-            "nome": "Olivia Campos",
-            "titulo_eleitoral": "841082824437",
-            "idade": 102,
-            "peso": 75.92,
-            "trabalho": "Profissional de relações públicas",
-            "data": 1588220548
+            "name": "Catarina Correia",
+            "age": 6,
+            "weight": 178.9275,
+            "job": "Médico geneticista",
+            "datetime": 1588948730000
         }
-    ]}
-    return dt
+    ]
+    return pandas_dataframe(data=data)
