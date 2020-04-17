@@ -19,6 +19,14 @@ def mysql_specification():
 
 
 @fixture
+def mysql_specification_script():
+    return {
+        "type": "file",
+        "uri": "path/to/file.sql"
+    }
+
+
+@fixture
 def sql_formatter():
     return {
         'options': {

@@ -1,11 +1,10 @@
-from getpass import getpass
 from pandas import DataFrame
 from sqlalchemy import create_engine
-
+from src.lib.writers.databases import DatabaseWriter
 from src.lib.mysql.mysql import MySQLConnection
 
 
-class MysqlDatabaseWriter(object):
+class MysqlDatabaseWriter(DatabaseWriter):
     @staticmethod
     def rules():
         return {
@@ -21,18 +20,6 @@ class MysqlDatabaseWriter(object):
                 'options.schema': {'none': False, 'type': str}
             }
         }
-
-    def before_write(self):
-        host = self.specification \
-                   .get('options') \
-                   .get('host')
-        user = self.specification \
-                   .get('options') \
-                   .get('username')
-        print(f"Database host: {host}")
-        print(f"Username: {user}")
-        self.specification['options']['password'] = \
-            getpass(f"Type {user} password: ")
 
 
 class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
@@ -51,7 +38,8 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
                           path_or_buffer=None)
         if sql is not None:
             with MySQLConnection(**parameters) as connection:
-                connection.execute_query(sql)
+                for query in sql.split(';'):
+                    connection.execute_query(query)
 
         return f"Inserted with success"
 

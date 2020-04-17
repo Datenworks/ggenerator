@@ -5,8 +5,11 @@ from src.lib.writers.remotes.gcs import GCSRemoteWriter
 from src.lib.writers.remotes.azure_bs import AzureBSRemoteWriter
 from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
-from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
-    MysqlDirectDatabaseWriter
+from src.lib.writers.databases.mysql import (MysqlClientDatabaseWriter,
+                                             MysqlDirectDatabaseWriter)
+from src.lib.writers.\
+    databases.postgresql import (PostgresClientDatabaseWriter,
+                                 PostgresDirectDatabaseWriter)
 
 writers = {
     S3PresignedUrlRemoteWriter.key: S3PresignedUrlRemoteWriter,
@@ -22,7 +25,9 @@ uri_writers = {
 
 database_writers = {
     'mysql-cli': MysqlClientDatabaseWriter,
-    'mysql-direct': MysqlDirectDatabaseWriter
+    'mysql-direct': MysqlDirectDatabaseWriter,
+    'postgres-cli': PostgresClientDatabaseWriter,
+    'postgres-direct': PostgresDirectDatabaseWriter
 }
 
 writers.update(uri_writers)

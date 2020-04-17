@@ -45,7 +45,12 @@ def sql_specification_format():
                 'batch_size': 2,
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
                     }
                 },
                 'mode': 'replace',

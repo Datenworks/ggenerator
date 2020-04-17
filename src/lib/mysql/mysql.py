@@ -13,6 +13,7 @@ class MySQLConnection(object):
             user=username,
             password=password,
         )
+        self.base_connection = self.base_connection.split(" ")
         self.database = database
 
     def __enter__(self):
@@ -22,19 +23,16 @@ class MySQLConnection(object):
         self.close()
 
     def execute_query(self, query, *args):
-        self.base_connection = self.base_connection.split(" ")
         command = [
-            'mysql'
+            'mysql',
         ]
-        command.extend(self.base_connection)
+        for argoption in self.base_connection:
+            command.append(argoption)
         command.append(self.database)
         command.append('-e')
         command.append(query)
-        
-        print("Executing query: ", query)
-        output = self.shell.execute(command=command)
-        print("executou")
-        return 1
+
+        self.shell.execute(command=command)
 
     def close(self):
         pass

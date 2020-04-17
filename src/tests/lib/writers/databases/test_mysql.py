@@ -23,7 +23,7 @@ class TestMysqlClientDatabaseWriter(object):
                                        pandas_dataframe_with_data,
                                        sql_formatter,
                                        mysql_specification):
-        mock_conn = mocker.patch('MySQLdb.connections.Connection')
+        mock_conn = mocker.patch('src.lib.shell.Shell.execute')
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification=sql_formatter)
@@ -38,7 +38,7 @@ class TestMysqlClientDatabaseWriter(object):
                                                 sql_formatter,
                                                 pandas_dataframe_without_data,
                                                 mysql_specification):
-        mock_conn = mocker.patch('MySQLdb.connections.Connection')
+        mock_conn = mocker.patch('src.lib.shell.Shell.execute')
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification={})
