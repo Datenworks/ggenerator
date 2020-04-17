@@ -7,7 +7,8 @@ class MysqlConnection(object):
         except ModuleNotFoundError:
             msg = ("To use MySQL client method you need to "
                    "install `mysqlclient` library: "
-                   "https://pypi.org/project/mysqlclient/")
+                   "https://pypi.org/project/mysqlclient/, "
+                   "run: pip install ggenerator[mysql] to install it!")
             raise Exception(msg)
 
         self.connection = Connect(host=host,

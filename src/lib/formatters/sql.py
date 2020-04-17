@@ -45,9 +45,6 @@ class SQLFormatter(object):
                 'options.mode': {'none': False,
                                  'type': str,
                                  'values': ["append", "replace", "truncate"]},
-                'options.schema': {'none': False,
-                                   'type': dict,
-                                   'custom': [quoted_rule]},
                 'options': {'none': False,
                             'type': dict,
                             'custom': [replace_rule]}
@@ -56,6 +53,9 @@ class SQLFormatter(object):
                 'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]}
             }
         }
 

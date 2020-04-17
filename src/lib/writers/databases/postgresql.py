@@ -1,8 +1,8 @@
-from sqlalchemy import create_engine
 from getpass import getpass
 from pandas import DataFrame
 
-from src.lib.postgres.connection import PostgresConnection
+from src.lib.postgresql.psql import PostgresSqlPsql
+from sqlalchemy.engine import create_engine
 
 
 class PostgresDataBaseWritter(object):
@@ -35,7 +35,7 @@ class PostgresDataBaseWritter(object):
             getpass(f"Type {user} password: ")
 
 
-class PostgresClientDatabaseWriter(PostgresDataBaseWritter):
+class PostgreSqlClientDatabaseWriter(PostgresDataBaseWritter):
     key = 'sql'
 
     def __init__(self, formatter, specification):
@@ -43,21 +43,24 @@ class PostgresClientDatabaseWriter(PostgresDataBaseWritter):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
-        row_count = 0
-        parameters = self.specification \
-                         .get('options')
+        params = self.specification \
+                     .get('options')
 
         sql = self.formatter \
                   .format(dataframe=dataframe,
                           path_or_buffer=None)
         if sql is not None:
-            with PostgresConnection(**parameters) as connection:
-                for query in sql.split(';'):
-                    if len(query) < 6:
-                        continue
-                    row_count += connection.execute_query(query)
+            psql = PostgresSqlPsql(host=params['host'],
+                                   port=params.get('port', 5432),
+                                   database=params['database'],
+                                   user=params['username'],
+                                   password=params['password'])
+            for query in sql.split(';'):
+                if len(query) < 6:
+                    continue
+                psql.execute_query(query)
 
-        return f"{row_count} rows inserted"
+        return "Inserted with success"
 
 
 class PostgresDirectDatabaseWriter(PostgresDataBaseWritter):

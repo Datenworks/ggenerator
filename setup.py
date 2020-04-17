@@ -43,11 +43,13 @@ setup(
         "gcsfs>=0.6.0",
         "s3fs>=0.4.0",
         "faker>=4.0.1",
-        "sqlalchemy =>1.3.16",
-        "mysql-connector-python =>8.0.19",
-        "azure-storage-blob =>12.3.0"
-        "azure-storage-blob >=12.3.0"
+        "sqlalchemy>=1.3.16",
+        "mysql-connector-python>=8.0.19",
+        "azure-storage-blob>=12.3.0"
     ],
+    extras_require={
+        "mysql": ['mysqlclient>=1.4.6']
+    },
     entry_points="""
         [console_scripts]
         ggenerator=main:run
