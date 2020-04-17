@@ -29,7 +29,6 @@ def postgres_specification():
             "host": "",
             "port": 3306,
             "database": "",
-            "schema": "",
             "username": "",
             "password": ""
         }
