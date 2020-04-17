@@ -1,9 +1,11 @@
+import pandas as pd
+
+from sqlalchemy import create_engine
+
 from src.lib.formatters.sql import SQLFormatter
 from src.tests.lib.writers.fixtures import *  # noqa: F403, F401
 from src.tests.lib.writers.databases.fixtures import *  # noqa: F403, F401
 from src.lib.writers.databases.postgresql import PostgresDirectDatabaseWriter
-from sqlalchemy import create_engine
-import pandas as pd
 
 
 class TestPostgresDirectDatabaseWriter(object):
