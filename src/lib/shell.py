@@ -8,7 +8,7 @@ class Shell(object):
     def execute(self, command):
         process = Popen(command, stdout=PIPE, stderr=PIPE)
         output, error = process.communicate()
-        if error or process.returncode > 0:
+        if process.returncode > 0 and error:
             raise ShellError(error.decode())
 
         return output.decode()
