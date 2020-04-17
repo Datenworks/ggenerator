@@ -5,7 +5,8 @@ class MySQLConnection(object):
     connection = ("--host={host} --port={port} --user={user} "
                   "--password={password}")
 
-    def __init__(self, host, username, password, port, database, **kwargs):
+    def __init__(self, host, username, password, database, port=3306,
+                 **kwargs):
         self.shell = Shell()
         self.base_connection = self.connection.format(
             host=host,
