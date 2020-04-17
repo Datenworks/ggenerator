@@ -28,7 +28,6 @@ class TestFieldsConfiguration(object):
         fields = dataset['fields']
 
         for field in fields:
-            print(field)
             with raises(ValueError):
                 rules = FieldsConfiguration.get_rules(field, dataset['locale'])
                 required = rules['required']

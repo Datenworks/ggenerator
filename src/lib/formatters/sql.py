@@ -1,11 +1,16 @@
 from pandas import DataFrame
 
+from src.lib.sql import Sql
+
 
 class SQLFormatter(object):
     """Class that receive pandas dataframe
     and write it down in .sql format
     """
     key = 'sql'
+    modes = {'append': 'append',
+             'truncate': 'replace',
+             'replace': 'replace'}
 
     def __init__(self, specification):
         self.default = {
@@ -40,9 +45,6 @@ class SQLFormatter(object):
                 'options.mode': {'none': False,
                                  'type': str,
                                  'values': ["append", "replace", "truncate"]},
-                'options.schema': {'none': False,
-                                   'type': dict,
-                                   'custom': [quoted_rule]},
                 'options': {'none': False,
                             'type': dict,
                             'custom': [replace_rule]}
@@ -51,10 +53,71 @@ class SQLFormatter(object):
                 'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': [quoted_rule]}
             }
         }
 
-    def format(self, dataframe: DataFrame, path_or_buffer) -> str:
+    def __to_db(self,
+                dataframe: DataFrame,
+                conn,
+                params,
+                **kwargs) -> str:
+        table_name = params.get("table_name")
+        index_flag = params.get("index")
+        index_label = params.get("index_label", None)
+        batch_size = params.get("batch_size")
+        mode = self.modes.get(params.get("mode", 'append'))
+
+        try:
+            dataframe.to_sql(con=conn,
+                             name=table_name,
+                             if_exists=mode,
+                             index=index_flag,
+                             index_label=index_label,
+                             chunksize=batch_size,
+                             **kwargs)
+        except Exception as err:
+            msg = ("Error: Check your credentials (username,"
+                   " password, host, port, database)\n")
+            raise ValueError(msg, err)
+
+    def __to_sql(self,
+                 dataframe: DataFrame,
+                 path_or_buffer,
+                 params,
+                 **kwargs) -> str:
+        sql = Sql()
+        mode = params.get("mode")
+
+        if params.get('index'):
+            dataframe.index.name = params.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
+
+        if mode == "append":
+            data = sql.append_statement(dataframe, params)
+        elif mode == "replace":
+            data = sql.replace_statement(dataframe, params)
+        elif mode == "truncate":
+            data = sql.truncate_statement(dataframe, params)
+        else:
+            raise ValueError(f"Mode `{mode}` is invalid, expected:"
+                             " 'append', 'truncate' or 'replace'")
+
+        if isinstance(path_or_buffer, str):
+            with open(path_or_buffer, 'w') as f:
+                f.write(data)
+        elif path_or_buffer is None:
+            return data
+        else:
+            path_or_buffer.write(data)
+
+    def format(self,
+               dataframe: DataFrame,
+               path_or_buffer,
+               method=None,
+               **kwargs) -> str:
         """Format dataframe to sql script.
 
         Parameters:
@@ -66,97 +129,12 @@ class SQLFormatter(object):
         parameters.update(options)
 
         if dataframe.shape[0] > 0:
-            data = self.__format(parameters=parameters, dataframe=dataframe)
-            if isinstance(path_or_buffer, str):
-                with open(path_or_buffer, 'w') as f:
-                    f.write(data)
-            elif path_or_buffer is None:
-                return data
-            else:
-                path_or_buffer.write(data)
-
-    def replace(self, options: dict, dataframe: DataFrame):
-        schema = options.get('schema')
-        table_name = options.get('table_name')
-        fields = "("
-        cont = 0
-        for new_field in schema:
-            sql_type = schema[new_field].get('sqltype')
-            fields += new_field + " " + sql_type
-            cont += 1
-            if cont < len(schema):
-                fields += ", "
-        fields += ");"
-        return f"DROP TABLE IF EXISTS {table_name};\n"\
-               f"CREATE TABLE {table_name}" \
-               f"{fields}"
-
-    def truncate(self, options: dict, dataframe):
-        table_name = options.get("table_name")
-        query = f"TRUNCATE {table_name};\n\n"
-        query += self.append(options, dataframe)
-        return query
-
-    def __format(self, parameters, dataframe):
-        mode = parameters.get("mode")
-
-        if parameters.get('index'):
-            dataframe.index.name = parameters.get('index_label')
-            dataframe = dataframe.reset_index(level=0)
-
-        if mode == "append":
-            return self.append(parameters=parameters, dataframe=dataframe)
-        elif mode == "replace":
-            replace = self.replace(parameters, dataframe)
-            append = self.append(parameters, dataframe)
-            return f"{replace} \n"\
-                   f"{append}"
-        elif mode == "truncate":
-            return self.truncate(parameters, dataframe)
-        else:
-            raise ValueError(f"Mode `{mode}` is invalid, expected:"
-                             " 'append', 'truncate' or 'replace'")
-
-    def append(self, parameters: dict, dataframe: DataFrame) -> str:
-        table_name = parameters.get("table_name")
-        schema = parameters.get("schema", {})
-        batch_size = parameters['batch_size']
-        query = ""
-        for index in range(0, dataframe.shape[0], batch_size):
-            query += \
-                self.insert_statement(dataframe[index:index+batch_size],
-                                      table_name,
-                                      schema)
-            query += ";\n\n"
-        return query
-
-    def insert_statement(self, dataframe: DataFrame,
-                         table_name: str,
-                         schema: dict):
-        columns = dataframe.columns
-        values = self.__parse_rows(dataframe, schema)
-        return f"INSERT INTO {table_name} " \
-               f"({', '.join(columns)}) \n"\
-               "VALUES\n" + ',\n'.join(values)
-
-    def __parse_rows(self, dataframe: DataFrame, schema: dict = {}) -> list:
-        columns = dataframe.columns
-        values = []
-        for index, row in dataframe.iterrows():
-            values.append(self.__parse_row(row, columns, schema))
-        return values
-
-    def __parse_row(self, row, columns, schema: dict = {}):
-        row_value_sql = "("
-        first_column = True
-        for column in columns:
-            if not first_column:
-                row_value_sql += ", "
-            first_column = False
-            if column in schema \
-                    and schema.get(column).get('quoted') is True:
-                row_value_sql += "'" + str(row[column]) + "'"
-            else:
-                row_value_sql += str(row[column])
-        row_value_sql += ")"
-        return row_value_sql
+            if method == 'direct':
+                return self.__to_db(dataframe=dataframe,
+                                    conn=path_or_buffer,
+                                    params=parameters,
+                                    **kwargs)
+            return self.__to_sql(dataframe=dataframe,
+                                 path_or_buffer=path_or_buffer,
+                                 params=parameters,
+                                 **kwargs)

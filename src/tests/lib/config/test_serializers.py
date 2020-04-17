@@ -13,6 +13,12 @@ class TestSerializersConfiguration(object):
         assert rules is not None
         assert isinstance(rules, dict) is True
 
+    def test_sql(self, sql_writer_sample):
+        rules = SerializersConfiguration.get_rules(sql_writer_sample)
+
+        assert rules is not None
+        assert isinstance(rules, dict) is True
+
     def test_s3(self, s3_writer_sample):
         rules = SerializersConfiguration.get_rules(s3_writer_sample)
 
