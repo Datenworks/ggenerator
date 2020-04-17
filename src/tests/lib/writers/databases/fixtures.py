@@ -19,6 +19,23 @@ def mysql_specification():
 
 
 @fixture
+def postgres_specification():
+    return {
+        "type": "sql",
+        "options": {
+            "engine": "postgres",
+            "method": "cli",
+            "host": "",
+            "port": 5432,
+            "database": "",
+            "schema": "",
+            "username": "",
+            "password": ""
+        }
+    }
+
+
+@fixture
 def sql_formatter():
     return {
         'options': {
