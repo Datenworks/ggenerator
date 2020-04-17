@@ -25,14 +25,14 @@ class TestPostgreSqlClientDatabaseWriter(object):
                                        mocker,
                                        pandas_dataframe_with_data,
                                        sql_formatter,
-                                       postgres_specification):
+                                       postgres_specification_cli):
         mock_conn = mocker.patch.object(PostgresSqlPsql, 'execute_query')
         mock_conn.return_value = lambda x: None
 
         formatter = SQLFormatter(specification=sql_formatter)
         writer = PostgreSqlClientDatabaseWriter(
             formatter=formatter,
-            specification=postgres_specification
+            specification=postgres_specification_cli
         )
         writer.write(dataframe=pandas_dataframe_with_data)
 
@@ -42,14 +42,14 @@ class TestPostgreSqlClientDatabaseWriter(object):
                                                 mocker,
                                                 sql_formatter,
                                                 pandas_dataframe_without_data,
-                                                postgres_specification):
+                                                postgres_specification_cli):
         mock_conn = mocker.patch.object(PostgresSqlPsql, 'execute_query')
         mock_conn.return_value = lambda x: None
 
         formatter = SQLFormatter(specification={})
         writer = PostgreSqlClientDatabaseWriter(
             formatter=formatter,
-            specification=postgres_specification
+            specification=postgres_specification_cli
         )
         writer.write(dataframe=pandas_dataframe_without_data)
 
