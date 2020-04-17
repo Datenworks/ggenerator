@@ -2,7 +2,7 @@ from getpass import getpass
 from pandas import DataFrame
 from sqlalchemy import create_engine
 
-from src.lib.mysql.connection import MysqlConnection
+from src.lib.mysql.mysql import MySQLConnection
 
 
 class MysqlDatabaseWriter(object):
@@ -43,7 +43,6 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
-        row_count = 0
         parameters = self.specification \
                          .get('options')
 
@@ -51,13 +50,10 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
                   .format(dataframe=dataframe,
                           path_or_buffer=None)
         if sql is not None:
-            with MysqlConnection(**parameters) as connection:
-                for query in sql.split(';'):
-                    if len(query) < 6:
-                        continue
-                    row_count += connection.execute_query(query)
+            with MySQLConnection(**parameters) as connection:
+                connection.execute_query(sql)
 
-        return f"{row_count} rows inserted"
+        return f"Inserted with success"
 
 
 class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
