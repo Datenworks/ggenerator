@@ -16,16 +16,19 @@ class Sql(object):
             if not first_column:
                 row_value_sql += ", "
             first_column = False
-            if column in schema and \
-               schema.get(column, dict()) \
-                     .get('quoted', False) is True or self.isText(row[column]):
+            if self.is_quoted(column, schema, row[column]):
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
 
-    def isText(self, value):
+    def is_quoted(self, column, schema, value):
+        return self.is_text(value) or \
+            column in schema and \
+            schema.get(column, dict()).get('quoted', False) is True
+
+    def is_text(self, value):
         return isinstance(value, str)
 
     def insert_statement(self, dataframe: DataFrame,
