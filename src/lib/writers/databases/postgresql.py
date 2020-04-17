@@ -1,16 +1,7 @@
 from pandas import DataFrame
+from sqlalchemy.engine import create_engine
+
 from src.lib.writers.databases import DatabaseWriter
-
-
-class PostgresClientDatabaseWriter(DatabaseWriter):
-    key = 'sql'
-
-    def __init__(self, formatter, specification):
-        self.formatter = formatter
-        self.specification = specification
-
-    def write(self, dataframe: DataFrame):
-        pass
 
 
 class PostgresDirectDatabaseWriter(DatabaseWriter):
@@ -21,11 +12,18 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
 
     def __init__(self, formatter, specification):
         self.formatter = formatter
-        self.default = {}
+        self.default = {
+            'schema': None
+        }
         self.specification = specification
 
     def engine(self, params):
-        pass
+        return create_engine('postgres://'
+                             f"{params['username']}:"
+                             f"{params['password']}@"
+                             f"{params['host']}:"
+                             f"{params['port']}/"
+                             f"{params['database']}")
 
     def write(self, dataframe: DataFrame) -> None:
         """Write all dataframe on a DataBase Table.
@@ -33,4 +31,13 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
         Keyword arguments:
             - dataframe - pandas.Dataframe: dataframe containing the records
         """
-        pass
+        parameters = self.default
+        options = self.specification.get('options', {})
+        parameters.update(options)
+
+        connection = self.engine(parameters)
+
+        self.formatter.format(dataframe=dataframe,
+                              path_or_buffer=connection,
+                              method='direct',
+                              schema=parameters['schema'])
