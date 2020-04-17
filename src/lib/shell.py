@@ -6,11 +6,10 @@ class Shell(object):
         pass
 
     def execute(self, command):
-        process = Popen(command, stdout=PIPE)
+        process = Popen(command, stdout=PIPE, stderr=PIPE)
         output, error = process.communicate()
-
-        if error:
-            raise ShellError(error)
+        if error or process.returncode > 0:
+            raise ShellError(error.decode())
 
         return output.decode()
 
