@@ -42,9 +42,6 @@ class SQLFormatter(object):
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str},
-                'options.mode': {'none': False,
-                                 'type': str,
-                                 'values': ["append", "replace", "truncate"]},
                 'options': {'none': False,
                             'type': dict,
                             'custom': [replace_rule]}
@@ -55,7 +52,10 @@ class SQLFormatter(object):
                 'options.index_label': {'none': False, 'type': str},
                 'options.schema': {'none': False,
                                    'type': dict,
-                                   'custom': [quoted_rule]}
+                                   'custom': [quoted_rule]},
+                'options.mode': {'none': False,
+                                 'type': str,
+                                 'values': ["append", "replace", "truncate"]}
             }
         }
 
