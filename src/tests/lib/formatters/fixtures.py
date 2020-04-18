@@ -124,10 +124,28 @@ def fixture_spec_replace():
 
 
 @fixture
+def fixture_spec_replace_schema_changed():
+    true = True
+    specification = {"options": {
+        "table_name": "My_table",
+        "mode": "replace",
+        "index": true,
+        "index_label": "my_index_column",
+        "schema": {
+            "name": {"sqltype": "VARCHAR(50)", "quoted":
+                     true}
+        }
+
+    }
+    }
+
+    return specification
+
+
+@fixture
 def replace_dataframe():
     data = [
         {
-            "id": 1,
             "name": "Sophie Silveira",
             "age": 65,
             "weight": 194.16350529,
@@ -135,7 +153,6 @@ def replace_dataframe():
             "datetime": 1587241737000
         },
         {
-            "id": 2,
             "name": "Davi Lucca Duarte",
             "age": 105,
             "weight": 19.41,
@@ -143,7 +160,6 @@ def replace_dataframe():
             "datetime": 1588771828000
         },
         {
-            "id": 3,
             "name": "Luna da Rosa",
             "age": 56,
             "weight": 104.987,
@@ -151,7 +167,6 @@ def replace_dataframe():
             "datetime": 1588995002000
         },
         {
-            "id": 4,
             "name": "Vitor Melo",
             "age": 74,
             "weight": 170.79,
@@ -159,7 +174,6 @@ def replace_dataframe():
             "datetime": 1587715890000
         },
         {
-            "id": 5,
             "name": "Catarina Correia",
             "age": 6,
             "weight": 178.9275,

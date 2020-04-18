@@ -30,8 +30,8 @@ class SQLFormatter(object):
                 if mode == "replace":
                     if not isinstance(field.get("sqltype", None), str):
                         raise ValueError(
-                                "The Mode replace needs "
-                                "'sqltype' in Schema fields")
+                            "The Mode replace needs "
+                            "'sqltype' in Schema fields")
 
         def quoted_rule(schema):
             for key in schema.keys():
@@ -98,6 +98,12 @@ class SQLFormatter(object):
         if mode == "append":
             data = sql.append_statement(dataframe, params)
         elif mode == "replace":
+            schema = params.get('schema')
+            dataframe_columns = dataframe.columns
+            for column in dataframe_columns:
+                if column not in schema and \
+                   column != params.get('index_label'):
+                    dataframe.drop(column, axis='columns', inplace=True)
             data = sql.replace_statement(dataframe, params)
         elif mode == "truncate":
             data = sql.truncate_statement(dataframe, params)

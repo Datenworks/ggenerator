@@ -171,6 +171,21 @@ class TestSqlFormatter(object):
         assert len(text) > 0
         assert f'DROP TABLE IF EXISTS {table_name};' in text
 
+    def test_replace_with_different_schema_field_number(
+        self,
+        replace_dataframe,
+            fixture_spec_replace_schema_changed):
+        buffer = StringIO()
+        sql_writer = SQLFormatter(
+            specification=fixture_spec_replace_schema_changed)
+        sql_writer.format(replace_dataframe, buffer)
+
+        table_name = 'My_table'
+        text = buffer.getvalue()
+        assert isinstance(text, str) is True
+        assert len(text) > 0
+        assert f'DROP TABLE IF EXISTS {table_name};' in text
+
     def test_invalid_mode(self, pandas_dataframe_with_data):
         buffer = StringIO()
         table_name = 'mytable'

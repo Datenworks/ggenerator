@@ -27,6 +27,7 @@ def mysql_specification_script():
     }
 
 
+@fixture
 def postgres_specification():
     return {
         "type": "sql",
