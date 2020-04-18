@@ -53,6 +53,11 @@ class Sql(object):
             query += ";\n\n"
         return query
 
+    def create_append_statement(self, dataframe, params):
+        query = self.create_table_statement(params)
+        query += self.append_statement(dataframe, params)
+        return query
+
     def truncate_statement(self, dataframe, params):
         table_name = params.get("table_name")
         query = f"TRUNCATE {table_name};\n\n"
@@ -60,6 +65,13 @@ class Sql(object):
         return query
 
     def replace_statement(self, dataframe, params):
+        table_name = params.get('table_name')
+        replace = f"DROP TABLE IF EXISTS {table_name};\n"
+        replace += self.create_table_statement(params)
+        append = self.append_statement(dataframe, params)
+        return f"{replace} \n{append}"
+
+    def create_table_statement(self, params):
         schema = params.get('schema')
         table_name = params.get('table_name')
         fields = "("
@@ -71,8 +83,4 @@ class Sql(object):
             if cont < len(schema):
                 fields += ", "
         fields += ");"
-        replace = f"DROP TABLE IF EXISTS {table_name};\n" \
-                  f"CREATE TABLE {table_name}" \
-                  f"{fields}"
-        append = self.append_statement(dataframe, params)
-        return f"{replace} \n{append}"
+        return f"CREATE TABLE {table_name} IF NOT EXISTS {fields};\n\n"

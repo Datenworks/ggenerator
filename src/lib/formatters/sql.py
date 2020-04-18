@@ -96,7 +96,7 @@ class SQLFormatter(object):
             dataframe = dataframe.reset_index(level=0)
 
         if mode == "append":
-            data = sql.append_statement(dataframe, params)
+            data = sql.create_append_statement(dataframe, params)
         elif mode == "replace":
             schema = params.get('schema')
             dataframe_columns = dataframe.columns
