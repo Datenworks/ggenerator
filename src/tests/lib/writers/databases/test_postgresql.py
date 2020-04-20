@@ -24,8 +24,8 @@ class TestPostgresDirectDatabaseWriter(object):
 
     def test_writting_dataframe_with_records(self,
                                              mocker,
-                                             dataframe,
-                                             sql_formatter,
+                                             pandas_dataframe_with_data,
+                                             sql_specification_format,
                                              postgres_specification):
         db_engine = create_engine('sqlite:///:memory:')
 
@@ -35,16 +35,17 @@ class TestPostgresDirectDatabaseWriter(object):
         mock_ = mocker.patch.object(PostgresDirectDatabaseWriter, 'engine')
         mock_.return_value = db_engine
 
-        formatter = SQLFormatter(specification=sql_formatter)
+        formatter = SQLFormatter(
+            specification=sql_specification_format('mytable'))
         writer = PostgresDirectDatabaseWriter(
             formatter=formatter,
             specification=postgres_specification)
         writer.before_write()
-        writer.write(dataframe=dataframe)
+        writer.write(dataframe=pandas_dataframe_with_data)
 
         dataframe_from_sql = pd.read_sql_table(
             table_name='mytable', con=db_engine)
-        assert dataframe_from_sql.equals(dataframe)
+        assert dataframe_from_sql.equals(pandas_dataframe_with_data)
         mock_.assert_called()
 
     def test_writting_dataframe_without_records(self,

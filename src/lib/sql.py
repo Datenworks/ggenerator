@@ -76,6 +76,8 @@ class Sql(object):
         table_name = params.get('table_name')
         fields = "("
         cont = 0
+        if params.get("index"):
+            fields += params.get("index_label") + " INTEGER,"
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
             fields += new_field + " " + sql_type

@@ -8,25 +8,11 @@ class TestSqlFormatter(object):
     """Unit-test of SQLWriter class"""
 
     def test_writting_dataframe_with_records(self,
+                                             sql_specification_format,
                                              pandas_dataframe_with_data):
         buffer = StringIO()
-        sql_writer = SQLFormatter(specification={
-            'options': {
-                'table_name': 'mytable',
-                'batch_size': 2,
-                'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
-            }
-        })
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format('mytable', mode='append'))
         sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
@@ -34,77 +20,35 @@ class TestSqlFormatter(object):
         assert len(buffer.getvalue()) > 0
 
     def test_sql_script_is_append(self,
+                                  sql_specification_format,
                                   pandas_dataframe_with_data):
         buffer = StringIO()
-        csv_writer = SQLFormatter(specification={
-            'options': {
-                'table_name': 'mytable',
-                'batch_size': 2,
-                'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
-            }
-        })
-        csv_writer.format(dataframe=pandas_dataframe_with_data,
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format('mytable', mode='append'))
+        sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
         assert "INSERT INTO".lower() in buffer.getvalue().lower()
 
     def test_sql_script_contain_dataframe_columns(self,
+                                                  sql_specification_format,
                                                   pandas_dataframe_with_data):
         buffer = StringIO()
-        csv_writer = SQLFormatter(specification={
-            'options': {
-                'table_name': 'mytable',
-                'batch_size': 2,
-                'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
-            }
-        })
-        csv_writer.format(dataframe=pandas_dataframe_with_data,
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format('mytable', mode='append'))
+        sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
         for column in pandas_dataframe_with_data:
             assert column.lower() in buffer.getvalue().lower()
 
     def test_sql_script_contain_dataframe_rows(self,
+                                               sql_specification_format,
                                                pandas_dataframe_with_data):
         buffer = StringIO()
-        csv_writer = SQLFormatter(specification={
-            'options': {
-                'table_name': 'mytable',
-                'batch_size': 2,
-                'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
-            }
-        })
-        csv_writer.format(dataframe=pandas_dataframe_with_data,
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format('mytable', mode='append'))
+        sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
         for index, row in pandas_dataframe_with_data.iterrows():
@@ -112,29 +56,16 @@ class TestSqlFormatter(object):
                 assert row[column].lower() in buffer.getvalue().lower()
 
     def test_sql_script_contain_rows_and_index(self,
+                                               sql_specification_format,
                                                pandas_dataframe_with_data):
         buffer = StringIO()
         index_flag = True
         index_label = 'myindexlabel'
-        csv_writer = SQLFormatter(specification={
-            'options': {
-                'table_name': 'mytable',
-                'batch_size': 2,
-                'index': index_flag,
-                'index_label': index_label,
-                'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
-            }
-        })
+        csv_writer = SQLFormatter(
+            specification=sql_specification_format('mytable',
+                                                   index=index_flag,
+                                                   index_label=index_label,
+                                                   mode='append'))
         csv_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
@@ -152,16 +83,7 @@ class TestSqlFormatter(object):
                 'table_name': 'mytable',
                 'batch_size': 2,
                 'mode': 'append',
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': 'VARCHAR(50)'
-                    }
-                }
+                'schema': {}
             }
         })
         sql_writer.format(dataframe=pandas_dataframe_without_data,
@@ -170,21 +92,12 @@ class TestSqlFormatter(object):
         assert isinstance(buffer.getvalue(), str) is True
         assert len(buffer.getvalue()) == 0
 
-    def test_truncate(self, pandas_dataframe_with_data):
+    def test_truncate(self, sql_specification_format,
+                      pandas_dataframe_with_data):
         buffer = StringIO()
         table_name = 'mytable'
-        sql_writer = SQLFormatter(specification={
-            'options': {
-                'mode': 'truncate',
-                'table_name': table_name,
-                'batch_size': 2,
-                'schema': {
-                    'Column': {
-                        'quoted': True
-                    }
-                }
-            }
-        })
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format('mytable', mode='truncate'))
         sql_writer.format(dataframe=pandas_dataframe_with_data,
                           path_or_buffer=buffer)
 
@@ -206,36 +119,23 @@ class TestSqlFormatter(object):
         assert len(text) > 0
         assert f'DROP TABLE IF EXISTS {table_name};' in text
 
-    def test_replace_with_different_schema_field_number(
-        self,
-        replace_dataframe,
-            fixture_spec_replace_schema_changed):
-        buffer = StringIO()
-        sql_writer = SQLFormatter(
-            specification=fixture_spec_replace_schema_changed)
-        sql_writer.format(replace_dataframe, buffer)
-
-        table_name = 'My_table'
-        text = buffer.getvalue()
-        assert isinstance(text, str) is True
-        assert len(text) > 0
-        assert f'DROP TABLE IF EXISTS {table_name};' in text
-
-    def test_invalid_mode(self, pandas_dataframe_with_data):
+    def test_invalid_mode(self, sql_specification_format,
+                          pandas_dataframe_with_data):
         buffer = StringIO()
         table_name = 'mytable'
-        sql_writer = SQLFormatter(specification={
-            'options': {
-                'mode': 'invalid',
-                'table_name': table_name,
-                'batch_size': 2,
-                'schema': {
-                    'Column': {
-                        'quoted': True
-                    }
-                }
-            }
-        })
+        sql_writer = SQLFormatter(
+            specification=sql_specification_format(table_name, mode=''))
+
+        with raises(ValueError):
+            sql_writer.format(dataframe=pandas_dataframe_with_data,
+                              path_or_buffer=buffer)
+
+    def test_invalid_schema(self, pandas_dataframe_with_data,
+                            sql_wrong_spec_format):
+        buffer = StringIO()
+        table_name = 'mytable'
+        sql_writer = SQLFormatter(
+            specification=sql_wrong_spec_format(table_name))
 
         with raises(ValueError):
             sql_writer.format(dataframe=pandas_dataframe_with_data,

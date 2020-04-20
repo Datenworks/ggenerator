@@ -51,7 +51,7 @@ def sql_specification_format():
                     'Column2': {
                         'quoted': True,
                         'sqltype': "VARCHAR(50)"
-                    }
+                    },
                 },
                 'mode': 'replace',
                 'index': index,

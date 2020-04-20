@@ -26,6 +26,60 @@ def pandas_dataframe_without_data():
 
 
 @fixture
+def sql_specification_format():
+    def _spec(table_name, index=False, index_label=None, mode='append'):
+        return {
+            'options': {
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column1': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                },
+                'mode': mode,
+                'index': index,
+                'index_label': index_label
+            }
+        }
+    return _spec
+
+
+@fixture
+def sql_wrong_spec_format():
+    def _spec(table_name, index=False, index_label=None, mode='append'):
+        return {
+            'options': {
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column1': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'wrongColumn': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                },
+                'mode': mode,
+                'index': index,
+                'index_label': index_label
+            }
+        }
+    return _spec
+
+
+@fixture
 def fixture_spec_default():
     specification = {
         "datasets": {
@@ -97,28 +151,34 @@ def fixture_spec_default():
 
 @fixture
 def fixture_spec_replace():
-    true = True
-    false = False
-    specification = {"options": {
-        "table_name": "My_table",
-        "mode": "replace",
-        "schema": {
-            "name": {"sqltype": "VARCHAR(50)", "quoted":
-                     true},
-            "age": {"sqltype": "INTEGER NOT NULL", "quoted":
-                    false},
-            "weight": {"sqltype": "INTEGER NOT NULL", "quoted":
-                       false},
-            "job": {"sqltype": "VARCHAR(50)", "quoted":
-                    true},
-            "datetime": {"sqltype": "DATETIME", "quoted":
-                         false}
+    return {
+        "options": {
+            "table_name": "My_table",
+            "mode": "replace",
+            "schema": {
+                "name": {
+                    "sqltype": "VARCHAR(50)",
+                    "quoted": True
+                },
+                "age": {
+                    "sqltype": "INTEGER NOT NULL",
+                    "quoted": False
+                },
+                "weight": {
+                    "sqltype": "INTEGER NOT NULL",
+                    "quoted": False
+                },
+                "job": {
+                    "sqltype": "VARCHAR(50)",
+                    "quoted": True
+                },
+                "datetime": {
+                    "sqltype": "DATETIME",
+                    "quoted": False
+                }
+            }
         }
-
     }
-    }
-
-    return specification
 
 
 @fixture

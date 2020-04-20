@@ -67,6 +67,8 @@ class SQLFormatter(object):
         table_name = params.get("table_name")
         batch_size = params.get("batch_size")
         mode = params.get("mode", 'append')
+        index_flag = params.get("index")
+        index_label = params.get("index_label")
 
         try:
             if mode == 'truncate' and conn.has_table(table_name=table_name):
@@ -76,7 +78,8 @@ class SQLFormatter(object):
                              name=table_name,
                              if_exists=self.modes.get(mode),
                              chunksize=batch_size,
-                             index=False,
+                             index=index_flag,
+                             index_label=index_label,
                              **kwargs)
         except Exception as err:
             msg = ("Error: Check your credentials (username,"
@@ -90,6 +93,10 @@ class SQLFormatter(object):
                  **kwargs) -> str:
         sql = Sql()
         mode = params.get("mode")
+
+        if params.get('index'):
+            dataframe.index.name = params.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
 
         if mode == "append":
             data = sql.create_append_statement(dataframe, params)
@@ -124,11 +131,7 @@ class SQLFormatter(object):
         options = self.specification.get('options', {})
         parameters.update(options)
 
-        if parameters.get('index'):
-            dataframe.index.name = parameters.get('index_label')
-            dataframe = dataframe.reset_index(level=0)
-
-        schema_columns = set(parameters.get('schema').keys())
+        schema_columns = set(parameters.get('schema', dict()).keys())
         columns = set(dataframe.columns)
 
         if len(schema_columns - columns) > 0:
