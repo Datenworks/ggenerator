@@ -128,12 +128,22 @@ class SQLFormatter(object):
             dataframe.index.name = parameters.get('index_label')
             dataframe = dataframe.reset_index(level=0)
 
-        schema_columns = list(parameters.get('schema').keys())
-        columns = list(dataframe.columns)
+        schema_columns = set(parameters.get('schema').keys())
+        columns = set(dataframe.columns)
 
-        if schema_columns != columns:
-            raise ValueError(set(columns) - set(schema_columns),
-                             "Not declared on schemas!")
+        if len(schema_columns - columns) > 0:
+            raise ValueError(f"{schema_columns - columns} "
+                             "Column(s) not declared on Fields properties!\n"
+                             "Schema and Fields must have the same columns\n"
+                             "** Schema must have INDEX column if `index` "
+                             "property is True **")
+
+        if len(columns - schema_columns) > 0:
+            raise ValueError(f"{columns - schema_columns} "
+                             "Column(s) not declared on Schema properties!\n"
+                             "Schema and Fields must have the same columns\n"
+                             "** Schema must have INDEX column if `index` "
+                             "property is True **")
 
         if dataframe.shape[0] > 0:
             if method == 'direct':
