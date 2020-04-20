@@ -1,5 +1,5 @@
 from pandas import DataFrame
-
+from sqlalchemy.engine import Engine
 from src.lib.sql import Sql
 
 
@@ -9,7 +9,7 @@ class SQLFormatter(object):
     """
     key = 'sql'
     modes = {'append': 'append',
-             'truncate': 'replace',
+             'truncate': 'append',
              'replace': 'replace'}
 
     def __init__(self, specification):
@@ -61,19 +61,22 @@ class SQLFormatter(object):
 
     def __to_db(self,
                 dataframe: DataFrame,
-                conn,
+                conn: Engine,
                 params,
                 **kwargs) -> str:
         table_name = params.get("table_name")
         index_flag = params.get("index")
         index_label = params.get("index_label", None)
         batch_size = params.get("batch_size")
-        mode = self.modes.get(params.get("mode", 'append'))
+        mode = params.get("mode", 'append')
 
         try:
+            if mode == 'truncate' and conn.has_table(table_name=table_name):
+                conn.execution_options(autoCommit=True)\
+                    .execute(f"""TRUNCATE TABLE {table_name}""")
             dataframe.to_sql(con=conn,
                              name=table_name,
-                             if_exists=mode,
+                             if_exists=self.modes.get(mode),
                              index=index_flag,
                              index_label=index_label,
                              chunksize=batch_size,
