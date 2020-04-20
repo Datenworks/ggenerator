@@ -85,4 +85,4 @@ class Sql(object):
             if cont < len(schema):
                 fields += ", "
         fields += ");"
-        return f"CREATE TABLE {table_name} IF NOT EXISTS {fields};\n\n"
+        return f"CREATE TABLE IF NOT EXISTS {table_name} {fields};\n\n"
