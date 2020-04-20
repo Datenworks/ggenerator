@@ -77,8 +77,6 @@ class SQLFormatter(object):
             dataframe.to_sql(con=conn,
                              name=table_name,
                              if_exists=self.modes.get(mode),
-                             index=index_flag,
-                             index_label=index_label,
                              chunksize=batch_size,
                              **kwargs)
         except Exception as err:
@@ -94,19 +92,9 @@ class SQLFormatter(object):
         sql = Sql()
         mode = params.get("mode")
 
-        if params.get('index'):
-            dataframe.index.name = params.get('index_label')
-            dataframe = dataframe.reset_index(level=0)
-
         if mode == "append":
             data = sql.create_append_statement(dataframe, params)
         elif mode == "replace":
-            schema = params.get('schema')
-            dataframe_columns = dataframe.columns
-            for column in dataframe_columns:
-                if column not in schema and \
-                   column != params.get('index_label'):
-                    dataframe.drop(column, axis='columns', inplace=True)
             data = sql.replace_statement(dataframe, params)
         elif mode == "truncate":
             data = sql.truncate_statement(dataframe, params)
@@ -136,6 +124,16 @@ class SQLFormatter(object):
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
+
+        schema_columns = list(parameters.get('schema').keys())
+        columns = list(dataframe.columns)
+
+        if parameters.get('index'):
+            dataframe.index.name = parameters.get('index_label')
+            dataframe = dataframe.reset_index(level=0)
+
+        if schema_columns != columns:
+            raise ValueError(set(schema_columns) - set(columns))
 
         if dataframe.shape[0] > 0:
             if method == 'direct':
