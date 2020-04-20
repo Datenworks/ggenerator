@@ -137,16 +137,12 @@ class SQLFormatter(object):
         if len(schema_columns - columns) > 0:
             raise ValueError(f"{schema_columns - columns} "
                              "Column(s) not declared on Fields properties!\n"
-                             "Schema and Fields must have the same columns\n"
-                             "** Schema must have INDEX column if `index` "
-                             "property is True **")
+                             "Schema and Fields must have the same columns")
 
         if len(columns - schema_columns) > 0:
             raise ValueError(f"{columns - schema_columns} "
                              "Column(s) not declared on Schema properties!\n"
-                             "Schema and Fields must have the same columns\n"
-                             "** Schema must have INDEX column if `index` "
-                             "property is True **")
+                             "Schema and Fields must have the same columns")
 
         if dataframe.shape[0] > 0:
             if method == 'direct':
