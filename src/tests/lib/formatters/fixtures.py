@@ -103,8 +103,6 @@ def fixture_spec_replace():
         "table_name": "My_table",
         "mode": "replace",
         "schema": {
-            "id": {"sqltype": "INTEGER NOT NULL", "quoted":
-                   false},
             "name": {"sqltype": "VARCHAR(50)", "quoted":
                      true},
             "age": {"sqltype": "INTEGER NOT NULL", "quoted":

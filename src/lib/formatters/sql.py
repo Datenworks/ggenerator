@@ -104,9 +104,15 @@ class SQLFormatter(object):
             schema = params.get('schema')
             dataframe_columns = dataframe.columns
             for column in dataframe_columns:
-                if column not in schema and \
-                   column != params.get('index_label'):
-                    dataframe.drop(column, axis='columns', inplace=True)
+                if column not in schema:
+                    raise ValueError("Schema must have the same field names"
+                                     " to create the new table")
+            for schema_field in schema:
+                if schema_field not in dataframe_columns:
+                    raise ValueError(
+                        f"{schema_field} not found in fields generator. "
+                        "Please remove it from Schema"
+                        f" or insert the {schema_field} generator")
             data = sql.replace_statement(dataframe, params)
         elif mode == "truncate":
             data = sql.truncate_statement(dataframe, params)
