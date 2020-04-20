@@ -14,9 +14,15 @@ class TestSqlFormatter(object):
             'options': {
                 'table_name': 'mytable',
                 'batch_size': 2,
+                'mode': 'append',
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }
@@ -37,7 +43,12 @@ class TestSqlFormatter(object):
                 'mode': 'append',
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }
@@ -54,9 +65,15 @@ class TestSqlFormatter(object):
             'options': {
                 'table_name': 'mytable',
                 'batch_size': 2,
+                'mode': 'append',
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }
@@ -74,9 +91,15 @@ class TestSqlFormatter(object):
             'options': {
                 'table_name': 'mytable',
                 'batch_size': 2,
+                'mode': 'append',
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }
@@ -99,9 +122,15 @@ class TestSqlFormatter(object):
                 'batch_size': 2,
                 'index': index_flag,
                 'index_label': index_label,
+                'mode': 'append',
                 'schema': {
                     'Column1': {
-                        'quoted': True
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }
@@ -122,9 +151,15 @@ class TestSqlFormatter(object):
             'options': {
                 'table_name': 'mytable',
                 'batch_size': 2,
+                'mode': 'append',
                 'schema': {
-                    'Column': {
-                        'quoted': True
+                    'Column1': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': 'VARCHAR(50)'
                     }
                 }
             }

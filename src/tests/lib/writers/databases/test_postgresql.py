@@ -22,11 +22,11 @@ class TestPostgresDirectDatabaseWriter(object):
         mock.assert_called()
         assert writer.specification['options']['password'] == expected
 
-    def test_writting_csv_with_records(self,
-                                       mocker,
-                                       dataframe,
-                                       sql_formatter,
-                                       postgres_specification):
+    def test_writting_dataframe_with_records(self,
+                                             mocker,
+                                             dataframe,
+                                             sql_formatter,
+                                             postgres_specification):
         db_engine = create_engine('sqlite:///:memory:')
 
         mock = mocker.patch('getpass._raw_input')
@@ -52,8 +52,8 @@ class TestPostgresDirectDatabaseWriter(object):
                                                 sql_formatter,
                                                 pandas_dataframe_without_data,
                                                 postgres_specification):
-        mock_conn = mocker.patch('psycopg2.connect')
-        mock_conn.cursor.return_value = lambda x: 0
+        mock_ = mocker.patch.object(pd.DataFrame, 'to_sql')
+        mock_.return_value = 'direct_connection'
 
         formatter = SQLFormatter(specification={})
         writer = PostgresDirectDatabaseWriter(
@@ -61,4 +61,4 @@ class TestPostgresDirectDatabaseWriter(object):
             specification=postgres_specification)
         writer.write(dataframe=pandas_dataframe_without_data)
 
-        mock_conn.assert_not_called()
+        mock_.assert_not_called()
