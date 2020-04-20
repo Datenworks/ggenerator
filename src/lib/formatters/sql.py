@@ -65,8 +65,6 @@ class SQLFormatter(object):
                 params,
                 **kwargs) -> str:
         table_name = params.get("table_name")
-        index_flag = params.get("index")
-        index_label = params.get("index_label", None)
         batch_size = params.get("batch_size")
         mode = params.get("mode", 'append')
 
@@ -78,6 +76,7 @@ class SQLFormatter(object):
                              name=table_name,
                              if_exists=self.modes.get(mode),
                              chunksize=batch_size,
+                             index=False,
                              **kwargs)
         except Exception as err:
             msg = ("Error: Check your credentials (username,"
@@ -125,15 +124,16 @@ class SQLFormatter(object):
         options = self.specification.get('options', {})
         parameters.update(options)
 
-        schema_columns = list(parameters.get('schema').keys())
-        columns = list(dataframe.columns)
-
         if parameters.get('index'):
             dataframe.index.name = parameters.get('index_label')
             dataframe = dataframe.reset_index(level=0)
 
+        schema_columns = list(parameters.get('schema').keys())
+        columns = list(dataframe.columns)
+
         if schema_columns != columns:
-            raise ValueError(set(schema_columns) - set(columns))
+            raise ValueError(set(columns) - set(schema_columns),
+                             "Not declared on schemas!")
 
         if dataframe.shape[0] > 0:
             if method == 'direct':
