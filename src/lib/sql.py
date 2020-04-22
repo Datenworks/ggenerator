@@ -16,14 +16,20 @@ class Sql(object):
             if not first_column:
                 row_value_sql += ", "
             first_column = False
-            if column in schema and \
-               schema.get(column, dict()) \
-                     .get('quoted', False) is True:
+            if self.is_quoted(column, schema, row[column]):
                 row_value_sql += "'" + str(row[column]) + "'"
             else:
                 row_value_sql += str(row[column])
         row_value_sql += ")"
         return row_value_sql
+
+    def is_quoted(self, column, schema, value):
+        return self.is_text(value) or \
+            column in schema and \
+            schema.get(column, dict()).get('quoted', False) is True
+
+    def is_text(self, value):
+        return isinstance(value, str)
 
     def insert_statement(self, dataframe: DataFrame,
                          table_name: str,
@@ -47,6 +53,11 @@ class Sql(object):
             query += ";\n\n"
         return query
 
+    def create_append_statement(self, dataframe, params):
+        query = self.create_table_statement(params)
+        query += self.append_statement(dataframe, params)
+        return query
+
     def truncate_statement(self, dataframe, params):
         table_name = params.get("table_name")
         query = f"TRUNCATE {table_name};\n\n"
@@ -54,10 +65,19 @@ class Sql(object):
         return query
 
     def replace_statement(self, dataframe, params):
+        table_name = params.get('table_name')
+        replace = f"DROP TABLE IF EXISTS {table_name};\n"
+        replace += self.create_table_statement(params)
+        append = self.append_statement(dataframe, params)
+        return f"{replace} \n{append}"
+
+    def create_table_statement(self, params):
         schema = params.get('schema')
         table_name = params.get('table_name')
         fields = "("
         cont = 0
+        if params.get("index"):
+            fields += params.get("index_label") + " INTEGER,"
         for new_field in schema:
             sql_type = schema[new_field].get('sqltype')
             fields += new_field + " " + sql_type
@@ -65,8 +85,4 @@ class Sql(object):
             if cont < len(schema):
                 fields += ", "
         fields += ");"
-        replace = f"DROP TABLE IF EXISTS {table_name};\n" \
-                  f"CREATE TABLE {table_name}" \
-                  f"{fields}"
-        append = self.append_statement(dataframe, params)
-        return f"{replace} \n{append}"
+        return f"CREATE TABLE IF NOT EXISTS {table_name} {fields};\n\n"

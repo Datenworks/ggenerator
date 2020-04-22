@@ -26,3 +26,4 @@ ggenerator.egg-info/
 
 *.json
 requirements.txt
+debug.py

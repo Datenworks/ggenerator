@@ -26,6 +26,60 @@ def pandas_dataframe_without_data():
 
 
 @fixture
+def sql_specification_format():
+    def _spec(table_name, index=False, index_label=None, mode='append'):
+        return {
+            'options': {
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column1': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                },
+                'mode': mode,
+                'index': index,
+                'index_label': index_label
+            }
+        }
+    return _spec
+
+
+@fixture
+def sql_wrong_spec_format():
+    def _spec(table_name, index=False, index_label=None, mode='append'):
+        return {
+            'options': {
+                'table_name': table_name,
+                'batch_size': 2,
+                'schema': {
+                    'Column1': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'Column2': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                    'wrongColumn': {
+                        'quoted': True,
+                        'sqltype': "VARCHAR(50)"
+                    },
+                },
+                'mode': mode,
+                'index': index,
+                'index_label': index_label
+            }
+        }
+    return _spec
+
+
+@fixture
 def fixture_spec_default():
     specification = {
         "datasets": {
@@ -97,24 +151,47 @@ def fixture_spec_default():
 
 @fixture
 def fixture_spec_replace():
+    return {
+        "options": {
+            "table_name": "My_table",
+            "mode": "replace",
+            "schema": {
+                "name": {
+                    "sqltype": "VARCHAR(50)",
+                    "quoted": True
+                },
+                "age": {
+                    "sqltype": "INTEGER NOT NULL",
+                    "quoted": False
+                },
+                "weight": {
+                    "sqltype": "INTEGER NOT NULL",
+                    "quoted": False
+                },
+                "job": {
+                    "sqltype": "VARCHAR(50)",
+                    "quoted": True
+                },
+                "datetime": {
+                    "sqltype": "DATETIME",
+                    "quoted": False
+                }
+            }
+        }
+    }
+
+
+@fixture
+def fixture_spec_replace_schema_changed():
     true = True
-    false = False
     specification = {"options": {
         "table_name": "My_table",
         "mode": "replace",
+        "index": true,
+        "index_label": "my_index_column",
         "schema": {
-            "id": {"sqltype": "INTEGER NOT NULL", "quoted":
-                   false},
             "name": {"sqltype": "VARCHAR(50)", "quoted":
-                     true},
-            "age": {"sqltype": "INTEGER NOT NULL", "quoted":
-                    false},
-            "weight": {"sqltype": "INTEGER NOT NULL", "quoted":
-                       false},
-            "job": {"sqltype": "VARCHAR(50)", "quoted":
-                    true},
-            "datetime": {"sqltype": "DATETIME", "quoted":
-                         false}
+                     true}
         }
 
     }
@@ -127,7 +204,6 @@ def fixture_spec_replace():
 def replace_dataframe():
     data = [
         {
-            "id": 1,
             "name": "Sophie Silveira",
             "age": 65,
             "weight": 194.16350529,
@@ -135,7 +211,6 @@ def replace_dataframe():
             "datetime": 1587241737000
         },
         {
-            "id": 2,
             "name": "Davi Lucca Duarte",
             "age": 105,
             "weight": 19.41,
@@ -143,7 +218,6 @@ def replace_dataframe():
             "datetime": 1588771828000
         },
         {
-            "id": 3,
             "name": "Luna da Rosa",
             "age": 56,
             "weight": 104.987,
@@ -151,7 +225,6 @@ def replace_dataframe():
             "datetime": 1588995002000
         },
         {
-            "id": 4,
             "name": "Vitor Melo",
             "age": 74,
             "weight": 170.79,
@@ -159,7 +232,6 @@ def replace_dataframe():
             "datetime": 1587715890000
         },
         {
-            "id": 5,
             "name": "Catarina Correia",
             "age": 6,
             "weight": 178.9275,

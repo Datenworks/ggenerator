@@ -6,12 +6,13 @@ from src.tests.lib.writers.databases.fixtures import *  # noqa: F403, F401
 
 
 class TestPostgreSqlClientDatabaseWriter(object):
-    def test_before_write(self, mocker, sql_formatter):
+    def test_before_write(self, mocker, sql_specification_format):
         expected = "123"
         mock = mocker.patch('getpass._raw_input')
         mock.return_value = expected
 
-        formatter = SQLFormatter(specification=sql_formatter)
+        formatter = SQLFormatter(
+            specification=sql_specification_format('mytable'))
         writer = PostgreSqlClientDatabaseWriter(
             formatter=formatter,
             specification={'options': {}}
@@ -24,12 +25,13 @@ class TestPostgreSqlClientDatabaseWriter(object):
     def test_writting_csv_with_records(self,
                                        mocker,
                                        pandas_dataframe_with_data,
-                                       sql_formatter,
+                                       sql_specification_format,
                                        postgres_specification_cli):
         mock_conn = mocker.patch.object(PostgresSqlPsql, 'execute_query')
         mock_conn.return_value = lambda x: None
 
-        formatter = SQLFormatter(specification=sql_formatter)
+        formatter = SQLFormatter(
+            specification=sql_specification_format('mytable'))
         writer = PostgreSqlClientDatabaseWriter(
             formatter=formatter,
             specification=postgres_specification_cli
@@ -40,7 +42,6 @@ class TestPostgreSqlClientDatabaseWriter(object):
 
     def test_writting_dataframe_without_records(self,
                                                 mocker,
-                                                sql_formatter,
                                                 pandas_dataframe_without_data,
                                                 postgres_specification_cli):
         mock_conn = mocker.patch.object(PostgresSqlPsql, 'execute_query')

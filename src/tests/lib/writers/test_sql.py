@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from src.lib.formatters.sql import SQLFormatter
 from src.lib.writers.databases.mysql import MysqlDirectDatabaseWriter
 from src.tests.lib.writers.fixtures import *  # noqa: F403, F401
+import os
+import uuid
 
 
 class TestSQLWriter(object):
@@ -83,3 +85,21 @@ class TestSQLWriter(object):
             table_name='mytable', con=db_engine)
         assert dataframe_from_sql.equals(pandas_dataframe_with_data)
         mock_.assert_called()
+
+    def test_writing_sql_script(self, sql_specification_format,
+                                pandas_dataframe_with_data):
+        table_name = "mytable"
+        index_flag = True
+        index_label = "myindexlabel"
+        uri = uuid.uuid4().hex
+        formatter_spec = sql_specification_format(table_name=table_name,
+                                                  index=index_flag,
+                                                  index_label=index_label)
+        formatter = SQLFormatter(specification=formatter_spec)
+        formatter.format(dataframe=pandas_dataframe_with_data,
+                         path_or_buffer=uri)
+
+        assert os.path.exists(uri)
+        with open(uri, 'r') as f:
+            assert len(f.read()) > 0
+        os.remove(uri)

@@ -51,7 +51,7 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
                              f"{params['username']}:"
                              f"{params['password']}@"
                              f"{params['host']}:"
-                             f"{params['port']}/"
+                             f"{params.get('port', 5432)}/"
                              f"{params['database']}")
 
     def write(self, dataframe: DataFrame) -> None:

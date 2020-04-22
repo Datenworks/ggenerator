@@ -1,5 +1,5 @@
 from pandas import DataFrame
-
+from sqlalchemy.engine import Engine
 from src.lib.sql import Sql
 
 
@@ -9,7 +9,7 @@ class SQLFormatter(object):
     """
     key = 'sql'
     modes = {'append': 'append',
-             'truncate': 'replace',
+             'truncate': 'append',
              'replace': 'replace'}
 
     def __init__(self, specification):
@@ -26,12 +26,10 @@ class SQLFormatter(object):
             schema = options.get("schema")
             for key in schema.keys():
                 field = schema.get(key)
-                mode = options.get("mode")
-                if mode == "replace":
-                    if not isinstance(field.get("sqltype", None), str):
-                        raise ValueError(
-                                "The Mode replace needs "
-                                "'sqltype' in Schema fields")
+                if not isinstance(field.get("sqltype", None), str):
+                    raise ValueError(
+                        "The Mode replace needs "
+                        "'sqltype' in Schema fields")
 
         def quoted_rule(schema):
             for key in schema.keys():
@@ -61,22 +59,25 @@ class SQLFormatter(object):
 
     def __to_db(self,
                 dataframe: DataFrame,
-                conn,
+                conn: Engine,
                 params,
                 **kwargs) -> str:
         table_name = params.get("table_name")
-        index_flag = params.get("index")
-        index_label = params.get("index_label", None)
         batch_size = params.get("batch_size")
-        mode = self.modes.get(params.get("mode", 'append'))
+        mode = params.get("mode", 'append')
+        index_flag = params.get("index")
+        index_label = params.get("index_label")
 
         try:
+            if mode == 'truncate' and conn.has_table(table_name=table_name):
+                conn.execution_options(autoCommit=True)\
+                    .execute(f"""TRUNCATE TABLE {table_name}""")
             dataframe.to_sql(con=conn,
                              name=table_name,
-                             if_exists=mode,
+                             if_exists=self.modes.get(mode),
+                             chunksize=batch_size,
                              index=index_flag,
                              index_label=index_label,
-                             chunksize=batch_size,
                              **kwargs)
         except Exception as err:
             msg = ("Error: Check your credentials (username,"
@@ -96,7 +97,7 @@ class SQLFormatter(object):
             dataframe = dataframe.reset_index(level=0)
 
         if mode == "append":
-            data = sql.append_statement(dataframe, params)
+            data = sql.create_append_statement(dataframe, params)
         elif mode == "replace":
             data = sql.replace_statement(dataframe, params)
         elif mode == "truncate":
@@ -127,6 +128,19 @@ class SQLFormatter(object):
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
+
+        schema_columns = set(parameters.get('schema', dict()).keys())
+        columns = set(dataframe.columns)
+
+        if len(schema_columns - columns) > 0:
+            raise ValueError(f"{schema_columns - columns} "
+                             "Column(s) not declared on Fields properties!\n"
+                             "Schema and Fields must have the same columns")
+
+        if len(columns - schema_columns) > 0:
+            raise ValueError(f"{columns - schema_columns} "
+                             "Column(s) not declared on Schema properties!\n"
+                             "Schema and Fields must have the same columns")
 
         if dataframe.shape[0] > 0:
             if method == 'direct':

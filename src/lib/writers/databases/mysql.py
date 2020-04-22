@@ -1,7 +1,7 @@
 from pandas import DataFrame
 from sqlalchemy import create_engine
 from src.lib.writers.databases import DatabaseWriter
-from src.lib.mysql.connection import MysqlConnection
+from src.lib.mysql.mysql import MySQLConnection
 
 
 class MysqlDatabaseWriter(DatabaseWriter):
@@ -30,7 +30,6 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
         self.specification = specification
 
     def write(self, dataframe: DataFrame):
-        row_count = 0
         parameters = self.specification \
                          .get('options')
 
@@ -38,13 +37,11 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
                   .format(dataframe=dataframe,
                           path_or_buffer=None)
         if sql is not None:
-            with MysqlConnection(**parameters) as connection:
+            with MySQLConnection(**parameters) as connection:
                 for query in sql.split(';'):
-                    if len(query) < 6:
-                        continue
-                    row_count += connection.execute_query(query)
+                    connection.execute_query(query)
 
-        return f"{row_count} rows inserted"
+        return f"Inserted with success"
 
 
 class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
@@ -65,7 +62,7 @@ class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
                              f"{params['username']}:"
                              f"{params['password']}@"
                              f"{params['host']}:"
-                             f"{params['port']}/"
+                             f"{params.get('port', 3306)}/"
                              f"{params['database']}")
 
     def write(self, dataframe: DataFrame) -> None:
@@ -84,3 +81,4 @@ class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
                               path_or_buffer=connection,
                               method='direct',
                               schema=parameters['schema'])
+        return f"Inserted with success"
