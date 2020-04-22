@@ -1,5 +1,5 @@
-from pytest import fixture
 from src.tests.lib.formatters.fixtures import pandas_dataframe
+from pytest import fixture
 
 
 @fixture
@@ -28,14 +28,14 @@ def mysql_specification_script():
 
 
 @fixture
-def postgres_specification():
+def postgres_specification_cli():
     return {
         "type": "sql",
         "options": {
             "engine": "postgres",
-            "method": "direct",
+            "method": "cli",
             "host": "",
-            "port": 3306,
+            "port": 5432,
             "database": "",
             "username": "",
             "password": ""
@@ -44,26 +44,17 @@ def postgres_specification():
 
 
 @fixture
-def sql_formatter():
+def postgres_specification_direct():
     return {
-        'options': {
-            'table_name': 'mytable',
-            "mode": "truncate",
-            'batch_size': 2,
-            'schema': {
-                "id": {
-                    "quoted": False,
-                    "sqltype": "INTEGER"
-                },
-                "name": {
-                    "quoted": True,
-                    "sqltype": "VARCHAR(50)"
-                },
-                "age": {
-                    "quoted": False,
-                    "sqltype": "INTEGER"
-                }
-            }
+        "type": "sql",
+        "options": {
+            "engine": "postgres",
+            "method": "direct",
+            "host": "",
+            "port": 5432,
+            "database": "",
+            "username": "",
+            "password": ""
         }
     }
 

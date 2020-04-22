@@ -7,7 +7,8 @@ from src.lib.writers.\
     remotes.gcs_presigned_url import GCSPresignedUrlRemoteWriter
 from src.lib.writers.databases.mysql import MysqlClientDatabaseWriter, \
     MysqlDirectDatabaseWriter
-from src.lib.writers.databases.postgresql import PostgresDirectDatabaseWriter
+from src.lib.writers.databases.postgresql import PostgresDirectDatabaseWriter,\
+    PostgreSqlClientDatabaseWriter
 
 writers = {
     S3PresignedUrlRemoteWriter.key: S3PresignedUrlRemoteWriter,
@@ -24,6 +25,7 @@ uri_writers = {
 database_writers = {
     'mysql-cli': MysqlClientDatabaseWriter,
     'mysql-direct': MysqlDirectDatabaseWriter,
+    'postgres-cli': PostgreSqlClientDatabaseWriter,
     'postgres-direct': PostgresDirectDatabaseWriter
 }
 
