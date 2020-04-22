@@ -20,14 +20,30 @@ def mysql_specification():
 
 
 @fixture
-def postgres_specification():
+def postgres_specification_cli():
+    return {
+        "type": "sql",
+        "options": {
+            "engine": "postgres",
+            "method": "cli",
+            "host": "",
+            "port": 5432,
+            "database": "",
+            "username": "",
+            "password": ""
+        }
+    }
+
+
+@fixture
+def postgres_specification_direct():
     return {
         "type": "sql",
         "options": {
             "engine": "postgres",
             "method": "direct",
             "host": "",
-            "port": 3306,
+            "port": 5432,
             "database": "",
             "username": "",
             "password": ""

@@ -227,11 +227,20 @@ def file_writer_sample():
 
 
 @fixture
-def sql_writer_sample():
+def mysql_writer_sample():
     return {'type': 'sql',
             'options': {
                 'method': 'cli',
                 'engine': 'mysql'
+            }}
+
+
+@fixture
+def postgresql_writer_sample():
+    return {'type': 'sql',
+            'options': {
+                'method': 'cli',
+                'engine': 'postgres'
             }}
 
 

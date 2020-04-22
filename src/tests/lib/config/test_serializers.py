@@ -13,8 +13,14 @@ class TestSerializersConfiguration(object):
         assert rules is not None
         assert isinstance(rules, dict) is True
 
-    def test_sql(self, sql_writer_sample):
-        rules = SerializersConfiguration.get_rules(sql_writer_sample)
+    def test_mysql(self, mysql_writer_sample):
+        rules = SerializersConfiguration.get_rules(mysql_writer_sample)
+
+        assert rules is not None
+        assert isinstance(rules, dict) is True
+
+    def test_postgresql(self, postgresql_writer_sample):
+        rules = SerializersConfiguration.get_rules(postgresql_writer_sample)
 
         assert rules is not None
         assert isinstance(rules, dict) is True

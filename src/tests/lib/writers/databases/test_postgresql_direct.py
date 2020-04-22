@@ -9,7 +9,7 @@ from src.lib.writers.databases.postgresql import PostgresDirectDatabaseWriter
 
 
 class TestPostgresDirectDatabaseWriter(object):
-    def test_before_write(self, mocker, sql_formatter, postgres_specification):
+    def test_before_write(self, mocker, sql_formatter):
         expected = "123"
         mock = mocker.patch('getpass._raw_input')
         mock.return_value = expected
@@ -26,7 +26,7 @@ class TestPostgresDirectDatabaseWriter(object):
                                        mocker,
                                        dataframe,
                                        sql_formatter,
-                                       postgres_specification):
+                                       postgres_specification_direct):
         db_engine = create_engine('sqlite:///:memory:')
 
         mock = mocker.patch('getpass._raw_input')
@@ -38,7 +38,7 @@ class TestPostgresDirectDatabaseWriter(object):
         formatter = SQLFormatter(specification=sql_formatter)
         writer = PostgresDirectDatabaseWriter(
             formatter=formatter,
-            specification=postgres_specification)
+            specification=postgres_specification_direct)
         writer.before_write()
         writer.write(dataframe=dataframe)
 
@@ -51,14 +51,14 @@ class TestPostgresDirectDatabaseWriter(object):
                                                 mocker,
                                                 sql_formatter,
                                                 pandas_dataframe_without_data,
-                                                postgres_specification):
+                                                postgres_specification_direct):
         mock_conn = mocker.patch('psycopg2.connect')
         mock_conn.cursor.return_value = lambda x: 0
 
         formatter = SQLFormatter(specification={})
         writer = PostgresDirectDatabaseWriter(
             formatter=formatter,
-            specification=postgres_specification)
+            specification=postgres_specification_direct)
         writer.write(dataframe=pandas_dataframe_without_data)
 
         mock_conn.assert_not_called()
