@@ -45,7 +45,8 @@ setup(
         "faker>=4.0.1",
         "sqlalchemy>=1.3.16",
         "mysql-connector-python>=8.0.19",
-        "azure-storage-blob>=12.3.0"
+        "azure-storage-blob>=12.3.0",
+        "psycopg2-binary>=2.8.5"
     ],
     extras_require={
         "mysql": ['mysqlclient>=1.4.6']
