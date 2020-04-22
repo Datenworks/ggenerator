@@ -71,4 +71,3 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
                               method='direct',
                               schema=parameters['schema'])
         return "Inserted with success"
-

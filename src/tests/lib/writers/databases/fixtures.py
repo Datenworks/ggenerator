@@ -52,6 +52,7 @@ def postgres_specification_direct():
             "method": "direct",
             "host": "",
             "port": 5432,
+            "schema": None,
             "database": "",
             "username": "",
             "password": ""
