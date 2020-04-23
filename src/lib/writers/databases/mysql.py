@@ -81,4 +81,4 @@ class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
                               path_or_buffer=connection,
                               method='direct',
                               schema=parameters['schema'])
-        return f"Inserted with success"
+        return "Inserted with success"

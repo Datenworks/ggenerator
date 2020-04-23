@@ -42,7 +42,7 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
     def __init__(self, formatter, specification):
         self.formatter = formatter
         self.default = {
-            'schema': None
+            'schema': 'public'
         }
         self.specification = specification
 
@@ -70,3 +70,4 @@ class PostgresDirectDatabaseWriter(DatabaseWriter):
                               path_or_buffer=connection,
                               method='direct',
                               schema=parameters['schema'])
+        return "Inserted with success"

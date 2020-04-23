@@ -10,9 +10,9 @@ class DatabaseWriter(object):
                 'options.host': {'none': False, 'type': str},
                 'options.database': {'none': False, 'type': str},
                 'options.username': {'none': False, 'type': str},
-                'options.schema': {'none': False, 'type': str}
             },
             'optional': {
+                'options.schema': {'none': False, 'type': str},
                 'options.method': {'none': False, 'type': str},
                 'options.port': {'none': False, 'type': int},
             }
