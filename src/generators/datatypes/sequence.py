@@ -1,3 +1,6 @@
+from typing import List
+
+
 class SequenceType:
     key = 'integer:sequence'
     namespace = 'basic_type'
@@ -16,19 +19,27 @@ class SequenceType:
                 raise ValueError("Sequence `start_at` generator must be "
                                  f"greater than or equals {min_} and "
                                  f"less than or equals {max_}")
-        return {'required': {'generator.start_at': {
-                                'none': False,
-                                'type': int,
-                                'custom': [validate]}},
+        return {'required': {'generator.start_at': {'none': False,
+                                                    'type': int,
+                                                    'custom': [validate]}},
                 'optional': {}}
 
-    def generate(self):
-        return self.generate_records(num_of_rows=5)
+    def generate(self, num_of_records: int = 5) -> List[int]:
+        return self.generate_records(num_of_records=num_of_records)
 
-    def generate_records(self, num_of_rows) -> list:
-        return self.__generate_sequence(num_of_rows, self.step)
+    def generate_records(self, num_of_records, progress=None) -> List[int]:
+        return self.__generate_sequence(num_of_rows=num_of_records,
+                                        step=self.step,
+                                        progress=progress)
 
-    def __generate_sequence(self, num_of_rows, step) -> list:
-        return [x for x in range(self.start_at,
-                                 self.start_at + num_of_rows * step,
-                                 step)]
+    def __generate_sequence(self,
+                            num_of_rows,
+                            step,
+                            progress=None) -> List[int]:
+        results = []
+        for x in range(self.start_at,
+                       self.start_at + num_of_rows * step,
+                       step):
+            results.append(x)
+            progress and progress()
+        return results
