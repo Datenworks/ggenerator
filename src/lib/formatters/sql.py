@@ -23,6 +23,14 @@ class SQLFormatter(object):
     @staticmethod
     def rules():
         def replace_rule(options):
+            mode = options.get("mode")
+            if mode == "replace":
+                try:
+                    schema = options['schema']
+                except KeyError:
+                    raise ValueError(
+                        "Schema field is required for replace mode,\n"
+                        " please insert it")
             schema = options.get("schema")
             for key in schema.keys():
                 field = schema.get(key)
@@ -131,13 +139,14 @@ class SQLFormatter(object):
 
         schema_columns = set(parameters.get('schema', dict()).keys())
         columns = set(dataframe.columns)
+        mode = parameters.get('mode')
 
-        if len(schema_columns - columns) > 0:
+        if mode == 'replace' and len(schema_columns - columns) > 0:
             raise ValueError(f"{schema_columns - columns} "
                              "Column(s) not declared on Fields properties!\n"
                              "Schema and Fields must have the same columns")
 
-        if len(columns - schema_columns) > 0:
+        if mode == 'replace' and len(columns - schema_columns) > 0:
             raise ValueError(f"{columns - schema_columns} "
                              "Column(s) not declared on Schema properties!\n"
                              "Schema and Fields must have the same columns")
