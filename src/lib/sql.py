@@ -54,8 +54,13 @@ class Sql(object):
         return query
 
     def create_append_statement(self, dataframe, params):
-        query = self.create_table_statement(params)
-        query += self.append_statement(dataframe, params)
+        mode = params.get('mode')
+        schema = params.get('schema')
+        if mode == 'truncate' or mode == 'append' and schema is None:
+            query = self.append_statement(dataframe, params)
+        else:  # CRIAR OU NÃO CRIAR A TABELA?
+            query = self.create_table_statement(params)
+            query += self.append_statement(dataframe, params)
         return query
 
     def truncate_statement(self, dataframe, params):

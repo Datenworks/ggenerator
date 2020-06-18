@@ -182,6 +182,16 @@ def fixture_spec_replace():
 
 
 @fixture
+def fixture_spec_append2():
+    return {
+        "options": {
+            "table_name": "My_table",
+            "mode": "append"
+            }
+        }
+
+
+@fixture
 def fixture_spec_replace_schema_changed():
     true = True
     specification = {"options": {

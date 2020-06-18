@@ -140,3 +140,14 @@ class TestSqlFormatter(object):
         with raises(ValueError):
             sql_writer.format(dataframe=pandas_dataframe_with_data,
                               path_or_buffer=buffer)
+
+    def test_sql_script_is_append2(self,
+                                  replace_dataframe,
+                                  fixture_spec_append2):
+        buffer = StringIO()
+        sql_writer = SQLFormatter(
+            specification=fixture_spec_append2)
+        sql_writer.format(dataframe=replace_dataframe,
+                          path_or_buffer=buffer)
+
+        assert "INSERT INTO".lower() in buffer.getvalue().lower()
