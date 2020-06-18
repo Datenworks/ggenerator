@@ -39,16 +39,16 @@ def generate(spec_path, dryrun_flag):
 
 
 def generate_datasets(spec_path):
-    try:
-        generator = \
-            GeneratorsHandler(arguments={'config_file': spec_path})
-        for dset_name, dset_format, dset_path in generator.generate():
-            click.echo("| Finished!\n"
-                       f"| Dataset name: {dset_name}\n"
-                       f"| Dataset format: {dset_format}\n"
-                       f"| Dataset: {dset_path}\n")
-    except Exception as err:
-        click.echo(f"Error: {err}")
+    #try:
+    generator = \
+        GeneratorsHandler(arguments={'config_file': spec_path})
+    for dset_name, dset_format, dset_path in generator.generate():
+        click.echo("| Finished!\n"
+                    f"| Dataset name: {dset_name}\n"
+                    f"| Dataset format: {dset_format}\n"
+                    f"| Dataset: {dset_path}\n")
+    # except Exception as err:
+    #     click.echo(f"Error: {err}")
 
 
 def generate_dryrun(spec_path):

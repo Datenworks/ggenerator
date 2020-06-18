@@ -25,26 +25,25 @@ class SQLFormatter(object):
         def replace_rule(options):
             mode = options.get("mode")
             if mode == "replace":
-                try:
-                    schema = options['schema']
-                except Exception:
+                if "schema" not in options.keys():
                     raise ValueError(
                         "Schema field is required for replace mode,\n"
                         " please insert it")
-            else:# TAELADO!
                 schema = options.get("schema")
                 for key in schema.keys():
                     field = schema.get(key)
-                    if not isinstance(field.get("sqltype", None), str):
+                    if "sqltype" not in field.keys():
                         raise ValueError(
-                            "The Mode replace needs "
+                            "The replace mode needs "
                             "'sqltype' in Schema fields")
 
         def quoted_rule(schema):
             for key in schema.keys():
                 field = schema.get(key)
                 if not isinstance(field.get("quoted", None), bool):
-                    raise ValueError(" Schema fields required 'quoted'")
+                    raise ValueError("Schema fields requires 'quoted' key. \n"
+                                     "Please insert 'quoted' parameter\n"
+                                     " inside key block")
 
         return {
             'required': {
@@ -59,7 +58,10 @@ class SQLFormatter(object):
                                  'values': ["append", "replace", "truncate"]},
                 'options.schema': {'none': False,
                                    'type': dict,
-                                   'custom': [replace_rule, quoted_rule]}
+                                   'custom': [quoted_rule]},
+                'options': {'none': False,
+                            'type': dict,
+                            'custom': [replace_rule]}
             }
         }
 

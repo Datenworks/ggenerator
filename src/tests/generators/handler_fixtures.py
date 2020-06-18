@@ -287,3 +287,99 @@ def unknown_type_spec():
             "serializers": {
                 "to": [{"type": "file",
                         "uri": "/tmp/teste.csv"}]}}}}
+
+
+@fixture
+def valid_spec_for_replace_rules():
+    false = False
+    true = True
+
+    return {
+        "datasets": {
+            "sample": {
+                "size": 10,
+                "locale": "pt_BR",
+                "fields": [
+                    {
+                        "type": "integer:sequence",
+                        "name": "id",
+                        "generator": {
+                            "start_at": 1
+                        }
+                    },
+                    {
+                        "type": "name",
+                        "name": "name",
+                        "generator": {}
+                    },
+                    {
+                        "type": "pyint",
+                        "name": "age",
+                        "generator": {
+                            "max_value": 120
+                        }
+                    },
+                    {
+                        "type": "pyfloat",
+                        "name": "weight",
+                        "generator": {
+                            "positive": false,
+                            "min_value": 0,
+                            "max_value": 250
+                        }
+                    },
+                    {
+                        "type": "job",
+                        "name": "job",
+                        "generator": {}
+                    },
+                    {
+                        "type": "future_datetime",
+                        "name": "datetime",
+                        "generator": {}
+                    }
+                ],
+                "format": {
+                    "type": "sql",
+                    "options": {
+                        "table_name": "My_table",
+                        "mode": "replace",
+                        "schema": {
+                            "id": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "name": {
+                                "sqltype": "VARCHAR(50)",
+                                "quoted": true
+                            },
+                            "age": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "weight": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "job": {
+                                "sqltype": "VARCHAR(50)",
+                                "quoted": true
+                            },
+                            "datetime": {
+                                "sqltype": "DATETIME",
+                                "quoted": false
+                            }
+                        }
+                    }
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "/home/tadeu/Desktop/dataset.sql"
+                        }
+                    ]
+                }
+            }
+        }
+    }
