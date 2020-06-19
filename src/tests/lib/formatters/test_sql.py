@@ -128,16 +128,6 @@ class TestSqlFormatter(object):
         with raises(ValueError):
             sql_writer.format(replace_dataframe, buffer)
 
-    def test_replace_schema_bigger_than_fields(
-                        self,
-                        replace_dataframe,
-                        invalid_spec_for_replace_schema_bigger_than_fields):
-        buffer = StringIO()
-        sql_writer = SQLFormatter(
-            specification=invalid_spec_for_replace_schema_bigger_than_fields)
-        with raises(ValueError):
-            sql_writer.format(replace_dataframe, buffer)
-
     def test_invalid_mode(self, sql_specification_format,
                           pandas_dataframe_with_data):
         buffer = StringIO()
@@ -148,7 +138,6 @@ class TestSqlFormatter(object):
         with raises(ValueError):
             sql_writer.format(dataframe=pandas_dataframe_with_data,
                               path_or_buffer=buffer)
-
 
     def test_sql_script_is_append2(self,
                                    replace_dataframe,
