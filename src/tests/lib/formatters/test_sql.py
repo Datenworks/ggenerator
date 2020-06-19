@@ -119,6 +119,25 @@ class TestSqlFormatter(object):
         assert len(text) > 0
         assert f'DROP TABLE IF EXISTS {table_name};' in text
 
+    def test_replace_without_schema(self,
+                                    replace_dataframe,
+                                    fixture_spec_replace_without_schema):
+        buffer = StringIO()
+        sql_writer = SQLFormatter(
+            specification=fixture_spec_replace_without_schema)
+        with raises(ValueError):
+            sql_writer.format(replace_dataframe, buffer)
+
+    def test_replace_schema_bigger_than_fields(
+                        self,
+                        replace_dataframe,
+                        invalid_spec_for_replace_schema_bigger_than_fields):
+        buffer = StringIO()
+        sql_writer = SQLFormatter(
+            specification=invalid_spec_for_replace_schema_bigger_than_fields)
+        with raises(ValueError):
+            sql_writer.format(replace_dataframe, buffer)
+
     def test_invalid_mode(self, sql_specification_format,
                           pandas_dataframe_with_data):
         buffer = StringIO()
@@ -130,20 +149,10 @@ class TestSqlFormatter(object):
             sql_writer.format(dataframe=pandas_dataframe_with_data,
                               path_or_buffer=buffer)
 
-    def test_invalid_schema(self, pandas_dataframe_with_data,
-                            sql_wrong_spec_format):
-        buffer = StringIO()
-        table_name = 'mytable'
-        sql_writer = SQLFormatter(
-            specification=sql_wrong_spec_format(table_name))
-
-        with raises(ValueError):
-            sql_writer.format(dataframe=pandas_dataframe_with_data,
-                              path_or_buffer=buffer)
 
     def test_sql_script_is_append2(self,
-                                  replace_dataframe,
-                                  fixture_spec_append2):
+                                   replace_dataframe,
+                                   fixture_spec_append2):
         buffer = StringIO()
         sql_writer = SQLFormatter(
             specification=fixture_spec_append2)

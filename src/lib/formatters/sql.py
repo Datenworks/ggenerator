@@ -37,14 +37,6 @@ class SQLFormatter(object):
                             "The replace mode needs "
                             "'sqltype' in Schema fields")
 
-        def quoted_rule(schema):
-            for key in schema.keys():
-                field = schema.get(key)
-                if not isinstance(field.get("quoted", None), bool):
-                    raise ValueError("Schema fields requires 'quoted' key. \n"
-                                     "Please insert 'quoted' parameter\n"
-                                     " inside key block")
-
         return {
             'required': {
                 'options.table_name': {'none': False, 'type': str}
@@ -58,7 +50,7 @@ class SQLFormatter(object):
                                  'values': ["append", "replace", "truncate"]},
                 'options.schema': {'none': False,
                                    'type': dict,
-                                   'custom': [quoted_rule]},
+                                   'custom': []},
                 'options': {'none': False,
                             'type': dict,
                             'custom': [replace_rule]}

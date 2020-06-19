@@ -383,3 +383,146 @@ def valid_spec_for_replace_rules():
             }
         }
     }
+
+
+@fixture
+def invalid_spec_for_replace_rules_without_schema():
+    false = False
+
+    return {
+        "datasets": {
+            "sample": {
+                "size": 10,
+                "locale": "pt_BR",
+                "fields": [
+                    {
+                        "type": "integer:sequence",
+                        "name": "id",
+                        "generator": {
+                            "start_at": 1
+                        }
+                    },
+                    {
+                        "type": "name",
+                        "name": "name",
+                        "generator": {}
+                    },
+                    {
+                        "type": "pyint",
+                        "name": "age",
+                        "generator": {
+                            "max_value": 120
+                        }
+                    },
+                    {
+                        "type": "pyfloat",
+                        "name": "weight",
+                        "generator": {
+                            "positive": false,
+                            "min_value": 0,
+                            "max_value": 250
+                        }
+                    },
+                    {
+                        "type": "job",
+                        "name": "job",
+                        "generator": {}
+                    },
+                    {
+                        "type": "future_datetime",
+                        "name": "datetime",
+                        "generator": {}
+                    }
+                ],
+                "format": {
+                    "type": "sql",
+                    "options": {
+                        "table_name": "My_table",
+                        "mode": "replace"
+                    }
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "/home/tadeu/Desktop/dataset.sql"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+
+
+@fixture
+def invalid_spec_for_replace_rules_without_sqltype():
+    false = False
+
+    return {
+        "datasets": {
+            "sample": {
+                "size": 10,
+                "locale": "pt_BR",
+                "fields": [
+                    {
+                        "type": "integer:sequence",
+                        "name": "id",
+                        "generator": {
+                            "start_at": 1
+                        }
+                    },
+                    {
+                        "type": "name",
+                        "name": "name",
+                        "generator": {}
+                    },
+                    {
+                        "type": "pyint",
+                        "name": "age",
+                        "generator": {
+                            "max_value": 120
+                        }
+                    },
+                    {
+                        "type": "pyfloat",
+                        "name": "weight",
+                        "generator": {
+                            "positive": false,
+                            "min_value": 0,
+                            "max_value": 250
+                        }
+                    },
+                    {
+                        "type": "job",
+                        "name": "job",
+                        "generator": {}
+                    },
+                    {
+                        "type": "future_datetime",
+                        "name": "datetime",
+                        "generator": {}
+                    }
+                ],
+                "format": {
+                    "type": "sql",
+                    "options": {
+                        "table_name": "My_table",
+                        "mode": "replace",
+                        "schema": {
+                            "id": {
+                                "quoted": false
+                            }
+                        }
+                    }
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "/home/tadeu/Desktop/dataset.sql"
+                        }
+                    ]
+                }
+            }
+        }
+    }
