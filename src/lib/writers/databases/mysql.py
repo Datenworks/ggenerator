@@ -41,7 +41,7 @@ class MysqlClientDatabaseWriter(MysqlDatabaseWriter):
                 for query in sql.split(';'):
                     connection.execute_query(query)
 
-        return f"Inserted with success"
+        return "Inserted with success"
 
 
 class MysqlDirectDatabaseWriter(MysqlDatabaseWriter):
