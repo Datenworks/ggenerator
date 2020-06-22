@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "==5.3.5"
-flake8 = "==3.7.9"
+flake8 = ">=3.7.9,<4.0.0"
 pytest-mock = "==2.0.0"
 autopep8 = "*"
 pytest-cov = "==2.8.1"

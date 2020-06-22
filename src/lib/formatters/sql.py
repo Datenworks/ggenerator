@@ -23,37 +23,37 @@ class SQLFormatter(object):
     @staticmethod
     def rules():
         def replace_rule(options):
-            schema = options.get("schema")
-            for key in schema.keys():
-                field = schema.get(key)
-                if not isinstance(field.get("sqltype", None), str):
+            mode = options.get("mode")
+            if mode == "replace":
+                if "schema" not in options.keys():
                     raise ValueError(
-                        "The Mode replace needs "
-                        "'sqltype' in Schema fields")
-
-        def quoted_rule(schema):
-            for key in schema.keys():
-                field = schema.get(key)
-                if not isinstance(field.get("quoted", None), bool):
-                    raise ValueError(" Schema fields required 'quoted'")
+                        "Schema field is required for replace mode,\n"
+                        " please insert it")
+                schema = options.get("schema")
+                for key in schema.keys():
+                    field = schema.get(key)
+                    if "sqltype" not in field.keys():
+                        raise ValueError(
+                            "The replace mode needs "
+                            "'sqltype' in Schema fields")
 
         return {
             'required': {
-                'options.table_name': {'none': False, 'type': str},
-                'options': {'none': False,
-                            'type': dict,
-                            'custom': [replace_rule]}
+                'options.table_name': {'none': False, 'type': str}
             },
             'optional': {
                 'options.batch_size': {'none': False, 'type': int},
                 'options.index': {'none': False, 'type': bool},
                 'options.index_label': {'none': False, 'type': str},
-                'options.schema': {'none': False,
-                                   'type': dict,
-                                   'custom': [quoted_rule]},
                 'options.mode': {'none': False,
                                  'type': str,
-                                 'values': ["append", "replace", "truncate"]}
+                                 'values': ["append", "replace", "truncate"]},
+                'options.schema': {'none': False,
+                                   'type': dict,
+                                   'custom': []},
+                'options': {'none': False,
+                            'type': dict,
+                            'custom': [replace_rule]}
             }
         }
 
@@ -128,16 +128,18 @@ class SQLFormatter(object):
         parameters = self.default
         options = self.specification.get('options', {})
         parameters.update(options)
+        mode = parameters.get('mode')
 
-        schema_columns = set(parameters.get('schema', dict()).keys())
-        columns = set(dataframe.columns)
+        if mode == 'replace':
+            schema_columns = set(parameters.get('schema', dict()).keys())
+            columns = set(dataframe.columns)
 
-        if len(schema_columns - columns) > 0:
+        if mode == 'replace' and len(schema_columns - columns) > 0:
             raise ValueError(f"{schema_columns - columns} "
                              "Column(s) not declared on Fields properties!\n"
                              "Schema and Fields must have the same columns")
 
-        if len(columns - schema_columns) > 0:
+        if mode == 'replace' and len(columns - schema_columns) > 0:
             raise ValueError(f"{columns - schema_columns} "
                              "Column(s) not declared on Schema properties!\n"
                              "Schema and Fields must have the same columns")

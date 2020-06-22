@@ -51,35 +51,6 @@ def sql_specification_format():
 
 
 @fixture
-def sql_wrong_spec_format():
-    def _spec(table_name, index=False, index_label=None, mode='append'):
-        return {
-            'options': {
-                'table_name': table_name,
-                'batch_size': 2,
-                'schema': {
-                    'Column1': {
-                        'quoted': True,
-                        'sqltype': "VARCHAR(50)"
-                    },
-                    'Column2': {
-                        'quoted': True,
-                        'sqltype': "VARCHAR(50)"
-                    },
-                    'wrongColumn': {
-                        'quoted': True,
-                        'sqltype': "VARCHAR(50)"
-                    },
-                },
-                'mode': mode,
-                'index': index,
-                'index_label': index_label
-            }
-        }
-    return _spec
-
-
-@fixture
 def fixture_spec_default():
     specification = {
         "datasets": {
@@ -182,6 +153,26 @@ def fixture_spec_replace():
 
 
 @fixture
+def fixture_spec_replace_without_schema():
+    return {
+        "options": {
+            "table_name": "My_table",
+            "mode": "replace"
+        }
+    }
+
+
+@fixture
+def fixture_spec_append2():
+    return {
+        "options": {
+            "table_name": "My_table",
+            "mode": "append"
+            }
+        }
+
+
+@fixture
 def fixture_spec_replace_schema_changed():
     true = True
     specification = {"options": {
@@ -253,3 +244,89 @@ def dataframe_with_datetime():
     df['at'] = df['at'].apply(lambda x: isoparse(x))
 
     return df
+
+
+@fixture
+def invalid_spec_for_replace_schema_bigger_than_fields():
+    false = False
+    true = True
+
+    return {
+        "datasets": {
+            "sample": {
+                "size": 10,
+                "locale": "pt_BR",
+                "fields": [
+                    {
+                        "type": "integer:sequence",
+                        "name": "id",
+                        "generator": {
+                            "start_at": 1
+                        }
+                    },
+                    {
+                        "type": "pyint",
+                        "name": "age",
+                        "generator": {
+                            "max_value": 120
+                        }
+                    },
+                    {
+                        "type": "pyfloat",
+                        "name": "weight",
+                        "generator": {
+                            "positive": false,
+                            "min_value": 0,
+                            "max_value": 250
+                        }
+                    },
+                    {
+                        "type": "future_datetime",
+                        "name": "datetime",
+                        "generator": {}
+                    }
+                ],
+                "format": {
+                    "type": "sql",
+                    "options": {
+                        "table_name": "My_table",
+                        "mode": "replace",
+                        "schema": {
+                            "id": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "name": {
+                                "sqltype": "VARCHAR(50)",
+                                "quoted": true
+                            },
+                            "age": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "weight": {
+                                "sqltype": "INTEGER NOT NULL",
+                                "quoted": false
+                            },
+                            "job": {
+                                "sqltype": "VARCHAR(50)",
+                                "quoted": true
+                            },
+                            "datetime": {
+                                "sqltype": "DATETIME",
+                                "quoted": false
+                            }
+                        }
+                    }
+                },
+                "serializers": {
+                    "to": [
+                        {
+                            "type": "file",
+                            "uri": "/home/tadeu/Desktop/dataset.sql"
+                        }
+                    ]
+                }
+            }
+        }
+    }

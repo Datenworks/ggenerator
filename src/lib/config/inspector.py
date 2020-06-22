@@ -26,7 +26,8 @@ class ConfigurationInpector(object):
            optional is False:
             raise ValueError(f"JSON Key `{trace}` can not "
                              "be `None`, `null` or empty")
-        elif optional is True:
+        elif self.__validate_none(value=configuration.get(key),
+                                  expected=expected) and optional is True:
             return
 
         if len(keys) > 1:
