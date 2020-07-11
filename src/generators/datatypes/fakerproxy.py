@@ -74,9 +74,13 @@ class FakerType(object):
         return self.__parse_data(self.generator_type(*self.args,
                                                      **self.kwargs))
 
-    def generate_records(self, num_of_records):
-        return [self.generate()
-                for _ in range(num_of_records)]
+    def generate_records(self, num_of_records, progress=None):
+        results = []
+        for _ in range(num_of_records):
+            results.append(self.generate())
+            progress and progress()
+
+        return results
 
     def __parse_data(self, data):
         if isinstance(data, str):

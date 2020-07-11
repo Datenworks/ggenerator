@@ -1,5 +1,6 @@
 import json
 
+from alive_progress import alive_bar
 from pandas import DataFrame, Series
 
 from src.lib.config import general_rules, datetime_rules
@@ -80,7 +81,6 @@ class BaseHandler(object):
         return configuration
 
     def generate_dataframe(self, specification: dict, size) -> DataFrame:
-        size = size
         fields = specification['fields']
         locale = specification['locale']
         generators_map = Metadata(locale=locale).get_generators_map()
@@ -94,7 +94,12 @@ class BaseHandler(object):
             generator_class = generators_map[field_type]['type']
             generator = generator_class(**field_arguments)
 
-            series = Series(generator.generate_records(size))
+            with alive_bar(size) as bar:
+                # E731 do not assign a lambda expression, use a def
+                def progress(): bar(text=f"ggenerating {field_name}")
+
+                series = Series(generator.generate_records(num_of_records=size,
+                                                           progress=progress))
 
             dataframe[field_name] = series.values
 
