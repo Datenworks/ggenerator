@@ -8,7 +8,8 @@ class JsonFormatter(object):
     key = 'json-array'
 
     def __init__(self, specification={}):
-        self.default = {'orient': 'records'}
+        self.default = {'orient': 'records',
+                        'date_unit': 's'}
         self.specification = specification
 
     @staticmethod
@@ -32,12 +33,3 @@ class JsonFormatter(object):
         if dataframe.shape[0] > 0:
             dataframe.to_json(
                 path_or_buf=path_or_buffer, force_ascii=False, **parameters)
-
-    @staticmethod
-    def check(options):
-        indent = options.get("indent")
-        if indent in ["pretty", "minify", "", None]:
-            pass
-        else:
-            raise ValueError(
-                            "json-array suports only 'pretty' and 'minify'")

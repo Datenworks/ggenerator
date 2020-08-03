@@ -80,6 +80,7 @@ class TestS3PresignedUrlRemoteWriter(object):
                 formatter=formatter,
                 specification=specification_without_url
             )
+            writer.before_write()
             signed_url = writer.write(dataframe=pandas_dataframe_without_data)
 
             mock_post.assert_called()
@@ -109,7 +110,7 @@ class TestS3PresignedUrlRemoteWriter(object):
             )
 
             with raises(ValueError):
-                writer.write(dataframe=pandas_dataframe_without_data)
+                writer.before_write()
 
                 mock_post.assert_called()
                 mock_file.assert_called()
