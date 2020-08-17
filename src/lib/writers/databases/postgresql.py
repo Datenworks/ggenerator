@@ -1,5 +1,5 @@
 import platform
-import os
+from os import getenv
 from pandas import DataFrame
 from sqlalchemy.engine import create_engine
 
@@ -28,8 +28,8 @@ class PostgreSqlClientDatabaseWriter(DatabaseWriter):
                                    user=params['username'],
                                    password=params['password'])
             if platform.system() == "Windows":
-                print(platform.system())
-                postgres_envvar = os.getenv("PSQL_CLI_BINPATH")
+                postgres_envvar = getenv("PSQL_CLI_BINPATH")
+                # postgres_envvar = getenv("TESTE")
                 print(postgres_envvar)
                 if postgres_envvar == "" or postgres_envvar == " " \
                         or postgres_envvar is None:
