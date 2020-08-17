@@ -1,4 +1,5 @@
-import platform, os
+import platform
+import os
 from pandas import DataFrame
 from sqlalchemy.engine import create_engine
 
@@ -29,16 +30,20 @@ class PostgreSqlClientDatabaseWriter(DatabaseWriter):
             if platform.system() == "Windows":
                 print(platform.system())
                 postgres_envvar = os.getenv("PSQL_CLI_BINPATH")
-                if postgres_envvar != "" or postgres_envvar != " ":
-                    for query in sql.split(';'):
-                        if len(query) < 6:
-                            continue
-                        psql.execute_query_windows(query, postgres_envvar)
-
-            for query in sql.split(';'):
-                if len(query) < 6:
-                    continue
-                psql.execute_query(query)
+                print(postgres_envvar)
+                if postgres_envvar == "" or postgres_envvar == " " \
+                        or postgres_envvar is None:
+                    raise ValueError(
+                        "Please set your PSQL_CLI_BINPATH env var.")
+                for query in sql.split(';'):
+                    if len(query) < 6:
+                        continue
+                    psql.execute_query_windows(query, postgres_envvar)
+            elif platform.system() == "Linux":
+                for query in sql.split(';'):
+                    if len(query) < 6:
+                        continue
+                    psql.execute_query(query)
 
         return "Inserted with success"
 
