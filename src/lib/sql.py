@@ -54,8 +54,12 @@ class Sql(object):
         return query
 
     def create_append_statement(self, dataframe, params):
-        query = self.create_table_statement(params)
-        query += self.append_statement(dataframe, params)
+        mode = params.get('mode')
+        if mode == 'truncate' or mode == 'append':
+            query = self.append_statement(dataframe, params)
+        else:
+            query = self.create_table_statement(params)
+            query += self.append_statement(dataframe, params)
         return query
 
     def truncate_statement(self, dataframe, params):
@@ -85,4 +89,4 @@ class Sql(object):
             if cont < len(schema):
                 fields += ", "
         fields += ");"
-        return f"CREATE TABLE IF NOT EXISTS {table_name} {fields};\n\n"
+        return f"CREATE TABLE IF NOT EXISTS {table_name} {fields}\n\n"

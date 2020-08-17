@@ -26,3 +26,15 @@ class PostgresSqlPsql(object):
                      .execute(command=command)
 
         return output
+
+    def execute_query_windows(self, query, postgres_envvar):
+        command = [
+            postgres_envvar,
+            'psql',
+            self.base_command,
+            '-c',
+            query
+        ]
+        output = self.shell \
+                     .execute(command=command)
+        return output

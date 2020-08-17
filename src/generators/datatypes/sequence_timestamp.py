@@ -2,6 +2,7 @@ import pytz
 
 from datetime import datetime, timedelta
 from dateutil.parser import isoparse
+from typing import List
 
 
 class TimestampSequenceType:
@@ -40,13 +41,19 @@ class TimestampSequenceType:
         seconds = self.datepart_in_seconds[self.datepart]
         return timedelta(seconds=seconds * delta * self.step)
 
-    def generate(self):
+    def generate(self, num_of_records: int = 5) -> List[str]:
         return [dt.isoformat()
-                for dt in self.generate_records(num_of_records=5)]
+                for dt in self.generate_records(num_of_records=num_of_records)]
 
-    def generate_records(self, num_of_records) -> list:
-        return [self.__generate_next(delta)
-                for delta in range(0, num_of_records)]
+    def generate_records(self,
+                         num_of_records,
+                         progress=None) -> List[datetime]:
+        results = []
+        for delta in range(0, num_of_records):
+            results.append(self.__generate_next(delta))
+            progress and progress()
+
+        return results
 
     @staticmethod
     def rules():

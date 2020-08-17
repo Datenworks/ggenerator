@@ -233,3 +233,44 @@ class TestBaseHundler(object):
             handler = BaseHandler()
             with pytest.raises(ValueError):
                 handler.valid_specification('')
+
+    def test_basehandler_valid_replace(self, valid_spec_for_replace_rules):
+        handler = BaseHandler()
+
+        with open('valid_spec_for_replace_rules.json', 'w') as f:
+            json.dump(valid_spec_for_replace_rules, f)
+
+        config = handler.valid_specification(
+            'valid_spec_for_replace_rules.json')
+
+        assert valid_spec_for_replace_rules == config
+
+        remove('valid_spec_for_replace_rules.json')
+
+    def test_basehandler_invalid_replace_without_schema(
+                self,
+                invalid_spec_for_replace_rules_without_schema):
+        handler = BaseHandler()
+
+        with open(
+             'invalid_spec_for_replace_rules_without_schema.json', 'w') as f:
+            json.dump(invalid_spec_for_replace_rules_without_schema, f)
+        with pytest.raises(ValueError):
+            handler.valid_specification(
+             'invalid_spec_for_replace_rules_without_schema.json')
+
+        remove('invalid_spec_for_replace_rules_without_schema.json')
+
+    def test_basehandler_invalid_replace_without_sqltype(
+                self,
+                invalid_spec_for_replace_rules_without_sqltype):
+        handler = BaseHandler()
+
+        with open(
+             'invalid_spec_for_replace_rules_without_sqltype.json', 'w') as f:
+            json.dump(invalid_spec_for_replace_rules_without_sqltype, f)
+        with pytest.raises(ValueError):
+            handler.valid_specification(
+             'invalid_spec_for_replace_rules_without_sqltype.json')
+
+        remove('invalid_spec_for_replace_rules_without_sqltype.json')

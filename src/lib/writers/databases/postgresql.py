@@ -1,3 +1,4 @@
+import platform, os
 from pandas import DataFrame
 from sqlalchemy.engine import create_engine
 
@@ -25,6 +26,15 @@ class PostgreSqlClientDatabaseWriter(DatabaseWriter):
                                    database=params['database'],
                                    user=params['username'],
                                    password=params['password'])
+            if platform.system() == "Windows":
+                print(platform.system())
+                postgres_envvar = os.getenv("PSQL_CLI_BINPATH")
+                if postgres_envvar != "" or postgres_envvar != " ":
+                    for query in sql.split(';'):
+                        if len(query) < 6:
+                            continue
+                        psql.execute_query_windows(query, postgres_envvar)
+
             for query in sql.split(';'):
                 if len(query) < 6:
                     continue
