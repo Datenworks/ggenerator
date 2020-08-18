@@ -1,5 +1,8 @@
 from src.lib.shell import Shell
+from os import getenv
 
+
+MYSQL_CLI_BINPATH = getenv("MYSQL_CLI_BINPATH")
 
 class MySQLConnection(object):
     connection = ("--host={host} --port={port} --user={user} "
@@ -25,7 +28,7 @@ class MySQLConnection(object):
 
     def execute_query(self, query, *args):
         command = [
-            'mysql',
+            MYSQL_CLI_BINPATH or 'mysql',
         ]
         for argoption in self.base_connection:
             command.append(argoption)
