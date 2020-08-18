@@ -35,8 +35,10 @@ class MySQLConnection(object):
 
         if platform.system() == "Windows" and MYSQL_CLI_BINPATH:
             command = [MYSQL_CLI_BINPATH, "--default-character-set=utf8"]
-        else:
-            raise Exception("You must set ")
+        elif not MYSQL_CLI_BINPATH:
+            raise Exception("You must set the MYSQL_CLI_BINPATH on your "
+                            "Environment Variables with the path "
+                            "of your mysql client installed on the machine")
 
         for argoption in self.base_connection:
             command.append(argoption)
