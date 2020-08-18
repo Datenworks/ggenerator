@@ -38,7 +38,7 @@ class PostgreSqlClientDatabaseWriter(DatabaseWriter):
                 for query in sql.split(';'):
                     if len(query) < 6:
                         continue
-                    psql.execute_query_windows(query, postgres_envvar)
+                    psql.execute_query_windows(query)
             elif platform.system() == "Linux":
                 for query in sql.split(';'):
                     if len(query) < 6:
