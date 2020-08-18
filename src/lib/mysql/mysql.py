@@ -30,15 +30,11 @@ class MySQLConnection(object):
 
     def execute_query(self, query, *args, **kwargs):
         command = [
-            'mysql',
+            MYSQL_CLI_BINPATH or 'mysql',
         ]
 
-        if platform.system() == "Windows" and MYSQL_CLI_BINPATH:
-            command = [MYSQL_CLI_BINPATH, "--default-character-set=utf8"]
-        elif not MYSQL_CLI_BINPATH:
-            raise Exception("You must set the MYSQL_CLI_BINPATH on your "
-                            "Environment Variables with the path "
-                            "of your mysql client installed on the machine")
+        if platform.system() == "Windows":
+            command.append("--default-character-set=utf8")
 
         for argoption in self.base_connection:
             command.append(argoption)
