@@ -15,12 +15,14 @@ class PostgresSqlPsql(object):
                                         database=database)
 
     def execute_query(self, query):
+        nl = "\n"
         command = [
-            '/usr/bin/env',
-            'psql',
-            self.base_command,
+            'chcp 1252',
+            '|',
+            '"C:\\Program Files\\PostgreSQL\\12\\bin\\psql"',
             '-c',
-            query
+            f'{query.replace(nl, "")}',
+            f'{self.base_command}'
         ]
         output = self.shell \
                      .execute(command=command)

@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, check_output
 
 
 class Shell(object):
@@ -8,12 +8,12 @@ class Shell(object):
     def execute(self, command):
         returncode, output, error = self.execute_command(command)
         if returncode > 0 and error:
-            raise ShellError(error.decode())
+            raise ShellError(error)
 
-        return output.decode()
+        return output
 
     def execute_command(self, command):
-        process = Popen(command, stdout=PIPE, stderr=PIPE)
+        process = Popen(command, stdout=PIPE, stderr=PIPE, text=True)
         output, error = process.communicate()
         return process.returncode, output, error
 
