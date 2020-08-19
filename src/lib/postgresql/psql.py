@@ -20,9 +20,9 @@ class PostgresSqlPsql(object):
     def execute_query(self, query):
         nl = "\n"
         default_psql = [POSTGRES_CLI_BINPATH or '/usr/bin/env', 'psql']
-        
+
         command = [
-            *default_psql ,
+            *default_psql,
             '-c',
             f'{query.replace(nl, "")}',
             self.base_command
