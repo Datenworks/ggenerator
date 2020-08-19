@@ -1,4 +1,7 @@
+from os import getenv
 from src.lib.shell import Shell
+
+POSTGRES_CLI_BINPATH = getenv("POSTGRES_CLI_BINPATH")
 
 
 class PostgresSqlPsql(object):
@@ -17,12 +20,10 @@ class PostgresSqlPsql(object):
     def execute_query(self, query):
         nl = "\n"
         command = [
-            'chcp 1252',
-            '|',
-            '"C:\\Program Files\\PostgreSQL\\12\\bin\\psql"',
+            POSTGRES_CLI_BINPATH or 'psql',
             '-c',
             f'{query.replace(nl, "")}',
-            f'{self.base_command}'
+            self.base_command
         ]
         output = self.shell \
                      .execute(command=command)
