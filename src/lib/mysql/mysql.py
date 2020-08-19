@@ -1,4 +1,9 @@
+import platform
+from os import getenv
+
 from src.lib.shell import Shell
+
+MYSQL_CLI_BINPATH = getenv("MYSQL_CLI_BINPATH")
 
 
 class MySQLConnection(object):
@@ -23,10 +28,14 @@ class MySQLConnection(object):
     def __exit__(self, type, value, traceback):
         self.close()
 
-    def execute_query(self, query, *args):
+    def execute_query(self, query, *args, **kwargs):
         command = [
-            'mysql',
+            MYSQL_CLI_BINPATH or 'mysql',
         ]
+
+        if platform.system() == "Windows":
+            command.append("--default-character-set=utf8")
+
         for argoption in self.base_connection:
             command.append(argoption)
         command.append(self.database)
