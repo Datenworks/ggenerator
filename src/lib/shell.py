@@ -1,4 +1,4 @@
-from subprocess import Popen, PIPE, check_output
+from subprocess import Popen, PIPE
 
 
 class Shell(object):
