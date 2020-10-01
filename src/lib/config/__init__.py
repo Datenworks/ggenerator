@@ -7,3 +7,12 @@ general_rules = {
     "datasets.{*}.format.type": {'type': str, 'none': False},
     "datasets.{*}.serializers.to.[*].type": {'type': str, 'none': False}
 }
+
+datetime_rules = {
+    "format.options": {'type': dict, 'none': False},
+    "format.options.date_format": {
+        'type': str,
+        'none': False,
+        'values': ['iso', 'epoch']
+    }
+}
