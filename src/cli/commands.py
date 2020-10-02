@@ -6,9 +6,9 @@ from src.generators.datatypes import Metadata
 from tabulate import tabulate
 from locale import getdefaultlocale
 from src import utils
-from os import getenv
+from src.cli import get_version
 
-VERSION = getenv("TRAVIS_TAG", "0.1")
+VERSION = get_version('ggenerator')
 default_locale = getdefaultlocale()[0]
 
 
