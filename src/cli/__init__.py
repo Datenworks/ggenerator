@@ -1,7 +1,12 @@
+import os
+
 def get_version(package):
-    try:
-        from importlib.metadata import version
-        return version('ggenerator')
-    except ModuleNotFoundError as err:
-        import pkg_resources
-        return pkg_resources.get_distribution('ggenerator').version
+    if 'TRAVIS_TAG' in os.environ:
+        return getenv("TRAVIS_TAG", 'v0.0')
+    else:
+        try:
+            from importlib.metadata import version
+            return version(package)
+        except ModuleNotFoundError as err:
+            import pkg_resources
+            return pkg_resources.get_distribution(package).version
