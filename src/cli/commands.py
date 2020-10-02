@@ -7,7 +7,6 @@ from tabulate import tabulate
 from locale import getdefaultlocale
 from src import utils
 from src.cli import get_version
-from os import getenv
 
 VERSION = get_version('ggenerator')
 default_locale = getdefaultlocale()[0]

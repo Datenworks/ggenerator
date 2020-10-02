@@ -1,6 +1,8 @@
+import os
+
+
 def get_version(package):
     if 'TRAVIS_TAG' in os.environ:
-        import os
         return os.getenv("TRAVIS_TAG", 'v0.0')
     else:
         try:
